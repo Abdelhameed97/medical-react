@@ -76,6 +76,44 @@ A full-stack web application for managing medical appointments with role-based a
 
 # Medical App Frontend
 # Project Structure
-<pre lang="markdown"> ```bash medical-app-frontend/ │ ├── public/ ├── src/ │ ├── assets/ # Images, logos, etc. │ ├── components/ # Shared/common UI components │ │ ├── Button.jsx │ │ └── DoctorCard.jsx │ ├── features/ # Feature-based folder structure │ │ ├── auth/ # Login, register, logout │ │ │ ├── Login.jsx │ │ │ ├── Register.jsx │ │ │ ├── authSlice.js │ │ │ └── authAPI.js │ │ ├── appointments/ # Booking & managing appointments │ │ ├── doctors/ # Doctor list, profile, availability │ │ ├── patients/ # Patient profile & actions │ │ ├── admin/ # Admin dashboards │ │ └── notifications/ # Emails or UI notifications │ ├── pages/ # Route-level components │ │ ├── Home.jsx │ │ ├── Dashboard.jsx │ │ ├── DoctorProfile.jsx │ │ └── NotFound.jsx │ ├── routes/ # Route definitions + Role-based routing │ │ └── ProtectedRoutes.jsx │ ├── services/ # Axios instances, API base config │ │ └── api.js │ ├── store/ # Redux Toolkit slices, store config │ │ ├── store.js │ │ └── slices/ │ ├── utils/ # Helper functions, validators │ ├── App.jsx │ ├── main.jsx │ └── index.css ├── .env # REACT_APP_API_URL etc. ├── package.json └── README.md ``` </pre>
+```bash
+medical-app-frontend/
+│
+├── public/
+├── src/
+│   ├── assets/              # Images, logos, etc.
+│   ├── components/          # Shared/common UI components
+│   │   ├── Button.jsx
+│   │   └── DoctorCard.jsx
+│   ├── features/            # Feature-based folder structure
+│   │   ├── auth/            # Login, register, logout
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── authSlice.js
+│   │   │   └── authAPI.js
+│   │   ├── appointments/    # Booking & managing appointments
+│   │   ├── doctors/         # Doctor list, profile, availability
+│   │   ├── patients/        # Patient profile & actions
+│   │   ├── admin/           # Admin dashboards
+│   │   └── notifications/   # Emails or UI notifications
+│   ├── pages/               # Route-level components
+│   │   ├── Home.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── DoctorProfile.jsx
+│   │   └── NotFound.jsx
+│   ├── routes/              # Route definitions + Role-based routing
+│   │   └── ProtectedRoutes.jsx
+│   ├── services/            # Axios instances, API base config
+│   │   └── api.js
+│   ├── store/               # Redux Toolkit slices, store config
+│   │   ├── store.js
+│   │   └── slices/
+│   ├── utils/               # Helper functions, validators
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+├── .env                    # REACT_APP_API_URL etc.
+├── package.json
+└── README.md
 
 # Medical App Frontend
