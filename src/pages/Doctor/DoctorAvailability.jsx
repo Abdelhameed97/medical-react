@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
   Box, Typography, FormGroup, FormControlLabel, Checkbox,
-  TextField, Button, Grid, Paper, Divider, Chip, Stack
+  TextField, Button, Grid, Paper, Divider, Chip, Stack,
+  Modal, Backdrop, Fade
 } from "@mui/material";
 import axios from "axios";
 import {
@@ -15,6 +16,7 @@ const DoctorAvailability = () => {
   const [selectedDays, setSelectedDays] = useState({});
   const [availability, setAvailability] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [openSuccessModal, setOpenSuccessModal] = useState(false);
 
   useEffect(() => {
     axios.get("http://localhost:5000/availability?doctorId=1").then(res => {
@@ -69,11 +71,15 @@ const DoctorAvailability = () => {
           })
         );
         
-        Promise.all(posts)
-          .then(() => {
-            setIsSaving(false);
-            alert("Availability saved successfully");
-          })
+       Promise.all(posts)
+  .then(() => {
+    axios.get("http://localhost:5000/availability?doctorId=1").then(res => {
+      setAvailability(res.data); 
+      setIsSaving(false);
+      setOpenSuccessModal(true);
+    });
+  })
+
           .catch(() => {
             setIsSaving(false);
             alert("Error saving availability");
@@ -82,8 +88,63 @@ const DoctorAvailability = () => {
     });
   };
 
+  const handleCloseSuccessModal = () => {
+    setOpenSuccessModal(false);
+  };
+
   return (
     <Box p={3} sx={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+      {/* Success Modal */}
+      <Modal
+        open={openSuccessModal}
+        onClose={handleCloseSuccessModal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openSuccessModal}>
+          <Box sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: '8px',
+            textAlign: 'center'
+          }}>
+            <CheckCircle sx={{ 
+              color: '#4CAF50', 
+              fontSize: '60px',
+              mb: 2
+            }} />
+            <Typography variant="h5" component="h2" gutterBottom>
+              Success
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 3 }}>
+                Availability saved successfully
+              {/* You have successfully reset your password. */}
+            </Typography>
+            <Button
+              variant="contained"
+              onClick={handleCloseSuccessModal}
+              sx={{
+                backgroundColor: '#4a90e2',
+                '&:hover': {
+                  backgroundColor: '#3a80d2'
+                }
+              }}
+            >
+                Continue
+            </Button>
+          </Box>
+        </Fade>
+      </Modal>
+
       <Typography variant="h4" gutterBottom sx={{ 
         fontWeight: 'bold', 
         color: '#1e293b',
