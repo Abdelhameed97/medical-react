@@ -1,0 +1,179 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "email": "admin@med.com",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "username": "dr.john",
+      "email": "john@med.com",
+      "role": "doctor"
+    },
+    {
+      "id": "3",
+      "username": "sara",
+      "email": "sara@med.com",
+      "role": "patient"
+    },
+    {
+      "id": "4",
+      "username": "dr.amal",
+      "email": "amal@med.com",
+      "role": "doctor"
+    },
+    {
+      "id": "5",
+      "username": "ahmed",
+      "email": "ahmed@med.com",
+      "role": "patient"
+    }
+  ],
+  "specialties": [
+    {
+      "id": "1",
+      "name": "Cardiology"
+    },
+    {
+      "id": "2",
+      "name": "Neurology"
+    },
+    {
+      "id": "3",
+      "name": "Dermatology"
+    }
+  ],
+  "doctors": [
+    {
+      "id": "1",
+      "userId": 2,
+      "fullName": "Dr. John Smith",
+      "specialtyId": 1,
+      "bio": "أخصائي قلب بخبرة 10 سنوات",
+      "contact": "123456789",
+      "approved": true,
+      "name": "rehab",
+      "email": "rehab@gmail.com",
+      "phone": "01013102431",
+      "specialty": "لاموي"
+    },
+    {
+      "id": "2",
+      "userId": 4,
+      "fullName": "Dr. Amal Fathy",
+      "specialtyId": 2,
+      "bio": "استشاري أعصاب",
+      "contact": "987654321",
+      "approved": true,
+      "name": "amal",
+      "email": "amal@gmail.com",
+      "phone": "01011223344",
+      "specialty": "Neurology"
+    }
+  ],
+  "patients": [
+    {
+      "id": "1",
+      "userId": 3,
+      "fullName": "Sara Ali",
+      "age": 27,
+      "gender": "female",
+      "contact": "0100000001"
+    },
+    {
+      "id": "2",
+      "userId": 5,
+      "fullName": "Ahmed Tarek",
+      "age": 35,
+      "gender": "male",
+      "contact": "0100000002"
+    },
+    {
+      "id": "3",
+      "userId": 5,
+      "fullName": "Ahmed Tarek Jr",
+      "age": 10,
+      "gender": "male",
+      "contact": "0100000003"
+    }
+  ],
+  "availability": [
+    {
+      "id": "e953",
+      "doctorId": 1,
+      "day": "Sunday",
+      "startTime": "00:01",
+      "endTime": "21:00"
+    },
+    {
+      "id": "86ba",
+      "doctorId": 1,
+      "day": "Monday",
+      "startTime": "10:00",
+      "endTime": "19:00"
+    },
+    {
+      "id": "f421",
+      "doctorId": 2,
+      "day": "Tuesday",
+      "startTime": "09:00",
+      "endTime": "17:00"
+    },
+    {
+      "id": "f422",
+      "doctorId": 2,
+      "day": "Thursday",
+      "startTime": "12:00",
+      "endTime": "20:00"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "1",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-05-27",
+      "time": "09:30",
+      "status": "approved",
+      "notes": "متابعة الحالة"
+    },
+    {
+      "id": "5",
+      "patientId": 2,
+      "doctorId": 1,
+      "date": "2025-06-05",
+      "time": "14:00",
+      "status": "approved",
+      "notes": "كشف جديد"
+    },
+    {
+      "id": "2",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-05-28",
+      "time": "10:00",
+      "status": "rejected",
+      "notes": "كشف دوري"
+    },
+    {
+      "id": "3",
+      "patientId": 2,
+      "doctorId": 1,
+      "date": "2025-05-29",
+      "time": "11:00",
+      "status": "rejected",
+      "notes": ""
+    },
+    {
+      "id": "4",
+      "patientId": 3,
+      "doctorId": 2,
+      "date": "2025-05-01",
+      "time": "13:00",
+      "status": "approved",
+      "notes": "مراجعة تقرير الأشعة"
+    }
+  ]
+}
