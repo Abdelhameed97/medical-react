@@ -11,7 +11,6 @@ const DoctorDashboard = () => {
       </Typography>
       
       <Grid container spacing={3} mt={2}>
-        {/* بطاقة المواعيد القادمة */}
         <Grid item xs={12} md={4}>
           <Paper elevation={3} sx={{ 
             p: 3, 
