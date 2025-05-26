@@ -80,7 +80,8 @@
       "fullName": "Sara Ali",
       "age": 27,
       "gender": "female",
-      "contact": "0100000001"
+      "contact": "0100000001",
+      "approved": true
     },
     {
       "id": "2",
@@ -88,7 +89,8 @@
       "fullName": "Ahmed Tarek",
       "age": 35,
       "gender": "male",
-      "contact": "0100000002"
+      "contact": "0100000002",
+      "approved": true
     },
     {
       "id": "3",
@@ -96,7 +98,8 @@
       "fullName": "Ahmed Tarek Jr",
       "age": 10,
       "gender": "male",
-      "contact": "0100000003"
+      "contact": "0100000003",
+      "approved": true
     }
   ],
   "availability": [

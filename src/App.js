@@ -6,6 +6,8 @@ import DoctorAvailability from "./pages/Doctor/DoctorAvailability";
 import DoctorProfile from "./pages/Doctor/DoctorProfile";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
+import AdminDoctorApproval from "./admin/AdminDoctorsApproval";
+import AdminPatientApproval from "./admin/AdminPatientApproval";
 
 function App() {
   return (
@@ -20,6 +22,10 @@ function App() {
             <Route path="/profile" element={<DoctorProfile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/admin/AdminPatientApproval" element={<AdminPatientApproval />} />
+            <Route path="/admin/AdminDoctorApproval" element={<AdminDoctorApproval />} />
+
+
           </Routes>
         </div>
       </div>
