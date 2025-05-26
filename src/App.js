@@ -1,29 +1,36 @@
-import { useState } from "react";
-import DoctorSidebar from "./components/DoctorSidebar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DoctorDashboard from "./pages/Doctor/DoctorDashboard";
 import DoctorAppointments from "./pages/Doctor/DoctorAppointments";
 import DoctorAvailability from "./pages/Doctor/DoctorAvailability";
 import DoctorProfile from "./pages/Doctor/DoctorProfile";
+import DoctorSidebar from "./components/DoctorSidebar";
+import Home from "./pages/Home";
 
-
-function App() {
-  const [page, setPage] = useState("dashboard");
-
+function DoctorLayout() {
+  // تصميم لوحة تحكم الدكتور فقط
   return (
     <div style={{ display: "flex" }}>
-      <DoctorSidebar onSelect={setPage} />
-      <div style={{ flex: 1,   marginLeft: 'auto', 
- }}>
-        {page === "dashboard" && <DoctorDashboard />}
-        {page === "appointments" && <DoctorAppointments />}
-        {page === "availability" && <DoctorAvailability />}
-        {page === "profile" && <DoctorProfile />}
-
-
-
-
+      <DoctorSidebar />
+      <div style={{ flex: 1 }}>
+        <Routes>
+          <Route path="dashboard" element={<DoctorDashboard />} />
+          <Route path="appointments" element={<DoctorAppointments />} />
+          <Route path="availability" element={<DoctorAvailability />} />
+          <Route path="profile" element={<DoctorProfile />} />
+        </Routes>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/doctor/*" element={<DoctorLayout />} />
+      </Routes>
+    </Router>
   );
 }
 

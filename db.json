@@ -115,11 +115,18 @@
       "endTime": "20:00"
     },
     {
-      "id": "5426",
+      "id": "a8fb",
       "doctorId": 1,
       "day": "Sunday",
       "startTime": "00:01",
       "endTime": "21:00"
+    },
+    {
+      "id": "6b40",
+      "doctorId": 1,
+      "day": "Monday",
+      "startTime": "02:00",
+      "endTime": "23:00"
     }
   ],
   "appointments": [
@@ -147,7 +154,7 @@
       "doctorId": 1,
       "date": "2025-05-28",
       "time": "10:00",
-      "status": "rejected",
+      "status": "approved",
       "notes": "كشف دوري"
     },
     {
@@ -156,7 +163,7 @@
       "doctorId": 1,
       "date": "2025-05-29",
       "time": "11:00",
-      "status": "rejected",
+      "status": "approved",
       "notes": ""
     },
     {
