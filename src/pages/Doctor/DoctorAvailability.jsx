@@ -127,7 +127,6 @@ const DoctorAvailability = () => {
             </Typography>
             <Typography variant="body1" sx={{ mb: 3 }}>
                 Availability saved successfully
-              {/* You have successfully reset your password. */}
             </Typography>
             <Button
               variant="contained"
