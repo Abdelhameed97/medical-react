@@ -111,15 +111,44 @@ import {
   Divider,
   Avatar,
   Box,
-  Typography
+  Typography,
+  styled
 } from "@mui/material";
 import {
   Dashboard as DashboardIcon,
   CalendarToday as CalendarTodayIcon,
   Person as PersonIcon,
-  AccessTime as AccessTimeIcon,
-  ExitToApp as ExitToAppIcon
+  AccessTime as AvailabilityIcon,
+  Schedule as ScheduleIcon,
+  ExitToApp as LogoutIcon
 } from "@mui/icons-material";
+
+const StyledListItem = styled(ListItem)(({ theme }) => ({
+  '&.MuiListItem-root': {
+    padding: '8px 16px',
+    margin: '4px 0',
+    borderRadius: '8px',
+    '&:hover': {
+      backgroundColor: '#3e4d5e',
+      '& .MuiListItemIcon-root': {
+        color: '#4a90e2'
+      }
+    },
+    '&.Mui-selected': {
+      backgroundColor: '#3e4d5e',
+      borderLeft: '4px solid #4a90e2'
+    }
+  }
+}));
+
+const WhiteLinkText = styled(ListItemText)(({ theme }) => ({
+  '& .MuiTypography-root': {
+    color: 'white !important',
+    '&:hover': {
+      color: 'white !important'
+    }
+  }
+}));
 
 const DoctorSidebar = () => {
   return (
@@ -127,88 +156,86 @@ const DoctorSidebar = () => {
       variant="permanent"
       anchor="left"
       sx={{
-        width: 350,
+        width: 280,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: 350,
+          width: 280,
           boxSizing: "border-box",
           borderRight: "none",
           backgroundColor: "#2e3b4a",
-          color: "white"
+          color: "white",
+          display: "flex",
+          flexDirection: "column"
         },
       }}
     >
-      <Box p={2} textAlign="center">
+      <Box p={3} textAlign="center" sx={{ pt: 4 }}>
         <Avatar
           alt="Doctor"
           src="/doctor-avatar.jpg"
           sx={{
-            width: 80,
-            height: 80,
-            margin: "0 auto 10px",
-            border: "3px solidrgb(6, 38, 75)"
+            width: 90,
+            height: 90,
+            margin: "0 auto 12px",
+            border: "3px solid #4a90e2",
+            boxShadow: '0 0 10px rgba(74, 144, 226, 0.5)'
           }}
         />
-        <Typography variant="h6">Dr/Rehab</Typography>
-        <Typography variant="caption">Cardiologist</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5, color: 'white' }}>Dr. Rehab Ali</Typography>
+        <Typography variant="caption" sx={{ color: 'white' }}>Cardiologist</Typography>
       </Box>
 
-      <Divider sx={{ backgroundColor: "#3e4d5e" }} />
+      <Divider sx={{ backgroundColor: "#3e4d5e", my: 1 }} />
 
-      <List>
-        <ListItem 
-          button 
-          component={Link} 
-          to="/doctor/dashboard" 
-          sx={{ py: 1.5, "&:hover": { backgroundColor: "#3e4d5e" } }}
-        >
-          <ListItemIcon sx={{ color: "white" }}><DashboardIcon /></ListItemIcon>
-          <ListItemText primary="Dashboard" />
-        </ListItem>
+      <Box sx={{ flexGrow: 1, px: 2 }}>
+        <List>
+          {[
+            { text: "Dashboard", icon: <DashboardIcon />, path: "/doctor/dashboard" },
+            { text: "Availability", icon: <AvailabilityIcon />, path: "/doctor/availability" },
 
-        <ListItem 
-          button 
-          component={Link} 
-          to="/doctor/appointments" 
-          sx={{ py: 1.5, "&:hover": { backgroundColor: "#3e4d5e" } }}
-        >
-          <ListItemIcon sx={{ color: "white" }}><CalendarTodayIcon /></ListItemIcon>
-          <ListItemText primary="Appointments" />
-        </ListItem>
+            { text: "Appointments", icon: <CalendarTodayIcon />, path: "/doctor/appointments" },
+            { text: "Schedule", icon: <ScheduleIcon />, path: "/doctor/schedule" },
+            { text: "Profile", icon: <PersonIcon />, path: "/doctor/profile" }
+          ].map((item) => (
+            <StyledListItem
+              key={item.text}
+              button
+              component={Link}
+              to={item.path}
+            >
+              <ListItemIcon sx={{ color: "white", minWidth: '40px' }}>
+                {item.icon}
+              </ListItemIcon>
+              <WhiteLinkText 
+                primary={item.text} 
+                primaryTypographyProps={{ 
+                  variant: 'body1',
+                  sx: { fontWeight: 500 } 
+                }} 
+              />
+            </StyledListItem>
+          ))}
+        </List>
+      </Box>
 
-        <ListItem 
-          button 
-          component={Link} 
-          to="/doctor/profile" 
-          sx={{ py: 1.5, "&:hover": { backgroundColor: "#3e4d5e" } }}
-        >
-          <ListItemIcon sx={{ color: "white" }}><PersonIcon /></ListItemIcon>
-          <ListItemText primary="Profile" />
-        </ListItem>
-
-        <ListItem 
-          button 
-          component={Link} 
-          to="/doctor/availability" 
-          sx={{ py: 1.5, "&:hover": { backgroundColor: "#3e4d5e" } }}
-        >
-          <ListItemIcon sx={{ color: "white" }}><AccessTimeIcon /></ListItemIcon>
-          <ListItemText primary="Availability" />
-        </ListItem>
-      </List>
-
-      <Box sx={{ marginTop: "auto", p: 2 }}>
+      <Box sx={{ p: 2, pt: 0 }}>
         <Divider sx={{ backgroundColor: "#3e4d5e", mb: 2 }} />
-        <ListItem 
-          button 
-          sx={{ 
-            py: 1.5, 
-            "&:hover": { backgroundColor: "#3e4d5e" }
-          }}
+        <StyledListItem
+          button
+          component={Link}
+          to="/logout"
         >
-          <ListItemIcon sx={{ color: "white" }}><ExitToAppIcon /></ListItemIcon>
-          <ListItemText primary="Logout" />
-        </ListItem>
+          <ListItemIcon sx={{ color: "white", minWidth: '40px' }}>
+            <LogoutIcon />
+          </ListItemIcon>
+          <WhiteLinkText 
+            primary="Logout" 
+            primaryTypographyProps={{ 
+              variant: 'body1',
+              sx: { fontWeight: 500 } 
+            }} 
+          />
+        </StyledListItem>
       </Box>
     </Drawer>
   );
