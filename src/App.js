@@ -8,7 +8,6 @@ import Home from "./pages/Home";
 import DoctorSchedule from "./pages/Doctor/DoctorSchedule"; // جديد
 // Add these new imports for patients and admin
 import AdminLayout from "./components/admin/shared/AdminLayout";
-import AdminDashboard from "./pages/admin/AdminDashboard";
 import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
 import DoctorList from "./components/admin/UserManagement/DoctorList";
@@ -17,6 +16,8 @@ import DoctorDetails from "./components/admin/UserManagement/DoctorDetails";
 import PatientDetails from "./components/admin/UserManagement/PatientDetails";
 import AppointmentsList from "./components/admin/Appointments/AppointmentsList";
 import SpecialtiesList from "./components/admin/Specialties/SpecialtyList";
+import AdminHomePage from "./components/Home/AdminHomePage";
+import Notifications from "./pages/admin/Notifications";
 
 function DoctorLayout() {
   // تصميم لوحة تحكم الدكتور فقط
@@ -30,7 +31,6 @@ function DoctorLayout() {
           <Route path="availability" element={<DoctorAvailability />} />
           <Route path="profile" element={<DoctorProfile />} />
           <Route path="schedule" element={<DoctorSchedule />} /> {/* جديد */}
-
         </Routes>
       </div>
     </div>
@@ -43,13 +43,14 @@ function AdminRoutes() {
     <ThemeProvider theme={theme}>
       <AdminLayout>
         <Routes>
-          <Route path="/" element={<AdminDashboard />} />
+          <Route path="/" element={<AdminHomePage />} />
           <Route path="doctors" element={<DoctorList />} />
           <Route path="patients" element={<PatientsList />} />
           <Route path="doctors/:id" element={<DoctorDetails />} />
           <Route path="patients/:id" element={<PatientDetails />} />
           <Route path="appointments" element={<AppointmentsList />} />
           <Route path="specialties" element={<SpecialtiesList />} />
+          <Route path="notifications" element={<Notifications />} />
         </Routes>
       </AdminLayout>
     </ThemeProvider>
