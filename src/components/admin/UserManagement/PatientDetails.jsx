@@ -17,7 +17,7 @@ const PatientDetails = () => {
   const [patient, setPatient] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3030/patients/${id}`)
+    fetch(`http://localhost:5000/patients/${id}`)
       .then((res) => res.json())
       .then((data) => setPatient(data))
       .catch((err) => console.error("Failed to fetch patient:", err));

@@ -42,7 +42,7 @@ const DoctorsList = () => {
   });
 
   const fetchDoctors = () => {
-    fetch("http://localhost:3030/doctors")
+    fetch("http://localhost:5000/doctors")
       .then((res) => res.json())
       .then((data) => setDoctors(data))
       .catch(() =>
@@ -55,7 +55,7 @@ const DoctorsList = () => {
   };
 
   const fetchSpecialties = () => {
-    fetch("http://localhost:3030/specialties")
+    fetch("http://localhost:5000/specialties")
       .then((res) => res.json())
       .then((data) => setSpecialties(data))
       .catch(() =>
@@ -109,8 +109,8 @@ const DoctorsList = () => {
   const handleSave = () => {
     const method = editingDoctor ? "PUT" : "POST";
     const url = editingDoctor
-      ? `http://localhost:3030/doctors/${editingDoctor.id}`
-      : "http://localhost:3030/doctors";
+      ? `http://localhost:5000/doctors/${editingDoctor.id}`
+      : "http://localhost:5000/doctors";
 
     fetch(url, {
       method,
@@ -147,7 +147,7 @@ const DoctorsList = () => {
   };
 
   const handleConfirmDelete = () => {
-    fetch(`http://localhost:3030/doctors/${doctorToDelete.id}`, {
+    fetch(`http://localhost:5000/doctors/${doctorToDelete.id}`, {
       method: "DELETE",
     })
       .then((res) => {

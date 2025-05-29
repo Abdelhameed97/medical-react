@@ -1,10 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+//import DoctorSidebar from "./components/DoctorSidebar";
+import Home from "./pages/Home";
 import DoctorDashboard from "./pages/Doctor/DoctorDashboard";
 import DoctorAppointments from "./pages/Doctor/DoctorAppointments";
 import DoctorAvailability from "./pages/Doctor/DoctorAvailability";
 import DoctorProfile from "./pages/Doctor/DoctorProfile";
+//import DoctorSchedule from "./pages/Doctor/DoctorSchedule";
+import Login from "./auth/Login";
+import Register from "./auth/Register";
+import AdminDoctorApproval from "./admin/AdminDoctorsApproval";
+import AdminPatientApproval from "./admin/AdminPatientApproval";
 import DoctorSidebar from "./components/DoctorSidebar";
-import Home from "./pages/Home";
+//import Home from "./pages/Home";
 import DoctorSchedule from "./pages/Doctor/DoctorSchedule"; // جديد
 // Add these new imports for patients and admin
 import AdminLayout from "./components/admin/shared/AdminLayout";
@@ -20,13 +27,12 @@ import AdminHomePage from "./components/Home/AdminHomePage";
 import Notifications from "./pages/admin/Notifications";
 
 function DoctorLayout() {
-  // تصميم لوحة تحكم الدكتور فقط
   return (
     <div style={{ display: "flex" }}>
       <DoctorSidebar />
       <div style={{ flex: 1 }}>
         <Routes>
-          <Route path="dashboard" element={<DoctorDashboard />} />
+          <Route path="/" element={<DoctorDashboard />} />
           <Route path="appointments" element={<DoctorAppointments />} />
           <Route path="availability" element={<DoctorAvailability />} />
           <Route path="profile" element={<DoctorProfile />} />
@@ -63,6 +69,10 @@ function App() {
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/doctor/*" element={<DoctorLayout />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/admin/AdminPatientApproval" element={<AdminPatientApproval />} />
+        <Route path="/admin/AdminDoctorApproval" element={<AdminDoctorApproval />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
       </Routes>
     </Router>
