@@ -1,58 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import {
   Box,
   Typography,
   Card,
   CardContent,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  Button,
+  Avatar,
+  CircularProgress,
 } from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
-
-const mockDoctors = [
-  {
-    id: "1",
-    name: "Dr. Amina Khaled",
-    specialty: "Cardiology",
-    bio: "Cardiologist with 10 years of experience in treating heart conditions.",
-    email: "amina.khaled@example.com",
-    availability: {
-      Monday: ["09:00 AM", "11:00 AM"],
-      Tuesday: ["01:00 PM", "03:00 PM"],
-      Wednesday: [],
-      Thursday: ["10:00 AM"],
-      Friday: ["02:00 PM", "04:00 PM"],
-    },
-  },
-  {
-    id: "2",
-    name: "Dr. Omar Tarek",
-    specialty: "Dermatology",
-    bio: "Expert in skincare and dermatological treatments.",
-    email: "omar.tarek@example.com",
-    availability: {
-      Monday: ["11:00 AM"],
-      Tuesday: ["09:00 AM", "12:00 PM"],
-      Wednesday: ["03:00 PM"],
-      Thursday: [],
-      Friday: ["10:00 AM"],
-    },
-  },
-];
 
 const Doctor_Details = () => {
   const { doctorId } = useParams();
-  const navigate = useNavigate();
+  const [doctor, setDoctor] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const doctor = mockDoctors.find((doc) => doc.id === doctorId);
+  useEffect(() => {
+    const fetchDoctor = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/doctors/${doctorId}`
+        );
+        setDoctor(res.data);
+      } catch (err) {
+        console.error("Failed to fetch doctor:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDoctor();
+  }, [doctorId]);
+
+  if (loading) {
+    return (
+      <Box textAlign='center' mt={5}>
+        <CircularProgress />
+        <Typography>Loading doctor details...</Typography>
+      </Box>
+    );
+  }
 
   if (!doctor) {
     return (
-      <Box p={3}>
+      <Box textAlign='center' mt={5}>
         <Typography variant='h6' color='error'>
           Doctor not found
         </Typography>
@@ -62,57 +53,31 @@ const Doctor_Details = () => {
 
   return (
     <Box p={3}>
-      <Card>
+      <Card sx={{ maxWidth: 600, margin: "0 auto" }}>
         <CardContent>
-          <Typography variant='h4' gutterBottom>
-            {doctor.name}
+          <Box display='flex' alignItems='center' mb={2}>
+            <Avatar
+              src={doctor.image}
+              alt={doctor.fullName}
+              sx={{ width: 80, height: 80, mr: 2 }}
+            />
+            <Box>
+              <Typography variant='h5'>{doctor.fullName}</Typography>
+              <Typography color='text.secondary'>{doctor.specialty}</Typography>
+            </Box>
+          </Box>
+
+          <Typography variant='body1' gutterBottom>
+            <strong>Email:</strong> {doctor.email}
           </Typography>
-          <Typography variant='h6' color='primary'>
-            {doctor.specialty}
+          <Typography variant='body1' gutterBottom>
+            <strong>Phone:</strong> {doctor.phone}
           </Typography>
-          <Typography variant='body1' mt={2}>
-            {doctor.bio}
-          </Typography>
-          <Typography variant='body2' color='text.secondary' mt={1}>
-            Contact: {doctor.email}
+          <Typography variant='body1'>
+            <strong>Bio:</strong> {doctor.bio}
           </Typography>
         </CardContent>
       </Card>
-
-      <Box mt={4}>
-        <Typography variant='h5' gutterBottom>
-          Availability
-        </Typography>
-        <Card>
-          <CardContent>
-            <List>
-              {Object.entries(doctor.availability).map(([day, times]) => (
-                <React.Fragment key={day}>
-                  <ListItem>
-                    <ListItemText
-                      primary={day}
-                      secondary={
-                        times.length > 0 ? times.join(", ") : "Not Available"
-                      }
-                    />
-                  </ListItem>
-                  <Divider />
-                </React.Fragment>
-              ))}
-            </List>
-          </CardContent>
-        </Card>
-      </Box>
-
-      <Box mt={3}>
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={() => navigate(`/patient/book-appointment/${doctor.id}`)}
-        >
-          Book Appointment
-        </Button>
-      </Box>
     </Box>
   );
 };

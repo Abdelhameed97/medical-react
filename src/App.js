@@ -32,6 +32,7 @@ import AppointmentsList from "./components/admin/Appointments/AppointmentsList";
 import SpecialtiesList from "./components/admin/Specialties/SpecialtyList";
 import AdminHomePage from "./components/Home/AdminHomePage";
 import Notifications from "./pages/admin/Notifications";
+import EditAppointment from "./features/patients/EditAppointments";
 
 function DoctorLayout() {
   return (
@@ -39,11 +40,11 @@ function DoctorLayout() {
       <DoctorSidebar />
       <div style={{ flex: 1 }}>
         <Routes>
-          <Route path="dashboard" element={<DoctorDashboard />} />
-          <Route path="appointments" element={<DoctorAppointments />} />
-          <Route path="availability" element={<DoctorAvailability />} />
-          <Route path="profile" element={<DoctorProfile />} />
-          <Route path="schedule" element={<DoctorSchedule />} /> {/* جديد */}
+          <Route path='dashboard' element={<DoctorDashboard />} />
+          <Route path='appointments' element={<DoctorAppointments />} />
+          <Route path='availability' element={<DoctorAvailability />} />
+          <Route path='profile' element={<DoctorProfile />} />
+          <Route path='schedule' element={<DoctorSchedule />} /> {/* جديد */}
         </Routes>
       </div>
     </div>
@@ -56,14 +57,14 @@ function AdminRoutes() {
     <ThemeProvider theme={theme}>
       <AdminLayout>
         <Routes>
-          <Route path="/" element={<AdminHomePage />} />
-          <Route path="doctors" element={<DoctorList />} />
-          <Route path="patients" element={<PatientsList />} />
-          <Route path="doctors/:id" element={<DoctorDetails />} />
-          <Route path="patients/:id" element={<PatientDetails />} />
-          <Route path="appointments" element={<AppointmentsList />} />
-          <Route path="specialties" element={<SpecialtiesList />} />
-          <Route path="notifications" element={<Notifications />} />
+          <Route path='/' element={<AdminHomePage />} />
+          <Route path='doctors' element={<DoctorList />} />
+          <Route path='patients' element={<PatientsList />} />
+          <Route path='doctors/:id' element={<DoctorDetails />} />
+          <Route path='patients/:id' element={<PatientDetails />} />
+          <Route path='appointments' element={<AppointmentsList />} />
+          <Route path='specialties' element={<SpecialtiesList />} />
+          <Route path='notifications' element={<Notifications />} />
         </Routes>
       </AdminLayout>
     </ThemeProvider>
@@ -84,7 +85,12 @@ function App() {
             path='book-appointment/:doctorId'
             element={<AppointmentBooking />}
           />
+
           <Route path='my-appointments' element={<MyAppointments />} />
+          <Route
+            path='edit-appointment/:appointmentId'
+            element={<EditAppointment />}
+          />
           <Route path='profile' element={<Profile />} />
         </Route>
 

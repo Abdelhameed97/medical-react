@@ -11,85 +11,62 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  CircularProgress,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const DoctorsList = () => {
-  // Mock static data
-  const doctorData = [
-    {
-      id: 1,
-      name: "Dr. Amina Khaled",
-      specialty: "Cardiology",
-      bio: "Specialist in cardiovascular diseases with 10 years of experience.",
-      email: "amina.khaled@example.com",
-    },
-    {
-      id: 2,
-      name: "Dr. Omar Tarek",
-      specialty: "Dermatology",
-      bio: "Expert in skincare and laser treatments.",
-      email: "omar.tarek@example.com",
-    },
-    {
-      id: 3,
-      name: "Dr. Fatma Adel",
-      specialty: "Pediatrics",
-      bio: "Caring pediatrician for children’s health and wellbeing.",
-      email: "fatma.adel@example.com",
-    },
-    {
-      id: 4,
-      name: "Dr. Youssef Hassan",
-      specialty: "Neurology",
-      bio: "Consultant neurologist with deep expertise in brain and nerve disorders.",
-      email: "youssef.hassan@example.com",
-    },
-  ];
-
-  const specialtyOptions = [
-    "Cardiology",
-    "Dermatology",
-    "Pediatrics",
-    "Neurology",
-  ];
-
-  const [doctors, setDoctors] = useState(doctorData);
-  const [filteredDoctors, setFilteredDoctors] = useState(doctorData);
+  const [doctors, setDoctors] = useState([]);
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [searchName, setSearchName] = useState("");
   const [specialtyFilter, setSpecialtyFilter] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const specialtyOptions = ["Cardiology", "Dermatology", "Pediatrics", "Neurology"];
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/doctors")
+      .then((res) => {
+        setDoctors(res.data);
+        setFilteredDoctors(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching doctors:", err);
+        setLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     const filtered = doctors.filter((doctor) => {
-      const matchesName = doctor.name
-        .toLowerCase()
-        .includes(searchName.toLowerCase());
+      const matchesName = doctor.fullName.toLowerCase().includes(searchName.toLowerCase());
       const matchesSpecialty =
         !specialtyFilter ||
-        doctor.specialty.toLowerCase() === specialtyFilter.toLowerCase();
+        doctor.specialty?.toLowerCase() === specialtyFilter.toLowerCase();
       return matchesName && matchesSpecialty;
     });
     setFilteredDoctors(filtered);
   }, [searchName, specialtyFilter, doctors]);
 
+  if (loading) return <Box p={3}><CircularProgress /></Box>;
+
   return (
     <Box p={3}>
-      <Typography variant='h4' gutterBottom>
-        Find a Doctor
-      </Typography>
+      <Typography variant="h4" gutterBottom>Find a Doctor</Typography>
 
       <Grid container spacing={2} mb={3}>
         <Grid item xs={12} md={6}>
           <TextField
             fullWidth
-            label='Search by name'
-            variant='outlined'
+            label="Search by name"
+            variant="outlined"
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
             InputProps={{
               startAdornment: (
-                <InputAdornment position='start'>
+                <InputAdornment position="start">
                   <SearchIcon />
                 </InputAdornment>
               ),
@@ -97,14 +74,14 @@ const DoctorsList = () => {
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <FormControl fullWidth variant='outlined'>
+          <FormControl fullWidth variant="outlined">
             <InputLabel>Specialty</InputLabel>
             <Select
               value={specialtyFilter}
               onChange={(e) => setSpecialtyFilter(e.target.value)}
-              label='Specialty'
+              label="Specialty"
             >
-              <MenuItem value=''>All Specialties</MenuItem>
+              <MenuItem value="">All Specialties</MenuItem>
               {specialtyOptions.map((spec) => (
                 <MenuItem key={spec} value={spec}>
                   {spec}
@@ -117,7 +94,7 @@ const DoctorsList = () => {
 
       <Grid container spacing={2}>
         {filteredDoctors.length === 0 ? (
-          <Typography variant='body1' color='text.secondary' m={2}>
+          <Typography variant="body1" color="text.secondary" m={2}>
             No doctors found.
           </Typography>
         ) : (
@@ -127,20 +104,14 @@ const DoctorsList = () => {
                 to={`/patient/doctors/${doctor.id}`}
                 style={{ textDecoration: "none" }}
               >
-                <Card
-                  sx={{
-                    cursor: "pointer",
-                    transition: "0.3s",
-                    "&:hover": { boxShadow: 6 },
-                  }}
-                >
+                <Card sx={{ cursor: "pointer", "&:hover": { boxShadow: 6 } }}>
                   <CardContent>
-                    <Typography variant='h6'>{doctor.name}</Typography>
-                    <Typography variant='body2' color='text.secondary'>
+                    <Typography variant="h6">{doctor.fullName}</Typography>
+                    <Typography variant="body2" color="text.secondary">
                       {doctor.specialty}
                     </Typography>
-                    <Typography variant='body2'>{doctor.bio}</Typography>
-                    <Typography variant='body2' color='primary'>
+                    <Typography variant="body2">{doctor.bio}</Typography>
+                    <Typography variant="body2" color="primary">
                       {doctor.email}
                     </Typography>
                   </CardContent>

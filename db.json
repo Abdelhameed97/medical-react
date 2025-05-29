@@ -53,12 +53,51 @@
   ],
   "doctors": [
     {
+      "id":"1",
+      "userId":1,
+      "fullName": "Dr. John Doe",
+      "specialtyId": 1,
+      "specialty": "Cardiology",
+      "bio": "Cardiologist with 15+ years of experience.",
+      "contact": "1234567890",
+      "approved": true,
+      "email": "john@example.com",
+      "phone": "01012345678",
+      "image": "https://randomuser.me/api/portraits/men/1.jpg"
+    },
+    {
       "id": "2",
+      "userId": 2,
+      "fullName": "Dr. Sarah Smith",
+      "specialtyId": 2,
+      "specialty": "Neurology",
+      "bio": "Neurologist with 10+ years of experience.",
+      "contact": "987654321",
+      "approved": true,
+      "email": "sarah@example.com",
+      "phone": "01012345678",
+      "image": "https://randomuser.me/api/portraits/women/2.jpg"
+    },
+    {
+      "id": "3",
+      "userId": 3,
+      "fullName": "Dr. Michael Johnson",
+      "specialtyId": 3,
+      "specialty": "Dermatology",
+      "bio": "Dermatologist with 12+ years of experience.",
+      "contact": "1234567890",
+      "approved": true,
+      "email": "michael@example.com",
+      "phone": "01012345678",
+      "image": "https://randomuser.me/api/portraits/men/3.jpg"
+    },
+    {
+      "id": "4",
       "userId": 4,
       "fullName": "Dr. Amal Fathy",
       "specialtyId": 2,
       "specialty": "Neurology",
-      "bio": "استشاري أعصاب",
+      "bio": "Neurologist with 10+ years of experience.",
       "contact": "987654321",
       "approved": true,
       "email": "amal@gmail.com",
@@ -66,13 +105,69 @@
       "image": "https://randomuser.me/api/portraits/women/11.jpg"
     },
     {
-      "fullName": "Marwa Nasser",
-      "email": "marwa.nasser33@yahoo.com",
-      "phone": "01010560217",
-      "specialtyId": "1",
+      "id": "5",
+      "userId": 10,
+      "fullName": "Dr. Karim Ali",
+      "specialtyId": 3,
+      "specialty": "Dermatology",
+      "bio": "Dermatologist with 15+ years in clinical practice.",
+      "contact": "0111111111",
+      "approved": true,
+      "email": "karim@example.com",
+      "phone": "01012345678",
+      "image": "https://randomuser.me/api/portraits/men/14.jpg"
+    },
+    {
+      "id": "6",
+      "userId": 1,
+      "fullName": "Dr. Amin Khaled",
+      "specialtyId": 1,
+      "specialty": "cardiology",
+      "bio": "Specialist in cardiovascular diseases with 10 years of experience.",
+      "contact": "0111111111",
+      "approved": true,
+      "email": "amina@example.com",
+      "phone": "01012345678",
+      "image": "https://randomuser.me/api/portraits/men/13.jpg"
+    },
+    {
+      "id": "7",
+      "userId": 2,
+      "fullName": "Dr. Abelhameed Mohamed",
+      "specialtyId": 2,
+      "specialty": "Neurology",
+      "bio": "Specialist in neurology with 10 years of experience.",
+      "contact": "0111111111",
+      "approved": true,
+      "email": "amina@example.com",
+      "phone": "01012345678",
+      "image": "https://randomuser.me/api/portraits/men/7.jpg"
+    },
+    {
+      "id": "8",
+      "userId": 2,
+      "fullName": "Dr. Marwa Mahmoud",
+      "specialtyId": 2,
+      "specialty": "Neurology",
       "bio": "Aloooooooooooo,",
-      "image": "https://i.pinimg.com/736x/b1/64/22/b164227cdac3346248a9aac9f589a753.jpg",
-      "id": "3c9b"
+      "contact": "0111111111",
+      "approved": false,
+      "email": "marwa@example.com",
+      "phone": "01012345668",
+      "image": "https://randomuser.me/api/portraits/women/10.jpg"
+    },
+    {
+      "id": "9",
+      "userId": 2,
+      "fullName": "Dr. Ahmed Ali",
+      "specialtyId": 2,
+      "specialty": "Neurology",
+      "bio": "Aloooooooooooo,",
+      "contact": "0111111111",
+      "approved": false,
+      "email": "ahmed@example.com",
+      "phone": "01012345668",
+      "image": "https://randomuser.me/api/portraits/men/15.jpg"
     }
   ],
   "patients": [
@@ -108,21 +203,21 @@
   "availability": [
     {
       "id": "f421",
-      "doctorId": 2,
+      "doctorId": 7,
       "day": "Tuesday",
       "startTime": "09:00",
       "endTime": "17:00"
     },
     {
       "id": "f422",
-      "doctorId": 2,
+      "doctorId": 8,
       "day": "Thursday",
       "startTime": "12:00",
       "endTime": "20:00"
     },
     {
       "id": "fe56",
-      "doctorId": 1,
+      "doctorId": 9,
       "day": "Saturday",
       "startTime": "09:00",
       "endTime": "17:00"
@@ -139,7 +234,7 @@
     },
     {
       "id": "2",
-      "doctorId": 3,
+      "doctorId": 2,
       "patientId": 1,
       "date": "2025-06-03T14:00:00",
       "reason": "Follow-up appointment",
@@ -147,7 +242,7 @@
     },
     {
       "id": "3",
-      "doctorId": 2,
+      "doctorId": 3,
       "patientId": 4,
       "date": "2025-06-05T09:00:00",
       "reason": "Consultation for allergies",
@@ -155,7 +250,7 @@
     },
     {
       "id": "4",
-      "doctorId": 1,
+      "doctorId": 4,
       "patientId": 3,
       "date": "2025-06-07T11:15:00",
       "reason": "Blood pressure check",
@@ -163,8 +258,40 @@
     },
     {
       "id": "5",
-      "doctorId": 4,
+      "doctorId": 5,
       "patientId": 5,
+      "date": "2025-06-08T16:00:00",
+      "reason": "Skin rash evaluation",
+      "status": "Scheduled"
+    },
+    {
+      "id": "6",
+      "doctorId": 6,
+      "patientId": 5,
+      "date": "2025-06-08T16:00:00",
+      "reason": "Skin rash evaluation",
+      "status": "Scheduled"
+    },
+      {
+      "id": "7",
+      "doctorId": 7,
+      "patientId": 1,
+      "date": "2025-06-08T16:00:00",
+      "reason": "Skin rash evaluation",
+      "status": "Scheduled"
+    },
+    {
+      "id": "8",
+      "doctorId": 8,
+      "patientId": 1,
+      "date": "2025-06-08T16:00:00",
+      "reason": "Skin rash evaluation",
+      "status": "Scheduled"
+    },
+    {
+      "id": "9",
+      "doctorId": 9,
+      "patientId": 1,
       "date": "2025-06-08T16:00:00",
       "reason": "Skin rash evaluation",
       "status": "Scheduled"
