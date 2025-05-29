@@ -169,5 +169,25 @@
       "reason": "Skin rash evaluation",
       "status": "Scheduled"
     }
+  ],
+  "notifications": [
+    {
+      "id": 1,
+      "message": "Booking confirmed for Dr. Omar at 2025-06-01 10:00 AM.",
+      "email": "patient1@example.com",
+      "status": "confirmed"
+    },
+    {
+      "id": 2,
+      "message": "Booking confirmation email sent to sara@med.com.",
+      "email": "sara@med.com",
+      "status": "sent"
+    },
+    {
+      "id": 3,
+      "message": "Booking confirmed for Dr. Amal at 2025-06-05 09:00 AM.",
+      "email": "patient2@example.com",
+      "status": "confirmed"
+    }
   ]
 }
