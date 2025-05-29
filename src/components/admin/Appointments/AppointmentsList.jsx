@@ -39,7 +39,7 @@ const AppointmentsList = () => {
   });
 
   const fetchAppointments = () => {
-    fetch("http://localhost:3030/appointments")
+    fetch("http://localhost:5000/appointments")
       .then((res) => res.json())
       .then((data) => setAppointments(data))
       .catch((err) =>
@@ -107,8 +107,8 @@ const AppointmentsList = () => {
 
     const method = editingAppointment ? "PUT" : "POST";
     const url = editingAppointment
-      ? `http://localhost:3030/appointments/${editingAppointment.id}`
-      : "http://localhost:3030/appointments";
+      ? `http://localhost:5000/appointments/${editingAppointment.id}`
+      : "http://localhost:5000/appointments";
 
     fetch(url, {
       method,
@@ -137,7 +137,7 @@ const AppointmentsList = () => {
   };
 
   const handleConfirmDelete = () => {
-    fetch(`http://localhost:3030/appointments/${selectedAppointment.id}`, {
+    fetch(`http://localhost:5000/appointments/${selectedAppointment.id}`, {
       method: "DELETE",
     })
       .then((res) => {

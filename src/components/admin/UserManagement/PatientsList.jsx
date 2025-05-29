@@ -41,7 +41,7 @@ const PatientList = () => {
   });
 
   const fetchPatients = () => {
-    fetch("http://localhost:3030/patients")
+    fetch("http://localhost:5000/patients")
       .then((res) => res.json())
       .then((data) => setPatients(data))
       .catch(() =>
@@ -96,8 +96,8 @@ const PatientList = () => {
   const handleSave = () => {
     const method = editingPatient ? "PUT" : "POST";
     const url = editingPatient
-      ? `http://localhost:3030/patients/${editingPatient.id}`
-      : "http://localhost:3030/patients";
+      ? `http://localhost:5000/patients/${editingPatient.id}`
+      : "http://localhost:5000/patients";
 
     fetch(url, {
       method,
@@ -134,7 +134,7 @@ const PatientList = () => {
   };
 
   const handleConfirmDelete = () => {
-    fetch(`http://localhost:3030/patients/${patientToDelete.id}`, {
+    fetch(`http://localhost:5000/patients/${patientToDelete.id}`, {
       method: "DELETE",
     })
       .then((res) => {

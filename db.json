@@ -53,17 +53,13 @@
   ],
   "doctors": [
     {
-      "id":"1",
-      "userId":1,
-      "fullName": "Dr. John Doe",
-      "specialtyId": 1,
-      "specialty": "Cardiology",
-      "bio": "Cardiologist with 15+ years of experience.",
-      "contact": "1234567890",
-      "approved": true,
-      "email": "john@example.com",
-      "phone": "01012345678",
-      "image": "https://randomuser.me/api/portraits/men/1.jpg"
+      "name": "rehab",
+      "email": "rehab@gmail.com",
+      "phone": "01013102431",
+      "specialty": "لاموي",
+      "bio": "gjvklkscb,mb nd",
+      "id": "1",
+      "approved": false
     },
     {
       "id": "2",
@@ -99,6 +95,8 @@
       "specialty": "Neurology",
       "bio": "Neurologist with 10+ years of experience.",
       "contact": "987654321",
+      "approved": false,
+      "name": "amal",
       "approved": true,
       "email": "amal@gmail.com",
       "phone": "01011223344",
@@ -178,6 +176,7 @@
       "age": 27,
       "gender": "female",
       "contact": "0100000001",
+      "approved": false,
       "image": "https://randomuser.me/api/portraits/women/12.jpg"
     },
     {
@@ -187,15 +186,30 @@
       "age": 35,
       "gender": "male",
       "contact": "0100000002",
+      "approved": false
+    },
+    {
+      "id": "3",
+      "userId": 5,
+      "fullName": "Ahmed Tarek Jr",
+      "age": 10,
+      "gender": "male",
+      "contact": "0100000003",
+      "approved": false,
       "image": "https://randomuser.me/api/portraits/men/13.jpg"
     },
     {
+      "id": "4",
+      "userId": 6,
       "fullName": "Layla Mohamed",
       "email": "",
       "phone": "",
       "address": "",
       "age": 19,
       "gender": "female",
+      "contact": "0100000004",
+      "image": "https://randomuser.me/api/portraits/women/14.jpg",
+      "approved": false,
       "notes": "Alooooooo",
       "id": "3"
     }

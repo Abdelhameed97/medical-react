@@ -34,7 +34,7 @@ const SpecialtiesList = () => {
   const [selectedSpecialty, setSelectedSpecialty] = useState(null);
 
   const fetchSpecialties = () => {
-    fetch("http://localhost:3030/specialties")
+    fetch("http://localhost:5000/specialties")
       .then((res) => res.json())
       .then((data) => setSpecialties(data));
   };
@@ -70,8 +70,8 @@ const SpecialtiesList = () => {
   const handleSave = () => {
     const method = editingSpecialty ? "PUT" : "POST";
     const url = editingSpecialty
-      ? `http://localhost:3030/specialties/${editingSpecialty.id}`
-      : "http://localhost:3030/specialties";
+      ? `http://localhost:5000/specialties/${editingSpecialty.id}`
+      : "http://localhost:5000/specialties";
 
     fetch(url, {
       method,
@@ -102,7 +102,7 @@ const SpecialtiesList = () => {
   };
 
   const handleConfirmDelete = () => {
-    fetch(`http://localhost:3030/specialties/${selectedSpecialty.id}`, {
+    fetch(`http://localhost:5000/specialties/${selectedSpecialty.id}`, {
       method: "DELETE",
     })
       .then((res) => {

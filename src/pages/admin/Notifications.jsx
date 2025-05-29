@@ -23,7 +23,7 @@ const Notifications = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("http://localhost:3030/notifications")
+        fetch("http://localhost:5000/notifications")
             .then((res) => {
                 if (!res.ok) throw new Error("Failed to fetch notifications");
                 return res.json();
