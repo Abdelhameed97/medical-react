@@ -15,7 +15,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
 
-const DoctorList = () => {
+const DoctorsList = () => {
   // Mock static data
   const doctorData = [
     {
@@ -124,10 +124,16 @@ const DoctorList = () => {
           filteredDoctors.map((doctor) => (
             <Grid item xs={12} sm={6} md={4} key={doctor.id}>
               <Link
-                to={`/doctors/${doctor.id}`}
+                to={`/patient/doctors/${doctor.id}`}
                 style={{ textDecoration: "none" }}
               >
-                <Card>
+                <Card
+                  sx={{
+                    cursor: "pointer",
+                    transition: "0.3s",
+                    "&:hover": { boxShadow: 6 },
+                  }}
+                >
                   <CardContent>
                     <Typography variant='h6'>{doctor.name}</Typography>
                     <Typography variant='body2' color='text.secondary'>
@@ -148,4 +154,4 @@ const DoctorList = () => {
   );
 };
 
-export default DoctorList;
+export default DoctorsList;

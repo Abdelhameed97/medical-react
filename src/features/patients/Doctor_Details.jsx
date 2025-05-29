@@ -44,7 +44,7 @@ const mockDoctors = [
   },
 ];
 
-const DoctorDetails = () => {
+const Doctor_Details = () => {
   const { doctorId } = useParams();
   const navigate = useNavigate();
 
@@ -108,7 +108,7 @@ const DoctorDetails = () => {
         <Button
           variant='contained'
           color='primary'
-          onClick={() => navigate(`/book-appointment/${doctor.id}`)}
+          onClick={() => navigate(`/patient/book-appointment/${doctor.id}`)}
         >
           Book Appointment
         </Button>
@@ -117,4 +117,4 @@ const DoctorDetails = () => {
   );
 };
 
-export default DoctorDetails;
+export default Doctor_Details;
