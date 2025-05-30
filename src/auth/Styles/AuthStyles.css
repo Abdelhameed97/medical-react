@@ -1,24 +1,4 @@
-/* ===== Global Styles ===== */
-:root {
-  --primary: #199A8E;
-  --primary-dark: #0d7a70;
-  --secondary: #101623;
-  --light: #F5F8FF;
-  --error: #FF4D4D;
-  --success: #4BB543;
-}
 
-body {
-  /* background: linear-gradient(135deg, rgba(11, 233, 185, 0.959) 0%, rgba(2, 124, 98, 0.671) 100%); */
-  background-size: cover;
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
-  min-height: 100vh;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--secondary);
-}
 
 .auth-container {
   max-width: 480px;

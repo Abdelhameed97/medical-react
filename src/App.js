@@ -61,6 +61,7 @@ function DoctorLayout() {
       <div style={{ flex: 1 }}>
         <Routes>
           <Route path="/" element={<DoctorDashboard />} />
+          <Route path="dashboard" element={<DoctorDashboard />} />
           <Route path="appointments" element={<DoctorAppointments />} />
           <Route path="availability" element={<DoctorAvailability />} />
           <Route path="profile" element={<DoctorProfile />} />

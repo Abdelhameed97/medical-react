@@ -85,6 +85,14 @@
       "email": "adam@gmail.com",
       "password": "123456789",
       "role": "patient"
+    },
+    {
+      "id": "3c9f",
+      "name": "maka",
+      "username": "Mohmed",
+      "email": "maka@gmail.com",
+      "password": "123456789",
+      "role": "patient"
     }
   ],
   "specialties": [
@@ -502,7 +510,7 @@
       "status": "sent"
     },
     {
-      "id": "3",
+      "id": "2",
       "message": "Booking confirmed for Dr. Amal at 2025-06-05 09:00 AM.",
       "email": "patient2@example.com",
       "patientId": 1,

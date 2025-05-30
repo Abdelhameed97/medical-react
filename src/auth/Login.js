@@ -9,6 +9,11 @@ import {
   Box
 } from "@mui/material";
 
+// Primary color and its variants
+const primaryColor = "#199A8E";
+const primaryLight = "#E0F2F1";
+const primaryDark = "#0D6E64";
+
 function Login() {
   const navigate = useNavigate();
 
@@ -134,7 +139,16 @@ function Login() {
         alt="Logo"
         className="auth-logo"
       />
-      <Typography className="auth-title">Welcome Back</Typography>
+      <Typography 
+        className="auth-title"
+        sx={{ 
+          color: primaryColor,
+          fontWeight: 600,
+          mb: 3
+        }}
+      >
+        Welcome Back
+      </Typography>
 
       {formError && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -153,6 +167,7 @@ function Login() {
           helperText={errors.email}
           fullWidth
           margin="normal"
+          sx={{ mb: 2 }}
         />
         <TextField
           label="Password"
@@ -164,6 +179,7 @@ function Login() {
           helperText={errors.password}
           fullWidth
           margin="normal"
+          sx={{ mb: 2 }}
         />
         <Button
           type="submit"
@@ -171,10 +187,13 @@ function Login() {
           fullWidth
           sx={{
             mt: 2,
-            backgroundColor: "var(--primary)",
+            mb: 2,
+            py: 1.5,
+            backgroundColor: primaryColor,
             color: "#fff",
+            fontWeight: 600,
             "&:hover": {
-              backgroundColor: "var(--primary-dark)",
+              backgroundColor: primaryDark,
             },
           }}
           disabled={
@@ -187,18 +206,20 @@ function Login() {
         
         {/* Register Button */}
         <Box sx={{ mt: 2, textAlign: 'center' }}>
-          <Typography variant="body2" sx={{ mb: 1 }}>
+          <Typography variant="body2" sx={{ mb: 1, color: "#64748b" }}>
             Don't have an account?
           </Typography>
           <Button
             variant="outlined"
             fullWidth
             sx={{
-              borderColor: "var(--primary)",
-              color: "var(--primary)",
+              py: 1.5,
+              borderColor: primaryColor,
+              color: primaryColor,
+              fontWeight: 600,
               "&:hover": {
-                backgroundColor: "rgba(var(--primary-rgb), 0.08)",
-                borderColor: "var(--primary-dark)",
+                backgroundColor: primaryLight,
+                borderColor: primaryDark,
               },
             }}
             onClick={handleRegisterClick}

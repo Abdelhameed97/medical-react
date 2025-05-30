@@ -32,6 +32,11 @@ import {
   Lightbulb,
 } from "@mui/icons-material";
 
+// Primary color and its variants
+const primaryColor = "#199A8E";
+const primaryLight = "#E0F2F1";
+const primaryDark = "#0D6E64";
+
 // Adjust the path according to your project
 const BASE_PATH = "";
 
@@ -52,7 +57,7 @@ function Header() {
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ justifyContent: "space-between", py: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <MedicalServices sx={{ color: "#10b981", fontSize: 32 }} />
+            <MedicalServices sx={{ color: primaryColor, fontSize: 32 }} />
             <Typography
               variant="h6"
               component={BaseLink}
@@ -62,7 +67,7 @@ function Header() {
                 color: "#1e293b",
                 letterSpacing: 0.5,
                 cursor: "pointer",
-                "&:hover": { color: "#10b981" },
+                "&:hover": { color: primaryColor },
               }}
             >
               JCLINIC
@@ -75,14 +80,14 @@ function Header() {
               to="/login"
               variant="outlined"
               sx={{
-                borderColor: "#10b981",
-                color: "#10b981",
+                borderColor: primaryColor,
+                color: primaryColor,
                 textTransform: "none",
                 fontWeight: 600,
                 px: 3,
                 "&:hover": { 
-                  backgroundColor: "#ecfdf5",
-                  borderColor: "#059669" 
+                  backgroundColor: primaryLight,
+                  borderColor: primaryDark 
                 },
               }}
             >
@@ -93,14 +98,14 @@ function Header() {
               to="/register"
               variant="contained"
               sx={{
-                backgroundColor: "#10b981",
+                backgroundColor: primaryColor,
                 color: "white",
                 textTransform: "none",
                 fontWeight: 600,
                 px: 3,
                 boxShadow: "none",
                 "&:hover": { 
-                  backgroundColor: "#059669",
+                  backgroundColor: primaryDark,
                   boxShadow: "none" 
                 },
               }}
@@ -121,7 +126,7 @@ function HeroSection() {
   return (
     <Box
       sx={{
-        background: "linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)",
+        background: `linear-gradient(135deg, ${primaryLight} 0%, #B2DFDB 100%)`,
         py: 10,
         px: 2,
       }}
@@ -139,7 +144,7 @@ function HeroSection() {
                 lineHeight: 1.2,
               }}
             >
-              Modern Healthcare <Box component="span" sx={{ color: "#10b981" }}>Made Simple</Box>
+              Modern Healthcare <Box component="span" sx={{ color: primaryColor }}>Made Simple</Box>
             </Typography>
             <Typography
               variant="h6"
@@ -159,7 +164,7 @@ function HeroSection() {
                 variant="contained"
                 size="large"
                 sx={{
-                  backgroundColor: "#10b981",
+                  backgroundColor: primaryColor,
                   color: "white",
                   px: 4,
                   py: 1.5,
@@ -168,7 +173,7 @@ function HeroSection() {
                   fontSize: "1rem",
                   boxShadow: "none",
                   "&:hover": {
-                    backgroundColor: "#059669",
+                    backgroundColor: primaryDark,
                     boxShadow: "none",
                   },
                 }}
@@ -181,16 +186,16 @@ function HeroSection() {
                 variant="outlined"
                 size="large"
                 sx={{
-                  borderColor: "#10b981",
-                  color: "#10b981",
+                  borderColor: primaryColor,
+                  color: primaryColor,
                   px: 4,
                   py: 1.5,
                   fontWeight: 600,
                   textTransform: "none",
                   fontSize: "1rem",
                   "&:hover": {
-                    backgroundColor: "#ecfdf5",
-                    borderColor: "#059669",
+                    backgroundColor: primaryLight,
+                    borderColor: primaryDark,
                   },
                 }}
               >
@@ -221,7 +226,7 @@ function HeroSection() {
 function ServicesSection() {
   const services = [
     {
-      icon: <People sx={{ fontSize: 40, color: "#10b981" }} />,
+      icon: <People sx={{ fontSize: 40, color: primaryColor }} />,
       title: "For Patients",
       description:
         "Easy appointment booking, medical records access, and secure messaging with your healthcare providers.",
@@ -229,7 +234,7 @@ function ServicesSection() {
       btnText: "Patient Portal",
     },
     {
-      icon: <MedicalServices sx={{ fontSize: 40, color: "#10b981" }} />,
+      icon: <MedicalServices sx={{ fontSize: 40, color: primaryColor }} />,
       title: "For Doctors",
       description:
         "Comprehensive tools to manage your practice, appointments, and patient communications efficiently.",
@@ -237,7 +242,7 @@ function ServicesSection() {
       btnText: "Doctor Portal",
     },
     {
-      icon: <Security sx={{ fontSize: 40, color: "#10b981" }} />,
+      icon: <Security sx={{ fontSize: 40, color: primaryColor }} />,
       title: "Admin Portal",
       description:
         "Manage the entire healthcare system, users, and platform settings with full control.",
@@ -252,7 +257,7 @@ function ServicesSection() {
         <Typography
           variant="overline"
           sx={{
-            color: "#10b981",
+            color: primaryColor,
             fontWeight: 600,
             letterSpacing: 1,
             fontSize: "0.875rem",
@@ -286,7 +291,7 @@ function ServicesSection() {
                 "&:hover": {
                   transform: "translateY(-5px)",
                   boxShadow: "0 10px 25px rgba(0,0,0,0.05)",
-                  borderColor: "#10b981",
+                  borderColor: primaryColor,
                 },
               }}
             >
@@ -309,13 +314,13 @@ function ServicesSection() {
                 variant="outlined"
                 sx={{
                   borderColor: "#e2e8f0",
-                  color: "#10b981",
+                  color: primaryColor,
                   fontWeight: 600,
                   textTransform: "none",
                   px: 3,
                   "&:hover": {
-                    borderColor: "#10b981",
-                    backgroundColor: "#ecfdf5",
+                    borderColor: primaryColor,
+                    backgroundColor: primaryLight,
                   },
                 }}
               >
@@ -328,25 +333,26 @@ function ServicesSection() {
     </Container>
   );
 }
+
 function FeaturesSection() {
   const features = [
     {
-      icon: <Security sx={{ fontSize: 40, color: "#10b981" }} />,
+      icon: <Security sx={{ fontSize: 40, color: primaryColor }} />,
       title: "Secure Platform",
       desc: "HIPAA-compliant system ensuring your health data remains private and protected.",
     },
     {
-      icon: <Bolt sx={{ fontSize: 40, color: "#10b981" }} />,
+      icon: <Bolt sx={{ fontSize: 40, color: primaryColor }} />,
       title: "Fast Access",
       desc: "Quick appointment scheduling with instant confirmation notifications.",
     },
     {
-      icon: <Lightbulb sx={{ fontSize: 40, color: "#10b981" }} />,
+      icon: <Lightbulb sx={{ fontSize: 40, color: primaryColor }} />,
       title: "Intuitive Design",
       desc: "User-friendly interface that makes healthcare management effortless.",
     },
     {
-      icon: <SupportAgent sx={{ fontSize: 40, color: "#10b981" }} />,
+      icon: <SupportAgent sx={{ fontSize: 40, color: primaryColor }} />,
       title: "24/7 Support",
       desc: "Our dedicated team is always ready to assist you with any questions.",
     },
@@ -359,7 +365,7 @@ function FeaturesSection() {
           <Typography
             variant="overline"
             sx={{
-              color: "#10b981",
+              color: primaryColor,
               fontWeight: 600,
               letterSpacing: 1,
               fontSize: "0.875rem",
@@ -395,7 +401,7 @@ function FeaturesSection() {
                     p: 2,
                     mb: 3,
                     borderRadius: "50%",
-                    backgroundColor: "#ecfdf5",
+                    backgroundColor: primaryLight,
                   }}
                 >
                   {icon}
@@ -449,7 +455,7 @@ function TestimonialsSection() {
         <Typography
           variant="overline"
           sx={{
-            color: "#10b981",
+            color: primaryColor,
             fontWeight: 600,
             letterSpacing: 1,
             fontSize: "0.875rem",
@@ -508,7 +514,7 @@ function TestimonialsSection() {
 
 function CtaSection() {
   return (
-    <Box sx={{ backgroundColor: "#10b981", py: { xs: 8, md: 10 } }}>
+    <Box sx={{ backgroundColor: primaryColor, py: { xs: 8, md: 10 } }}>
       <Container maxWidth="md">
         <Box textAlign="center" sx={{ color: "white" }}>
           <Typography
@@ -527,14 +533,14 @@ function CtaSection() {
             size="large"
             sx={{
               backgroundColor: "white",
-              color: "#10b981",
+              color: primaryColor,
               px: 6,
               py: 1.5,
               fontWeight: 600,
               textTransform: "none",
               fontSize: "1rem",
               "&:hover": {
-                backgroundColor: "#f0fdf4",
+                backgroundColor: primaryLight,
               },
             }}
           >
@@ -553,7 +559,7 @@ function Footer() {
         <Grid container spacing={6}>
           <Grid item xs={12} md={4}>
             <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <MedicalServices sx={{ color: "#10b981", fontSize: 32, mr: 1 }} />
+              <MedicalServices sx={{ color: primaryColor, fontSize: 32, mr: 1 }} />
               <Typography variant="h6" sx={{ fontWeight: 800 }}>
                 JCLINIC
               </Typography>
@@ -562,16 +568,16 @@ function Footer() {
               Modern healthcare solutions designed to connect patients and doctors through innovative technology.
             </Typography>
             <Stack direction="row" spacing={1}>
-              <IconButton sx={{ color: "#94a3b8", "&:hover": { color: "#10b981" } }}>
+              <IconButton sx={{ color: "#94a3b8", "&:hover": { color: primaryColor } }}>
                 <Facebook />
               </IconButton>
-              <IconButton sx={{ color: "#94a3b8", "&:hover": { color: "#10b981" } }}>
+              <IconButton sx={{ color: "#94a3b8", "&:hover": { color: primaryColor } }}>
                 <Twitter />
               </IconButton>
-              <IconButton sx={{ color: "#94a3b8", "&:hover": { color: "#10b981" } }}>
+              <IconButton sx={{ color: "#94a3b8", "&:hover": { color: primaryColor } }}>
                 <Instagram />
               </IconButton>
-              <IconButton sx={{ color: "#94a3b8", "&:hover": { color: "#10b981" } }}>
+              <IconButton sx={{ color: "#94a3b8", "&:hover": { color: primaryColor } }}>
                 <LinkedIn />
               </IconButton>
             </Stack>
@@ -587,7 +593,7 @@ function Footer() {
                 to="/"
                 color="inherit"
                 underline="none"
-                sx={{ color: "#e2e8f0", "&:hover": { color: "#10b981" } }}
+                sx={{ color: "#e2e8f0", "&:hover": { color: primaryColor } }}
               >
                 Home
               </MuiLink>
@@ -596,7 +602,7 @@ function Footer() {
                 to="/doctors"
                 color="inherit"
                 underline="none"
-                sx={{ color: "#e2e8f0", "&:hover": { color: "#10b981" } }}
+                sx={{ color: "#e2e8f0", "&:hover": { color: primaryColor } }}
               >
                 Doctors
               </MuiLink>
@@ -605,7 +611,7 @@ function Footer() {
                 to="/appointments"
                 color="inherit"
                 underline="none"
-                sx={{ color: "#e2e8f0", "&:hover": { color: "#10b981" } }}
+                sx={{ color: "#e2e8f0", "&:hover": { color: primaryColor } }}
               >
                 Appointments
               </MuiLink>
@@ -614,7 +620,7 @@ function Footer() {
                 to="/contact"
                 color="inherit"
                 underline="none"
-                sx={{ color: "#e2e8f0", "&:hover": { color: "#10b981" } }}
+                sx={{ color: "#e2e8f0", "&:hover": { color: primaryColor } }}
               >
                 Contact
               </MuiLink>
@@ -631,7 +637,7 @@ function Footer() {
                 to="/blog"
                 color="inherit"
                 underline="none"
-                sx={{ color: "#e2e8f0", "&:hover": { color: "#10b981" } }}
+                sx={{ color: "#e2e8f0", "&:hover": { color: primaryColor } }}
               >
                 Blog
               </MuiLink>
@@ -640,7 +646,7 @@ function Footer() {
                 to="/faq"
                 color="inherit"
                 underline="none"
-                sx={{ color: "#e2e8f0", "&:hover": { color: "#10b981" } }}
+                sx={{ color: "#e2e8f0", "&:hover": { color: primaryColor } }}
               >
                 FAQs
               </MuiLink>
@@ -649,7 +655,7 @@ function Footer() {
                 to="/privacy"
                 color="inherit"
                 underline="none"
-                sx={{ color: "#e2e8f0", "&:hover": { color: "#10b981" } }}
+                sx={{ color: "#e2e8f0", "&:hover": { color: primaryColor } }}
               >
                 Privacy Policy
               </MuiLink>
@@ -658,7 +664,7 @@ function Footer() {
                 to="/terms"
                 color="inherit"
                 underline="none"
-                sx={{ color: "#e2e8f0", "&:hover": { color: "#10b981" } }}
+                sx={{ color: "#e2e8f0", "&:hover": { color: primaryColor } }}
               >
                 Terms
               </MuiLink>
