@@ -36,7 +36,7 @@ function DoctorLayout() {
           <Route path="appointments" element={<DoctorAppointments />} />
           <Route path="availability" element={<DoctorAvailability />} />
           <Route path="profile" element={<DoctorProfile />} />
-          <Route path="schedule" element={<DoctorSchedule />} /> {/* جديد */}
+          <Route path="schedule" element={<DoctorSchedule />} /> 
         </Routes>
       </div>
     </div>
