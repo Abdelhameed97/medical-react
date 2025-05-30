@@ -15,9 +15,12 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  Chip,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CustomPagination from "../../CustomPagination.jsx";
+import { useNavigate } from "react-router-dom"; 
 
 const AppointmentsList = () => {
   const [appointments, setAppointments] = useState([]);
@@ -29,6 +32,7 @@ const AppointmentsList = () => {
     date: "",
     time: "",
     notes: "",
+    status: "pending",
   });
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -37,6 +41,12 @@ const AppointmentsList = () => {
     message: "",
     severity: "success",
   });
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const appointmentsPerPage = 6;
+
+  const navigate = useNavigate(); 
 
   const fetchAppointments = () => {
     fetch("http://localhost:5000/appointments")
@@ -51,7 +61,6 @@ const AppointmentsList = () => {
     fetchAppointments();
   }, []);
 
-  // تم توحيد showSnackbar لتظهر رسائل مثل الـ SpecialtiesList
   const showSnackbar = (message, severity = "success") => {
     setSnackbar({ open: true, message, severity });
   };
@@ -69,6 +78,7 @@ const AppointmentsList = () => {
       date: "",
       time: "",
       notes: "",
+      status: "pending",
     });
     setOpenDialog(true);
   };
@@ -81,6 +91,7 @@ const AppointmentsList = () => {
       date: appointment.date || "",
       time: appointment.time || "",
       notes: appointment.notes || "",
+      status: appointment.status || "pending",
     });
     setOpenDialog(true);
   };
@@ -92,6 +103,10 @@ const AppointmentsList = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleStatusChange = (status) => {
+    setFormData((prev) => ({ ...prev, status }));
   };
 
   const handleSave = () => {
@@ -157,175 +172,256 @@ const AppointmentsList = () => {
     setSelectedAppointment(null);
   };
 
-  return (
-    <Container sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom textAlign="center">
-        All Appointments
-      </Typography>
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "approved":
+        return "success";
+      case "pending":
+        return "warning";
+      case "rejected":
+        return "error";
+      default:
+        return "default";
+    }
+  };
 
-      <Box textAlign="center" sx={{ mb: 3 }}>
-        <Button variant="contained" color="primary" onClick={handleOpenAdd}>
-          Add Appointment
+  // Pagination logic
+  const indexOfLastAppointment = currentPage * appointmentsPerPage;
+  const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
+  const currentAppointments = appointments.slice(
+    indexOfFirstAppointment,
+    indexOfLastAppointment
+  );
+  const totalPages = Math.ceil(appointments.length / appointmentsPerPage);
+
+  return (
+    <>
+      <Container sx={{ py: 4 }}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          textAlign="center"
+          color="primary"
+        >
+          Doctor Appointments
+        </Typography>
+
+        <Box textAlign="center" sx={{ mb: 3 }}>
+          <Button variant="contained" color="primary" onClick={handleOpenAdd}>
+            Add Appointment
+          </Button>
+        </Box>
+
+        <Grid container spacing={3}>
+          {currentAppointments.map((appointment) => (
+            <Grid item xs={12} sm={6} md={4} key={appointment.id}>
+              <Card sx={{ boxShadow: 3 }}>
+                <CardContent>
+                  <Box sx={{ mb: 1 }}>
+                    <Typography variant="h6" gutterBottom>
+                      Appointment #{appointment.id}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Doctor:</strong>{" "}
+                      {appointment.doctorName || appointment.doctor || "N/A"}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Patient:</strong>{" "}
+                      {appointment.patientName || appointment.patient || "N/A"}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Date:</strong> {appointment.date || "N/A"}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Time:</strong> {appointment.time || "N/A"}
+                    </Typography>
+                    <Box sx={{ my: 1 }}>
+                      <Chip
+                        label={appointment.status || "pending"}
+                        color={getStatusColor(appointment.status)}
+                        size="small"
+                      />
+                    </Box>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mt: 1 }}
+                    >
+                      {appointment.notes || ""}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleOpenEdit(appointment)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDelete(appointment)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+
+        {/* Pagination */}
+        <Box mt={4}>
+          <CustomPagination
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        </Box>
+
+        {/* Add/Edit Dialog */}
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle>
+            {editingAppointment ? "Edit Appointment" : "Add Appointment"}
+          </DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Doctor Name"
+              name="doctorName"
+              fullWidth
+              value={formData.doctorName}
+              onChange={handleInputChange}
+              required
+            />
+            <TextField
+              margin="dense"
+              label="Patient Name"
+              name="patientName"
+              fullWidth
+              value={formData.patientName}
+              onChange={handleInputChange}
+              required
+            />
+            <TextField
+              margin="dense"
+              label="Date"
+              name="date"
+              type="date"
+              fullWidth
+              value={formData.date}
+              onChange={handleInputChange}
+              InputLabelProps={{ shrink: true }}
+              required
+            />
+            <TextField
+              margin="dense"
+              label="Time"
+              name="time"
+              type="time"
+              fullWidth
+              value={formData.time}
+              onChange={handleInputChange}
+              InputLabelProps={{ shrink: true }}
+              required
+            />
+            <Box sx={{ my: 2 }}>
+              <Typography variant="subtitle2">Status</Typography>
+              <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
+                <Button
+                  variant={
+                    formData.status === "approved" ? "contained" : "outlined"
+                  }
+                  color="success"
+                  onClick={() => handleStatusChange("approved")}
+                >
+                  Approved
+                </Button>
+                <Button
+                  variant={
+                    formData.status === "pending" ? "contained" : "outlined"
+                  }
+                  color="warning"
+                  onClick={() => handleStatusChange("pending")}
+                >
+                  Pending
+                </Button>
+                <Button
+                  variant={
+                    formData.status === "rejected" ? "contained" : "outlined"
+                  }
+                  color="error"
+                  onClick={() => handleStatusChange("rejected")}
+                >
+                  Rejected
+                </Button>
+              </Box>
+            </Box>
+            <TextField
+              margin="dense"
+              label="Notes"
+              name="notes"
+              fullWidth
+              multiline
+              rows={3}
+              value={formData.notes}
+              onChange={handleInputChange}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog}>Cancel</Button>
+            <Button variant="contained" onClick={handleSave}>
+              {editingAppointment ? "Update" : "Add"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <Dialog open={openConfirmDialog} onClose={handleCancelDelete}>
+          <DialogTitle>Confirm Delete</DialogTitle>
+          <DialogContent>
+            Are you sure you want to delete this appointment?
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelDelete}>Cancel</Button>
+            <Button
+              color="error"
+              variant="contained"
+              onClick={handleConfirmDelete}
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Snackbar for feedback messages */}
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={4000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={handleSnackbarClose}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Container>
+
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+        <Button variant="contained" onClick={() => navigate("/admin/doctors")}>
+          Back to Dashboard
         </Button>
       </Box>
-
-      <Grid container spacing={3}>
-        {appointments.map((appointment) => (
-          <Grid item xs={12} sm={6} md={4} key={appointment.id}>
-            <Card sx={{ boxShadow: 3 }}>
-              <CardContent>
-                <Box sx={{ mb: 1 }}>
-                  <Typography variant="h6" gutterBottom>
-                    Appointment #{appointment.id}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Doctor:</strong>{" "}
-                    {appointment.doctorName || appointment.doctor || "N/A"}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Patient:</strong>{" "}
-                    {appointment.patientName || appointment.patient || "N/A"}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Date:</strong> {appointment.date || "N/A"}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Time:</strong> {appointment.time || "N/A"}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ mt: 1 }}
-                  >
-                    {appointment.notes || ""}
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleOpenEdit(appointment)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleDelete(appointment)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {/* Add/Edit Dialog */}
-      <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>
-          {editingAppointment ? "Edit Appointment" : "Add Appointment"}
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Doctor Name"
-            name="doctorName"
-            fullWidth
-            value={formData.doctorName}
-            onChange={handleInputChange}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Patient Name"
-            name="patientName"
-            fullWidth
-            value={formData.patientName}
-            onChange={handleInputChange}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Date"
-            name="date"
-            type="date"
-            fullWidth
-            value={formData.date}
-            onChange={handleInputChange}
-            InputLabelProps={{ shrink: true }}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Time"
-            name="time"
-            type="time"
-            fullWidth
-            value={formData.time}
-            onChange={handleInputChange}
-            InputLabelProps={{ shrink: true }}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Notes"
-            name="notes"
-            fullWidth
-            multiline
-            rows={3}
-            value={formData.notes}
-            onChange={handleInputChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleSave} variant="contained" color="primary">
-            {editingAppointment ? "Update" : "Add"}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Confirm Delete Dialog */}
-      <Dialog open={openConfirmDialog} onClose={handleCancelDelete}>
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete appointment #
-          <strong>{selectedAppointment?.id}</strong>?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelDelete}>Cancel</Button>
-          <Button
-            onClick={handleConfirmDelete}
-            variant="contained"
-            color="error"
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Snackbar for notifications */}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbar.severity}
-          sx={{ width: "100%" }}
-        >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </Container>
+    </>
   );
 };
 

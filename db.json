@@ -5,7 +5,27 @@
       "username": "admin",
       "email": "admin@med.com",
       "password": "admin123",
-      "role": "admin"
+      "role": "admin",
+      "lastLogin": "Fri, May 30, 09:32 PM",
+      "position": "System Administrator",
+      "department": "IT",
+      "employeeId": "EMP-ADM-042",
+      "joinDate": "10/02/2018",
+      "responsibilities": "Manage hospital systems, user accounts, and security policies",
+      "education": [
+        {
+          "institution": "Cairo University",
+          "degree": "Bachelor of Computer Science",
+          "period": "2003 - 2007",
+          "description": "Specialized in Information Systems and Network Security"
+        },
+        {
+          "institution": "Certified Information Systems Security Professional (CISSP)",
+          "degree": "ISC2",
+          "period": "2010"
+        }
+      ],
+      "phone": "01010560217"
     },
     {
       "id": "2",
@@ -55,6 +75,14 @@
       "name": "Ahmed",
       "username": "Ahmed",
       "email": "ali@example.com",
+      "password": "123456789",
+      "role": "patient"
+    },
+    {
+      "id": "0ec7",
+      "name": "adam",
+      "username": "Harbi_Abdellah",
+      "email": "adam@gmail.com",
       "password": "123456789",
       "role": "patient"
     }
@@ -365,10 +393,10 @@
       "id": "1",
       "patientId": 1,
       "doctorId": 1,
-      "date": "2025-06-02",
+      "date": "2025-05-30",
       "time": "13:00",
-      "status": "approved",
-      "notes": "ملاحظة رقم 1"
+      "status": "rejected",
+      "notes": "ملاحظة رقم 1"
     },
     {
       "id": "2",
@@ -449,6 +477,15 @@
       "date": "Wednesday, Jun 23, 2021 | 10:00 AM",
       "reason": "Chest pain",
       "paymentMethod": "VISA"
+    },
+    {
+      "id": "c6e0",
+      "doctorName": "Marwa",
+      "patientName": "Mayar",
+      "date": "2025-05-30",
+      "time": "18:43",
+      "notes": "aloooooo",
+      "status": "approved"
     }
   ],
   "notifications": [

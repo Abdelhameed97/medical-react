@@ -1,26 +1,33 @@
-import React from "react";
-import { Container, Grid, Typography, CircularProgress } from "@mui/material";
-import UserCard from "../../components/admin/UserManagement/UserCard"; // Assuming same UserCard used
-
-const staticPatients = [
-  {
-    id: 4,
-    title: "Sara Ibrahim",
-    overview: "Patient with history of hypertension and diabetes.",
-    poster_path: "/img2.jpg",
-  },
-  {
-    id: 5,
-    title: "John Doe",
-    overview: "Patient with asthma and allergies.",
-    poster_path: "/img4.jpg",
-  },
-];
+import React, { useState, useEffect } from "react";
+import { Container, Grid, Typography, CircularProgress, Box, Button } from "@mui/material";
+import UserCard from "../../components/admin/UserManagement/UserCard";
+import { useNavigate } from "react-router-dom";
 
 const PatientsPage = () => {
-  const loading = false;
-  const error = null;
-  const list = staticPatients;
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const navigate = useNavigate(); 
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/patients");
+        if (!response.ok) {
+          throw new Error("Failed to fetch patients");
+        }
+        const data = await response.json();
+        setPatients(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPatients();
+  }, []);
 
   if (loading) {
     return (
@@ -33,33 +40,42 @@ const PatientsPage = () => {
   if (error) {
     return (
       <Container sx={{ textAlign: "center", mt: 5 }}>
-        <Typography color="error" variant="h6">
-          {error}
-        </Typography>
+        <Typography variant="h6">{error}</Typography>
       </Container>
     );
   }
 
   return (
-    <Container sx={{ py: 5 }}>
-      <Typography variant="h4" gutterBottom>
-        Patients
-      </Typography>
-      <Grid container spacing={4}>
-        {list.map((user) => (
-          <Grid item xs={12} sm={6} md={4} key={user.id}>
-            <UserCard
-              id={user.id}
-              img={`https://image.tmdb.org/t/p/w500${user.poster_path}`}
-              title={user.title}
-              desc={user.overview.substring(0, 100) + "..."}
-              page={`/user/${user.id}`}
-              fullUser={user}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+    <>
+      <Container sx={{ py: 5 }}>
+        <Typography variant="h4" gutterBottom color="primary">
+          Patients
+        </Typography>
+        <Grid container spacing={4}>
+          {patients.map((patient) => (
+            <Grid item xs={12} sm={6} md={4} key={patient.id}>
+              <UserCard
+                id={patient.id}
+                img={patient.image}
+                title={patient.fullName}
+                desc={`${patient.gender}, ${patient.age} years old`}
+                page={`/patients/${patient.id}`}
+                fullUser={patient}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+      <Box sx={{ mt: 3, textAlign: "center" }}>
+        <Button
+          variant="outlined"
+          onClick={() => navigate("/admin")}
+          sx={{ px: 4 }}
+        >
+          Back to Dashboard
+        </Button>
+      </Box>
+    </>
   );
 };
 
