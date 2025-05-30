@@ -5,12 +5,8 @@ import {
   Typography,
   Avatar,
   Paper,
-  Divider,
   TextField,
   Button,
-  IconButton,
-  Chip,
-  Badge,
   List,
   ListItem,
   ListItemAvatar,
@@ -19,36 +15,25 @@ import {
   Tab,
   styled,
   useTheme,
-  LinearProgress,
   CircularProgress,
   Alert,
 } from "@mui/material";
 import {
   Edit,
   Save,
-  CameraAlt,
-  VerifiedUser,
-  Email,
-  Phone,
-  LocationOn,
-  Security,
   CalendarToday,
   Person,
   Work,
   School,
-  Lock,
   Notifications,
   CloudUpload,
-  PersonAdd,
 } from "@mui/icons-material";
-import { Settings } from "lucide-react";
 
 const ProfileCard = styled(Paper)(({ theme }) => ({
   background: `rgba(${
     theme.palette.mode === "dark" ? "30,30,30" : "255,255,255"
   }, 0.8)`,
   backdropFilter: "blur(12px)",
-  border: "1px solid rgba(255, 255, 255, 0.2)",
   borderRadius: "16px",
   boxShadow: theme.shadows[10],
   overflow: "hidden",
@@ -198,9 +183,6 @@ const AdminProfile = () => {
       sx={{
         p: 4,
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
-        backgroundImage:
-          "radial-gradient(circle at 10% 20%, rgba(200, 200, 255, 0.3) 0%, transparent 20%)",
       }}
     >
       {/* Header */}
@@ -238,280 +220,6 @@ const AdminProfile = () => {
           {editMode ? (loading ? "Saving..." : "Save Changes") : "Edit Profile"}
         </Button>
       </Box>
-
-      {adminData && (
-        <Grid container spacing={3}>
-          {/* Left Column - Profile Info */}
-          <Grid item xs={12} md={4}>
-            <ProfileCard>
-              <Box
-                sx={{
-                  p: 3,
-                  textAlign: "center",
-                  background:
-                    "linear-gradient(135deg, rgba(63,81,181,0.1) 0%, rgba(33,150,243,0.1) 100%)",
-                }}
-              >
-                <Badge
-                  overlap="circular"
-                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                  badgeContent={
-                    <IconButton
-                      sx={{
-                        bgcolor: "primary.main",
-                        color: "white",
-                        "&:hover": { bgcolor: "primary.dark" },
-                      }}
-                    >
-                      <CameraAlt fontSize="small" />
-                    </IconButton>
-                  }
-                >
-                  <Avatar
-                    sx={{
-                      width: 120,
-                      height: 120,
-                      margin: "0 auto 16px",
-                      border: "4px solid white",
-                      boxShadow: theme.shadows[6],
-                    }}
-                    src="https://randomuser.me/api/portraits/men/1.jpg"
-                    alt="Admin Avatar"
-                  />
-                </Badge>
-
-                <Typography variant="h5" fontWeight="bold" gutterBottom>
-                  {adminData.username}
-                  <VerifiedUser
-                    color="primary"
-                    sx={{ ml: 1, fontSize: "1.2rem" }}
-                  />
-                </Typography>
-
-                <Chip
-                  label={adminData.role}
-                  color="primary"
-                  size="small"
-                  sx={{ mb: 2, borderRadius: "8px" }}
-                />
-
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 2 }}
-                >
-                  Last login: {adminData.lastLogin}
-                </Typography>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: 2,
-                    mb: 3,
-                  }}
-                >
-                  <IconButton
-                    sx={{ bgcolor: "primary.light", color: "primary.main" }}
-                  >
-                    <Email />
-                  </IconButton>
-                  <IconButton
-                    sx={{
-                      bgcolor: "secondary.light",
-                      color: "secondary.main",
-                    }}
-                  >
-                    <Phone />
-                  </IconButton>
-                  <IconButton
-                    sx={{ bgcolor: "success.light", color: "success.main" }}
-                  >
-                    <Notifications />
-                  </IconButton>
-                </Box>
-              </Box>
-
-              <Divider />
-
-              <Box sx={{ p: 3 }}>
-                <List dense>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          bgcolor: "primary.light",
-                          color: "primary.main",
-                          width: 32,
-                          height: 32,
-                        }}
-                      >
-                        <Person fontSize="small" />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Username"
-                      secondary={adminData.username}
-                    />
-                  </ListItem>
-
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          bgcolor: "secondary.light",
-                          color: "secondary.main",
-                          width: 32,
-                          height: 32,
-                        }}
-                      >
-                        <Email fontSize="small" />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="Email" secondary={adminData.email} />
-                  </ListItem>
-
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          bgcolor: "warning.light",
-                          color: "warning.main",
-                          width: 32,
-                          height: 32,
-                        }}
-                      >
-                        <Phone fontSize="small" />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Phone"
-                      secondary={
-                        editMode ? (
-                          <TextField
-                            fullWidth
-                            variant="standard"
-                            value={adminData.phone || ""}
-                            onChange={(e) =>
-                              handleInputChange("phone", e.target.value)
-                            }
-                            disabled={!editMode}
-                          />
-                        ) : (
-                          adminData.phone || "Not provided"
-                        )
-                      }
-                    />
-                  </ListItem>
-
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          bgcolor: "success.light",
-                          color: "success.main",
-                          width: 32,
-                          height: 32,
-                        }}
-                      >
-                        <LocationOn fontSize="small" />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Location"
-                      secondary={
-                        editMode ? (
-                          <TextField
-                            fullWidth
-                            variant="standard"
-                            value={adminData.location || ""}
-                            onChange={(e) =>
-                              handleInputChange("location", e.target.value)
-                            }
-                            disabled={!editMode}
-                          />
-                        ) : (
-                          adminData.location || "Not provided"
-                        )
-                      }
-                    />
-                  </ListItem>
-                </List>
-              </Box>
-            </ProfileCard>
-
-            {/* Security Card */}
-            <ProfileCard sx={{ mt: 3 }}>
-              <Box sx={{ p: 3 }}>
-                <Typography
-                  variant="h6"
-                  fontWeight="bold"
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    mb: 2,
-                  }}
-                >
-                  <Security color="primary" sx={{ mr: 1 }} />
-                  Security Status
-                </Typography>
-
-                <Box sx={{ mb: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <span>Password Strength</span>
-                    <span>Strong</span>
-                  </Typography>
-                  <LinearProgress
-                    variant="determinate"
-                    value={90}
-                    sx={{
-                      height: 6,
-                      borderRadius: 3,
-                      mt: 1,
-                      "& .MuiLinearProgress-bar": {
-                        backgroundColor: "success.main",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ mb: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <span>Two-Factor Auth</span>
-                    <span>Enabled</span>
-                  </Typography>
-                  <LinearProgress
-                    variant="determinate"
-                    value={100}
-                    sx={{
-                      height: 6,
-                      borderRadius: 3,
-                      mt: 1,
-                      "& .MuiLinearProgress-bar": {
-                        backgroundColor: "primary.main",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  startIcon={<Lock />}
-                  sx={{ mt: 2, borderRadius: "12px" }}
-                >
-                  Change Password
-                </Button>
-              </Box>
-            </ProfileCard>
-          </Grid>
 
           {/* Right Column - Main Content */}
           <Grid item xs={12} md={8}>
@@ -759,9 +467,7 @@ const AdminProfile = () => {
               </Box>
             </ProfileCard>
           </Grid>
-        </Grid>
-      )}
-    </Box>
+\    </Box>
   );
 };
 
