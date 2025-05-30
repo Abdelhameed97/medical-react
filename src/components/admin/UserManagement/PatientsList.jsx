@@ -14,8 +14,10 @@ import {
   TextField,
   Snackbar,
   Alert,
+  Box,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import CustomPagination from "../../CustomPagination.jsx";
 
 const PatientList = () => {
   const [patients, setPatients] = useState([]);
@@ -30,10 +32,11 @@ const PatientList = () => {
     gender: "",
     notes: "",
   });
-
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [patientToDelete, setPatientToDelete] = useState(null);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const patientsPerPage = 6;
+  const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState({
     open: false,
     severity: "success",
@@ -56,6 +59,18 @@ const PatientList = () => {
   useEffect(() => {
     fetchPatients();
   }, []);
+
+  const indexOfLastPatient = currentPage * patientsPerPage;
+  const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
+  const currentPatients = patients.slice(
+    indexOfFirstPatient,
+    indexOfLastPatient
+  );
+  const totalPages = Math.ceil(patients.length / patientsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const handleOpenAdd = () => {
     setEditingPatient(null);
@@ -167,175 +182,201 @@ const PatientList = () => {
   };
 
   return (
-    <Container sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Patients
-      </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleOpenAdd}
-        sx={{ mb: 3 }}
-      >
-        Add Patient
-      </Button>
-      <Grid container spacing={2}>
-        {patients.map((patient) => (
-          <Grid item xs={12} sm={6} md={4} key={patient.id}>
-            <Card>
-              <CardContent
-                sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-              >
-                <Typography variant="h6">{patient.fullName}</Typography>
-                <Typography color="text.secondary">{patient.email}</Typography>
-                <Typography>{patient.phone}</Typography>
-                <Typography>{patient.address}</Typography>
-                <Typography>Age: {patient.age}</Typography>
-                <Typography>Gender: {patient.gender}</Typography>
-                <Typography>{patient.notes}</Typography>
-                <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    color="primary"
-                    component={Link}
-                    to={`/admin/patients/${patient.id}`}
-                  >
-                    View Details
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => handleOpenEdit(patient)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    color="error"
-                    onClick={() => handleDeleteClick(patient)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      <Dialog open={openDialog} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          {editingPatient ? "Edit Patient" : "Add Patient"}
-        </DialogTitle>
-        <DialogContent
-          sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+    <>
+      <Container sx={{ py: 4 }}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          color="primary"
+          textAlign="center"
         >
-          <TextField
-            label="Full Name"
-            name="fullName"
-            value={form.fullName}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Email"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Phone"
-            name="phone"
-            value={form.phone}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Address"
-            name="address"
-            value={form.address}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Age"
-            name="age"
-            type="number"
-            value={form.age}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Gender"
-            name="gender"
-            value={form.gender}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Notes"
-            name="notes"
-            multiline
-            rows={3}
-            value={form.notes}
-            onChange={handleChange}
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" color="primary" onClick={handleSave}>
-            {editingPatient ? "Update" : "Add"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          Patients
+        </Typography>
+        <Box textAlign="center" sx={{ mb: 3 }}>
 
-      <Dialog
-        open={confirmOpen}
-        onClose={handleCancelDelete}
-        aria-labelledby="confirm-dialog-title"
-        aria-describedby="confirm-dialog-description"
-      >
-        <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="confirm-dialog-description">
-            Are you sure you want to delete patient{" "}
-            <strong>{patientToDelete?.fullName}</strong>?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelDelete} color="primary">
-            Cancel
-          </Button>
           <Button
-            onClick={handleConfirmDelete}
-            color="error"
             variant="contained"
+            color="primary"
+            onClick={handleOpenAdd}
+            sx={{ mb: 3 }}
           >
-            Delete
+            Add Patient
           </Button>
-        </DialogActions>
-      </Dialog>
+        </Box>
+        <Grid container spacing={2}>
+          {currentPatients.map((patient) => (
+            <Grid item xs={12} sm={6} md={4} key={patient.id}>
+              <Card>
+                <CardContent
+                  sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                >
+                  <Typography variant="h6">{patient.fullName}</Typography>
+                  <Typography color="text.secondary">
+                    {patient.email}
+                  </Typography>
+                  <Typography>{patient.phone}</Typography>
+                  <Typography>{patient.address}</Typography>
+                  <Typography>Age: {patient.age}</Typography>
+                  <Typography>Gender: {patient.gender}</Typography>
+                  <Typography>{patient.notes}</Typography>
+                  <div
+                    style={{ display: "flex", gap: "8px", marginTop: "8px" }}
+                  >
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      color="primary"
+                      component={Link}
+                      to={`/admin/patients/${patient.id}`}
+                    >
+                      View Details
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => handleOpenEdit(patient)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      color="error"
+                      onClick={() => handleDeleteClick(patient)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
 
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbar.severity}
-          sx={{ width: "100%" }}
+        {patients.length > patientsPerPage && (
+          <CustomPagination
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
+
+        <Dialog open={openDialog} onClose={handleClose} maxWidth="sm" fullWidth>
+          <DialogTitle>
+            {editingPatient ? "Edit Patient" : "Add Patient"}
+          </DialogTitle>
+          <DialogContent
+            sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+          >
+            <TextField
+              label="Full Name"
+              name="fullName"
+              value={form.fullName}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              label="Phone"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              label="Address"
+              name="address"
+              value={form.address}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              label="Age"
+              name="age"
+              type="number"
+              value={form.age}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              label="Gender"
+              name="gender"
+              value={form.gender}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              label="Notes"
+              name="notes"
+              multiline
+              rows={3}
+              value={form.notes}
+              onChange={handleChange}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button variant="contained" color="primary" onClick={handleSave}>
+              {editingPatient ? "Update" : "Add"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={confirmOpen}
+          onClose={handleCancelDelete}
+          aria-labelledby="confirm-dialog-title"
+          aria-describedby="confirm-dialog-description"
         >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </Container>
+          <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="confirm-dialog-description">
+              Are you sure you want to delete patient{" "}
+              <strong>{patientToDelete?.fullName}</strong>?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelDelete} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmDelete}
+              color="error"
+              variant="contained"
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={handleSnackbarClose}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Container>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+        <Button variant="contained" onClick={() => navigate("/admin")}>
+          Back to Dashboard
+        </Button>
+      </Box>
+    </>
   );
 };
 
