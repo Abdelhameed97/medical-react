@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -9,45 +9,45 @@ import {
   FormControl,
   InputLabel,
   Button,
-  Alert
-} from '@mui/material';
-import { useParams, useNavigate } from 'react-router-dom';
+  Alert,
+} from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom";
 
 const mockDoctors = [
   {
-    id: '1',
-    name: 'Dr. Amina Khaled',
-    specialty: 'Cardiology',
+    id: "1",
+    name: "Dr. Amina Khaled",
+    specialty: "Cardiology",
     availability: {
-      Monday: ['09:00 AM', '11:00 AM'],
-      Tuesday: ['01:00 PM', '03:00 PM'],
-      Thursday: ['10:00 AM'],
-      Friday: ['02:00 PM', '04:00 PM']
-    }
+      Monday: ["09:00 AM", "11:00 AM"],
+      Tuesday: ["01:00 PM", "03:00 PM"],
+      Thursday: ["10:00 AM"],
+      Friday: ["02:00 PM", "04:00 PM"],
+    },
   },
   {
-    id: '2',
-    name: 'Dr. Omar Tarek',
-    specialty: 'Dermatology',
+    id: "2",
+    name: "Dr. Omar Tarek",
+    specialty: "Dermatology",
     availability: {
-      Monday: ['11:00 AM'],
-      Tuesday: ['09:00 AM', '12:00 PM'],
-      Wednesday: ['03:00 PM'],
-      Friday: ['10:00 AM']
-    }
-  }
+      Monday: ["11:00 AM"],
+      Tuesday: ["09:00 AM", "12:00 PM"],
+      Wednesday: ["03:00 PM"],
+      Friday: ["10:00 AM"],
+    },
+  },
 ];
 
 // Helper to get next 7 days with day names
 const getNext7Days = () => {
   const daysOfWeek = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday'
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
   const dates = [];
   const today = new Date();
@@ -57,7 +57,7 @@ const getNext7Days = () => {
     dates.push({
       dateObj: d,
       dayName: daysOfWeek[d.getDay()],
-      dateString: d.toISOString().split('T')[0] // yyyy-mm-dd
+      dateString: d.toISOString().split("T")[0], // yyyy-mm-dd
     });
   }
   return dates;
@@ -69,15 +69,15 @@ const AppointmentBooking = () => {
 
   const doctor = mockDoctors.find((d) => d.id === doctorId);
 
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
-  const [error, setError] = useState('');
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   if (!doctor) {
     return (
       <Box p={3}>
-        <Typography variant="h6" color="error">
+        <Typography variant='h6' color='error'>
           Doctor not found
         </Typography>
       </Box>
@@ -100,13 +100,13 @@ const AppointmentBooking = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     if (!selectedDate) {
-      setError('Please select a date.');
+      setError("Please select a date.");
       return;
     }
     if (!selectedTime) {
-      setError('Please select a time.');
+      setError("Please select a time.");
       return;
     }
 
@@ -116,8 +116,8 @@ const AppointmentBooking = () => {
     );
 
     setSuccess(true);
-    setSelectedDate('');
-    setSelectedTime('');
+    setSelectedDate("");
+    setSelectedTime("");
 
     // Optionally redirect after success
     // navigate('/my-appointments');
@@ -125,28 +125,28 @@ const AppointmentBooking = () => {
 
   return (
     <Box p={3}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant='h4' gutterBottom>
         Book Appointment with {doctor.name}
       </Typography>
-      <Typography variant="subtitle1" gutterBottom color="text.secondary">
+      <Typography variant='subtitle1' gutterBottom color='text.secondary'>
         Specialty: {doctor.specialty}
       </Typography>
 
       <Card>
         <CardContent>
           <form onSubmit={handleSubmit}>
-            <FormControl fullWidth margin="normal" variant="outlined">
-              <InputLabel id="date-label">Select Date</InputLabel>
+            <FormControl fullWidth margin='normal' variant='outlined'>
+              <InputLabel id='date-label'>Select Date</InputLabel>
               <Select
-                labelId="date-label"
+                labelId='date-label'
                 value={selectedDate}
                 onChange={(e) => {
                   setSelectedDate(e.target.value);
-                  setSelectedTime(''); // reset time when date changes
-                  setError('');
+                  setSelectedTime(""); // reset time when date changes
+                  setError("");
                   setSuccess(false);
                 }}
-                label="Select Date"
+                label='Select Date'
               >
                 {availableDates.length === 0 ? (
                   <MenuItem disabled>No available dates</MenuItem>
@@ -162,20 +162,20 @@ const AppointmentBooking = () => {
 
             <FormControl
               fullWidth
-              margin="normal"
-              variant="outlined"
+              margin='normal'
+              variant='outlined'
               disabled={!selectedDate}
             >
-              <InputLabel id="time-label">Select Time</InputLabel>
+              <InputLabel id='time-label'>Select Time</InputLabel>
               <Select
-                labelId="time-label"
+                labelId='time-label'
                 value={selectedTime}
                 onChange={(e) => {
                   setSelectedTime(e.target.value);
-                  setError('');
+                  setError("");
                   setSuccess(false);
                 }}
-                label="Select Time"
+                label='Select Time'
               >
                 {availableTimes.length === 0 ? (
                   <MenuItem disabled>No available time slots</MenuItem>
@@ -190,22 +190,22 @@ const AppointmentBooking = () => {
             </FormControl>
 
             {error && (
-              <Typography color="error" variant="body2" mt={1}>
+              <Typography color='error' variant='body2' mt={1}>
                 {error}
               </Typography>
             )}
 
             {success && (
-              <Alert severity="success" sx={{ mt: 2 }}>
+              <Alert severity='success' sx={{ mt: 2 }}>
                 Appointment successfully booked!
               </Alert>
             )}
 
             <Box mt={3}>
               <Button
-                variant="contained"
-                color="primary"
-                type="submit"
+                variant='contained'
+                color='primary'
+                type='submit'
                 disabled={!selectedDate || !selectedTime}
               >
                 Book Appointment

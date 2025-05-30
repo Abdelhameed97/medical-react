@@ -53,119 +53,211 @@
   ],
   "doctors": [
     {
-      "name": "rehab",
-      "email": "rehab@gmail.com",
-      "phone": "01013102431",
-      "specialty": "لاموي",
-      "bio": "gjvklkscb,mb nd",
       "id": "1",
-      "approved": false
+      "fullName": "Dr. Marcus Horizon",
+      "specialty": "Cardiology",
+      "rating": 4.7,
+      "distance": "800m away",
+      "image": "https://randomuser.me/api/portraits/men/75.jpg",
+      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "availableDates": [
+        {
+          "day": "Mon",
+          "date": "21"
+        },
+        {
+          "day": "Tue",
+          "date": "22"
+        },
+        {
+          "day": "Wed",
+          "date": "23"
+        }
+      ]
     },
     {
       "id": "2",
-      "userId": 2,
-      "fullName": "Dr. Sarah Smith",
-      "specialtyId": 2,
-      "specialty": "Neurology",
-      "bio": "Neurologist with 10+ years of experience.",
-      "contact": "987654321",
-      "approved": true,
-      "email": "sarah@example.com",
-      "phone": "01012345678",
-      "image": "https://randomuser.me/api/portraits/women/2.jpg"
+      "fullName": "Dr. Maria Carter",
+      "specialty": "Dentist",
+      "rating": 4.5,
+      "distance": "1.2km away",
+      "image": "https://randomuser.me/api/portraits/women/65.jpg",
+      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "availableDates": [
+        {
+          "day": "Mon",
+          "date": "21"
+        },
+        {
+          "day": "Tue",
+          "date": "22"
+        },
+        {
+          "day": "Wed",
+          "date": "23"
+        },
+        {
+          "day": "Thu",
+          "date": "24"
+        },
+        {
+          "day": "Fri",
+          "date": "25"
+        },
+        {
+          "day": "Sat",
+          "date": "26"
+        }
+      ]
     },
     {
       "id": "3",
-      "userId": 3,
-      "fullName": "Dr. Michael Johnson",
-      "specialtyId": 3,
-      "specialty": "Dermatology",
-      "bio": "Dermatologist with 12+ years of experience.",
-      "contact": "1234567890",
-      "approved": true,
-      "email": "michael@example.com",
-      "phone": "01012345678",
-      "image": "https://randomuser.me/api/portraits/men/3.jpg"
+      "fullName": "Dr. Stevi Moore",
+      "specialty": "Surgeon",
+      "rating": 4.8,
+      "distance": "500m away",
+      "image": "https://randomuser.me/api/portraits/women/66.jpg",
+      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "availableDates": [
+        {
+          "day": "Mon",
+          "date": "21"
+        },
+        {
+          "day": "Tue",
+          "date": "22"
+        },
+        {
+          "day": "Wed",
+          "date": "23"
+        },
+        {
+          "day": "Thu",
+          "date": "24"
+        }
+      ]
     },
     {
       "id": "4",
-      "userId": 4,
-      "fullName": "Dr. Amal Fathy",
-      "specialtyId": 2,
-      "specialty": "Neurology",
-      "bio": "Neurologist with 10+ years of experience.",
-      "contact": "987654321",
-      "approved": false,
-      "name": "amal",
-      "approved": true,
-      "email": "amal@gmail.com",
-      "phone": "01011223344",
-      "image": "https://randomuser.me/api/portraits/women/11.jpg"
+      "fullName": "Dr. Luke Daniels",
+      "specialty": "Lungs Specialist",
+      "rating": 4.6,
+      "distance": "2km away",
+      "image": "https://randomuser.me/api/portraits/men/65.jpg",
+      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "availableDates": [
+        {
+          "day": "Thu",
+          "date": "24"
+        },
+        {
+          "day": "Fri",
+          "date": "25"
+        },
+        {
+          "day": "Sat",
+          "date": "26"
+        }
+      ]
     },
     {
       "id": "5",
-      "userId": 10,
-      "fullName": "Dr. Karim Ali",
-      "specialtyId": 3,
-      "specialty": "Dermatology",
-      "bio": "Dermatologist with 15+ years in clinical practice.",
-      "contact": "0111111111",
-      "approved": true,
-      "email": "karim@example.com",
-      "phone": "01012345678",
-      "image": "https://randomuser.me/api/portraits/men/14.jpg"
+      "fullName": "Dr. Abdelhameed Mohamed",
+      "specialty": "Cardiology",
+      "rating": 4.7,
+      "distance": "800m away",
+      "image": "https://randomuser.me/api/portraits/men/75.jpg",
+      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "availableDates": [
+        {
+          "day": "Mon",
+          "date": "21"
+        },
+        {
+          "day": "Tue",
+          "date": "22"
+        },
+        {
+          "day": "Wed",
+          "date": "23"
+        }
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "General"
+    },
+    {
+      "id": "2",
+      "name": "Lungs Specialist"
+    },
+    {
+      "id": "3",
+      "name": "Dentist"
+    },
+    {
+      "id": "4",
+      "name": "Psychiatrist"
+    },
+    {
+      "id": "5",
+      "name": "Covid-19"
     },
     {
       "id": "6",
-      "userId": 1,
-      "fullName": "Dr. Amin Khaled",
-      "specialtyId": 1,
-      "specialty": "cardiology",
-      "bio": "Specialist in cardiovascular diseases with 10 years of experience.",
-      "contact": "0111111111",
-      "approved": true,
-      "email": "amina@example.com",
-      "phone": "01012345678",
-      "image": "https://randomuser.me/api/portraits/men/13.jpg"
+      "name": "Orthopedics"
     },
     {
       "id": "7",
-      "userId": 2,
-      "fullName": "Dr. Abelhameed Mohamed",
-      "specialtyId": 2,
-      "specialty": "Neurology",
-      "bio": "Specialist in neurology with 10 years of experience.",
-      "contact": "0111111111",
-      "approved": true,
-      "email": "amina@example.com",
-      "phone": "01012345678",
-      "image": "https://randomuser.me/api/portraits/men/7.jpg"
+      "name": "Surgeon"
     },
     {
       "id": "8",
-      "userId": 2,
-      "fullName": "Dr. Marwa Mahmoud",
-      "specialtyId": 2,
-      "specialty": "Neurology",
-      "bio": "Aloooooooooooo,",
-      "contact": "0111111111",
-      "approved": false,
-      "email": "marwa@example.com",
-      "phone": "01012345668",
-      "image": "https://randomuser.me/api/portraits/women/10.jpg"
+      "name": "Cardiologist"
+    }
+  ],
+  "recommendedDoctor": {
+    "id": 1,
+    "fullName": "Dr. Marcus Horizon",
+    "specialty": "Cardiology",
+    "rating": 4.7,
+    "distance": "800m away",
+    "image": "https://randomuser.me/api/portraits/men/75.jpg"
+  },
+  "recentDoctors": [
+    {
+      "id": "1",
+      "fullName": "Dr. Marcus Horizon",
+      "specialty": "Cardiology",
+      "rating": 4.7,
+      "distance": "800m away",
+      "image": "https://randomuser.me/api/portraits/men/75.jpg"
     },
     {
-      "id": "9",
-      "userId": 2,
-      "fullName": "Dr. Ahmed Ali",
-      "specialtyId": 2,
-      "specialty": "Neurology",
-      "bio": "Aloooooooooooo,",
-      "contact": "0111111111",
-      "approved": false,
-      "email": "ahmed@example.com",
-      "phone": "01012345668",
-      "image": "https://randomuser.me/api/portraits/men/15.jpg"
+      "id": "2",
+      "fullName": "Dr. Maria Carter",
+      "specialty": "Dentist",
+      "rating": 4.5,
+      "distance": "1.2km away",
+      "image": "https://randomuser.me/api/portraits/women/65.jpg"
+    },
+    {
+      "id": "3",
+      "fullName": "Dr. Stevi Moore",
+      "specialty": "Surgeon",
+      "rating": 4.8,
+      "distance": "500m away",
+      "image": "https://randomuser.me/api/portraits/women/66.jpg"
+    },
+    {
+      "id": "4",
+      "fullName": "Dr. Luke Daniels",
+      "specialty": "Lungs Specialist",
+      "rating": 4.6,
+      "distance": "2km away",
+      "image": "https://randomuser.me/api/portraits/men/65.jpg"
     }
   ],
   "patients": [
@@ -199,7 +291,7 @@
       "image": "https://randomuser.me/api/portraits/men/13.jpg"
     },
     {
-      "id": "4",
+      "id": "3",
       "userId": 6,
       "fullName": "Layla Mohamed",
       "email": "",
@@ -210,28 +302,27 @@
       "contact": "0100000004",
       "image": "https://randomuser.me/api/portraits/women/14.jpg",
       "approved": false,
-      "notes": "Alooooooo",
-      "id": "3"
+      "notes": "Alooooooo"
     }
   ],
   "availability": [
     {
       "id": "f421",
-      "doctorId": 7,
+      "doctorId": 1,
       "day": "Tuesday",
       "startTime": "09:00",
       "endTime": "17:00"
     },
     {
       "id": "f422",
-      "doctorId": 8,
+      "doctorId": 2,
       "day": "Thursday",
       "startTime": "12:00",
       "endTime": "20:00"
     },
     {
       "id": "fe56",
-      "doctorId": 9,
+      "doctorId": 3,
       "day": "Saturday",
       "startTime": "09:00",
       "endTime": "17:00"
@@ -248,14 +339,6 @@
     },
     {
       "id": "2",
-      "doctorId": 2,
-      "patientId": 1,
-      "date": "2025-06-03T14:00:00",
-      "reason": "Follow-up appointment",
-      "status": "Completed"
-    },
-    {
-      "id": "3",
       "doctorId": 3,
       "patientId": 4,
       "date": "2025-06-05T09:00:00",
@@ -263,7 +346,7 @@
       "status": "Scheduled"
     },
     {
-      "id": "4",
+      "id": "3",
       "doctorId": 4,
       "patientId": 3,
       "date": "2025-06-07T11:15:00",
@@ -271,7 +354,7 @@
       "status": "Cancelled"
     },
     {
-      "id": "5",
+      "id": "4",
       "doctorId": 5,
       "patientId": 5,
       "date": "2025-06-08T16:00:00",
@@ -279,53 +362,77 @@
       "status": "Scheduled"
     },
     {
-      "id": "6",
-      "doctorId": 6,
+      "id": "5",
+      "doctorId": 5,
       "patientId": 5,
       "date": "2025-06-08T16:00:00",
+      "reason": "covid-19",
+      "status": "Scheduled"
+    },
+    {
+      "id": "6",
+      "doctorId": 4,
+      "patientId": 1,
+      "date": "2025-06-08T16:00:00",
       "reason": "Skin rash evaluation",
       "status": "Scheduled"
     },
-      {
+    {
       "id": "7",
-      "doctorId": 7,
+      "doctorId": 3,
       "patientId": 1,
       "date": "2025-06-08T16:00:00",
       "reason": "Skin rash evaluation",
       "status": "Scheduled"
     },
     {
-      "id": "8",
-      "doctorId": 8,
+      "id": "6a19",
+      "doctorId": 1,
       "patientId": 1,
-      "date": "2025-06-08T16:00:00",
-      "reason": "Skin rash evaluation",
-      "status": "Scheduled"
+      "dateTime": "2025-05-30T00:45:25.643Z",
+      "reason": "General Checkup",
+      "status": "Pending"
     },
     {
-      "id": "9",
-      "doctorId": 9,
+      "id": "34c8",
+      "doctorId": "1",
       "patientId": 1,
-      "date": "2025-06-08T16:00:00",
-      "reason": "Skin rash evaluation",
-      "status": "Scheduled"
+      "date": "Friday, Jul 12, 2021 | 11:00 AM",
+      "reason": "Back pain",
+      "paymentMethod": "Mastercard"
+    },
+    {
+      "id": "05ba",
+      "doctorId": "2",
+      "patientId": 1,
+      "date": "Friday, Jul 12, 2021 | 11:00 AM",
+      "reason": "Headache",
+      "paymentMethod": "Mastercard"
+    },
+    {
+      "id": "a3ec",
+      "doctorId": "4",
+      "patientId": 1,
+      "date": "Wednesday, Jun 23, 2021 | 10:00 AM",
+      "reason": "Chest pain",
+      "paymentMethod": "VISA"
     }
   ],
   "notifications": [
     {
-      "id": 1,
+      "id": "1",
       "message": "Booking confirmed for Dr. Omar at 2025-06-01 10:00 AM.",
       "email": "patient1@example.com",
       "status": "confirmed"
     },
     {
-      "id": 2,
+      "id": "2",
       "message": "Booking confirmation email sent to sara@med.com.",
       "email": "sara@med.com",
       "status": "sent"
     },
     {
-      "id": 3,
+      "id": "3",
       "message": "Booking confirmed for Dr. Amal at 2025-06-05 09:00 AM.",
       "email": "patient2@example.com",
       "status": "confirmed"

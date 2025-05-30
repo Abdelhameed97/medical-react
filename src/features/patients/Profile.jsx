@@ -1,145 +1,113 @@
-import React, { useState } from 'react';
+import React from "react";
 import {
-  Box,
+  Avatar,
+  // BottomNavigation,
+  // BottomNavigationAction,
+  Card,
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   Typography,
-  TextField,
-  Button,
-  MenuItem,
-  Alert
-} from '@mui/material';
+  Box,
+  Paper,
+} from "@mui/material";
+import {
+  Favorite,
+  EventNote,
+  Payment,
+  QuestionAnswer,
+  Logout,
+  // Home,
+  // Chat,
+  // CalendarToday,
+  // Person,
+} from "@mui/icons-material";
 
-const genders = [
-  { value: 'male', label: 'Male' },
-  { value: 'female', label: 'Female' },
-  { value: 'other', label: 'Other' }
-];
-
-// Mock initial profile data
-const initialProfile = {
-  fullName: 'Abdelhameed Mohamed Hemida',
-  email: 'abdelhameed@example.com',
-  phone: '+201234567890',
-  gender: 'male',
-  dob: '1990-01-01'
-};
-
-const Profile = () => {
-  const [profile, setProfile] = useState(initialProfile);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-
-  const handleChange = (field) => (e) => {
-    setProfile({ ...profile, [field]: e.target.value });
-    setError('');
-    setSuccess(false);
-  };
-
-  const validate = () => {
-    if (!profile.fullName.trim()) return 'Full name is required.';
-    if (!profile.email.trim()) return 'Email is required.';
-    // Basic email regex
-    if (!/\S+@\S+\.\S+/.test(profile.email)) return 'Email is invalid.';
-    if (!profile.phone.trim()) return 'Phone is required.';
-    if (!profile.dob) return 'Date of birth is required.';
-    return null;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationError = validate();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-    setError('');
-    // TODO: Replace with API call to update profile
-    console.log('Profile saved:', profile);
-    setSuccess(true);
-  };
+const PatientProfile = () => {
+  // const [value, setValue] = React.useState(3); // 3 = Profile tab selected
 
   return (
-    <Box p={3} maxWidth={600} mx="auto">
-      <Typography variant="h4" gutterBottom>
-        Edit Profile
-      </Typography>
-
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-
-      {success && (
-        <Alert severity="success" sx={{ mb: 2 }}>
-          Profile updated successfully!
-        </Alert>
-      )}
-
-      <form onSubmit={handleSubmit} noValidate>
-        <TextField
-          label="Full Name"
-          value={profile.fullName}
-          onChange={handleChange('fullName')}
-          fullWidth
-          margin="normal"
-          required
+    <Box sx={{ pt: 8, pb: 2, bgcolor: "#e0f7f5", minHeight: "100vh" }}>
+      
+      <Card
+        sx={{
+          m: 2,
+          p: 2,
+          borderRadius: 4,
+          textAlign: "center",
+          background: "linear-gradient(to right, #2BC0E4, #EAECC6)",
+          color: "#fff",
+        }}
+      >
+        <Avatar
+          src='https://randomuser.me/api/portraits/women/44.jpg'
+          sx={{ width: 80, height: 80, margin: "0 auto" }}
         />
-
-        <TextField
-          label="Email"
-          type="email"
-          value={profile.email}
-          onChange={handleChange('email')}
-          fullWidth
-          margin="normal"
-          required
-        />
-
-        <TextField
-          label="Phone"
-          value={profile.phone}
-          onChange={handleChange('phone')}
-          fullWidth
-          margin="normal"
-          required
-        />
-
-        <TextField
-          select
-          label="Gender"
-          value={profile.gender}
-          onChange={handleChange('gender')}
-          fullWidth
-          margin="normal"
-        >
-          {genders.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-
-        <TextField
-          label="Date of Birth"
-          type="date"
-          value={profile.dob}
-          onChange={handleChange('dob')}
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true
-          }}
-          required
-        />
-
-        <Box mt={3}>
-          <Button variant="contained" color="primary" type="submit">
-            Save Profile
-          </Button>
+        <Typography variant='h6' sx={{ mt: 1 }}>
+          Amelia Renata
+        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-around", mt: 2 }}>
+          <Box>
+            <Typography variant='body2'>Heart rate</Typography>
+            <Typography fontWeight='bold'>215bpm</Typography>
+          </Box>
+          <Box>
+            <Typography variant='body2'>Calories</Typography>
+            <Typography fontWeight='bold'>756cal</Typography>
+          </Box>
+          <Box>
+            <Typography variant='body2'>Weight</Typography>
+            <Typography fontWeight='bold'>103lbs</Typography>
+          </Box>
         </Box>
-      </form>
+      </Card>
+
+      {/* Options List */}
+      <Paper sx={{ borderRadius: "24px 24px 0 0", p: 2 }}>
+        <List>
+          <ListItem button>
+            <ListItemIcon>
+              <Favorite sx={{ color: "#3ACCE1" }} />
+            </ListItemIcon>
+            <ListItemText primary='My Saved' />
+          </ListItem>
+          <Divider />
+          <ListItem button>
+            <ListItemIcon>
+              <EventNote sx={{ color: "#3ACCE1" }} />
+            </ListItemIcon>
+            <ListItemText primary='Appointment' />
+          </ListItem>
+          <Divider />
+          <ListItem button>
+            <ListItemIcon>
+              <Payment sx={{ color: "#3ACCE1" }} />
+            </ListItemIcon>
+            <ListItemText primary='Payment Method' />
+          </ListItem>
+          <Divider />
+          <ListItem button>
+            <ListItemIcon>
+              <QuestionAnswer sx={{ color: "#3ACCE1" }} />
+            </ListItemIcon>
+            <ListItemText primary='FAQs' />
+          </ListItem>
+          <Divider />
+          <ListItem button>
+            <ListItemIcon>
+              <Logout sx={{ color: "red" }} />
+            </ListItemIcon>
+            <ListItemText
+              primary='Logout'
+              primaryTypographyProps={{ color: "red" }}
+            />
+          </ListItem>
+        </List>
+      </Paper>
     </Box>
   );
 };
 
-export default Profile;
+export default PatientProfile;
