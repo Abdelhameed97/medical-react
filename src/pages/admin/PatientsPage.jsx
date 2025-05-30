@@ -1,26 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Grid, Typography, CircularProgress } from "@mui/material";
-import UserCard from "../../components/admin/UserManagement/UserCard"; // Assuming same UserCard used
-
-const staticPatients = [
-  {
-    id: 4,
-    title: "Sara Ibrahim",
-    overview: "Patient with history of hypertension and diabetes.",
-    poster_path: "/img2.jpg",
-  },
-  {
-    id: 5,
-    title: "John Doe",
-    overview: "Patient with asthma and allergies.",
-    poster_path: "/img4.jpg",
-  },
-];
+import UserCard from "../../components/admin/UserManagement/UserCard";
 
 const PatientsPage = () => {
-  const loading = false;
-  const error = null;
-  const list = staticPatients;
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/patients");
+        if (!response.ok) {
+          throw new Error("Failed to fetch patients");
+        }
+        const data = await response.json();
+        setPatients(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPatients();
+  }, []);
 
   if (loading) {
     return (
@@ -46,15 +50,15 @@ const PatientsPage = () => {
         Patients
       </Typography>
       <Grid container spacing={4}>
-        {list.map((user) => (
-          <Grid item xs={12} sm={6} md={4} key={user.id}>
+        {patients.map((patient) => (
+          <Grid item xs={12} sm={6} md={4} key={patient.id}>
             <UserCard
-              id={user.id}
-              img={`https://image.tmdb.org/t/p/w500${user.poster_path}`}
-              title={user.title}
-              desc={user.overview.substring(0, 100) + "..."}
-              page={`/user/${user.id}`}
-              fullUser={user}
+              id={patient.id}
+              img={patient.image}
+              title={patient.fullName}
+              desc={`${patient.gender}, ${patient.age} years old`}
+              page={`/patients/${patient.id}`}
+              fullUser={patient}
             />
           </Grid>
         ))}
