@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Container,
@@ -7,38 +7,57 @@ import {
   Avatar,
   Paper,
   Divider,
+  CircularProgress,
 } from "@mui/material";
-
-const staticUsers = [
-  {
-    id: 1,
-    title: "Dr. Ahmed Mohamed",
-    overview: "Experienced cardiologist with over 10 years in the field.",
-    poster_path: "/img1.jpg",
-  },
-  {
-    id: 2,
-    title: "Sara Ibrahim",
-    overview: "Patient with history of hypertension and diabetes.",
-    poster_path: "/img2.jpg",
-  },
-  {
-    id: 3,
-    title: "Dr. Nour Ali",
-    overview: "Neurologist specialized in pediatric cases.",
-    poster_path: "/img3.jpg",
-  },
-];
 
 const DoctorsPage = () => {
   const { id } = useParams();
-  const user = staticUsers.find((u) => u.id === Number(id));
+  const [doctor, setDoctor] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!user) {
+  useEffect(() => {
+    const fetchDoctor = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/doctors/${id}`);
+        if (!response.ok) {
+          throw new Error("Doctor not found");
+        }
+        const data = await response.json();
+        setDoctor(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDoctor();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <Container sx={{ py: 5, textAlign: "center" }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
+  if (error) {
     return (
       <Container sx={{ py: 5 }}>
         <Typography variant="h5" color="error">
-          User not found.
+          {error}
+        </Typography>
+      </Container>
+    );
+  }
+
+  if (!doctor) {
+    return (
+      <Container sx={{ py: 5 }}>
+        <Typography variant="h5" color="error">
+          Doctor not found.
         </Typography>
       </Container>
     );
@@ -48,19 +67,38 @@ const DoctorsPage = () => {
     <Container sx={{ py: 5 }}>
       <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 3 }}>
         <Box display="flex" alignItems="center" gap={3}>
-          <Avatar
-            src={`https://image.tmdb.org/t/p/w500${user.poster_path}`}
-            sx={{ width: 100, height: 100 }}
-          />
+          <Avatar src={doctor.image} sx={{ width: 100, height: 100 }} />
           <Box>
-            <Typography variant="h5">{user.title}</Typography>
+            <Typography variant="h5">{doctor.fullName}</Typography>
             <Typography variant="body2" color="text.secondary">
-              ID: {user.id}
+              Specialty: {doctor.specialty}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Rating: {doctor.rating}
             </Typography>
           </Box>
         </Box>
         <Divider sx={{ my: 3 }} />
-        <Typography variant="body1">{user.overview}</Typography>
+        <Typography variant="h6" gutterBottom>
+          Bio
+        </Typography>
+        <Typography variant="body1">{doctor.bio}</Typography>
+
+        {doctor.availableDates && (
+          <>
+            <Divider sx={{ my: 3 }} />
+            <Typography variant="h6" gutterBottom>
+              Available Dates
+            </Typography>
+            <Box display="flex" gap={2}>
+              {doctor.availableDates.map((date, index) => (
+                <Typography key={index} variant="body1">
+                  {date.day} {date.date}
+                </Typography>
+              ))}
+            </Box>
+          </>
+        )}
       </Paper>
     </Container>
   );
