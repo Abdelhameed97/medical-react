@@ -64,7 +64,7 @@ const DoctorsPage = () => {
   }
 
   return (
-    <Container sx={{ py: 5 }}>
+    <Container sx={{ py: 5, backgroundColor: "white" }}>
       <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 3 }}>
         <Box display="flex" alignItems="center" gap={3}>
           <Avatar src={doctor.image} sx={{ width: 100, height: 100 }} />

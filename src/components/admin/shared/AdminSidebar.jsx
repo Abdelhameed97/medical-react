@@ -63,7 +63,7 @@ const AdminSidebar = ({ drawerWidth = 240, mobileOpen, onDrawerToggle }) => {
       path: "/admin/AdminPatientApproval",
     },
     {
-      text: "Admin Profile",
+      text: "Profile",
       icon: <ProfileIcon />,
       path: "/admin/AdminProfile",
     },

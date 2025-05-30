@@ -13,6 +13,7 @@ import {
   Stack,
 } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = "http://localhost:5000";
 
@@ -20,6 +21,8 @@ export default function AdminPatientApproval() {
   const [patients, setPatients] = useState([]);
   const [page, setPage] = useState(1);
   const pageSize = 5;
+
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     fetchPatients();
@@ -55,6 +58,7 @@ export default function AdminPatientApproval() {
   };
 
   return (
+    <>
     <Box sx={{ backgroundColor: "#F5F8FF", minHeight: "100vh", p: 4 }}>
       <Paper elevation={3} sx={{ p: 3, borderRadius: "24px" }}>
         <Typography
@@ -127,5 +131,11 @@ export default function AdminPatientApproval() {
         </Stack>
       </Paper>
     </Box>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+        <Button variant="contained" onClick={() => navigate("/admin/doctors")}>
+          Back to Dashboard
+        </Button>
+      </Box>
+    </>
   );
 }

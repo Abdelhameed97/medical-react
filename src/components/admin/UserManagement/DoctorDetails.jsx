@@ -13,7 +13,7 @@ import {
 
 const DoctorDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate(); // ✅ Hook داخل جسم الـ component
+  const navigate = useNavigate(); 
   const [doctor, setDoctor] = useState(null);
 
   useEffect(() => {
