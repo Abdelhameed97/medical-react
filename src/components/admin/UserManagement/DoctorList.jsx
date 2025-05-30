@@ -15,8 +15,10 @@ import {
   Snackbar,
   Alert,
   DialogContentText,
+  Box,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import CustomPagination from "../../CustomPagination.jsx";
 
 const DoctorsList = () => {
   const [doctors, setDoctors] = useState([]);
@@ -25,7 +27,9 @@ const DoctorsList = () => {
   const [editingDoctor, setEditingDoctor] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [doctorToDelete, setDoctorToDelete] = useState(null);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const doctorsPerPage = 6;
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -34,7 +38,6 @@ const DoctorsList = () => {
     bio: "",
     image: "",
   });
-
   const [snackbar, setSnackbar] = useState({
     open: false,
     severity: "success",
@@ -71,6 +74,15 @@ const DoctorsList = () => {
     fetchDoctors();
     fetchSpecialties();
   }, []);
+
+  const indexOfLastDoctor = currentPage * doctorsPerPage;
+  const indexOfFirstDoctor = indexOfLastDoctor - doctorsPerPage;
+  const currentDoctors = doctors.slice(indexOfFirstDoctor, indexOfLastDoctor);
+  const totalPages = Math.ceil(doctors.length / doctorsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const handleOpenAdd = () => {
     setEditingDoctor(null);
@@ -180,179 +192,199 @@ const DoctorsList = () => {
   };
 
   return (
-    <Container sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Doctors
-      </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleOpenAdd}
-        sx={{ mb: 3 }}
-      >
-        Add Doctor
-      </Button>
-
-      <Grid container spacing={2}>
-        {doctors.map((doc) => (
-          <Grid item xs={12} sm={6} md={4} key={doc.id}>
-            <Card>
-              <CardContent
-                sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-              >
-                <Typography variant="h6">{doc.fullName}</Typography>
-                <Typography color="text.secondary">
-                  {specialties.find((s) => s.id === doc.specialtyId)?.name ||
-                    "No Specialty"}
-                </Typography>
-                <Typography>{doc.email}</Typography>
-                <Typography>{doc.phone}</Typography>
-                <Typography>{doc.bio}</Typography>
-                <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    color="primary"
-                    component={Link}
-                    to={`/admin/doctors/${doc.id}`}
-                  >
-                    View Details
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => handleOpenEdit(doc)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    color="error"
-                    onClick={() => handleDeleteClick(doc)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {/* Form Dialog */}
-      <Dialog open={openDialog} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          {editingDoctor ? "Edit Doctor" : "Add Doctor"}
-        </DialogTitle>
-        <DialogContent
-          sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+    <>
+      <Container sx={{ py: 4 }}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          color="primary"
+          textAlign="center"
         >
-          <TextField
-            label="Full Name"
-            name="fullName"
-            value={form.fullName}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Email"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Phone"
-            name="phone"
-            value={form.phone}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            select
-            label="Specialty"
-            name="specialtyId"
-            value={form.specialtyId}
-            onChange={handleChange}
-            fullWidth
-          >
-            {specialties.map((spec) => (
-              <MenuItem key={spec.id} value={spec.id}>
-                {spec.name}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            label="Bio"
-            name="bio"
-            value={form.bio}
-            onChange={handleChange}
-            multiline
-            rows={3}
-            fullWidth
-          />
-          <TextField
-            label="Image URL"
-            name="image"
-            value={form.image}
-            onChange={handleChange}
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" color="primary" onClick={handleSave}>
-            {editingDoctor ? "Update" : "Add"}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Confirm Delete Dialog */}
-      <Dialog
-        open={confirmOpen}
-        onClose={handleCancelDelete}
-        aria-labelledby="confirm-dialog-title"
-        aria-describedby="confirm-dialog-description"
-      >
-        <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="confirm-dialog-description">
-            Are you sure you want to delete doctor{" "}
-            <strong>{doctorToDelete?.fullName}</strong>?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelDelete} color="primary">
-            Cancel
-          </Button>
+          Doctors
+        </Typography>
+        <Box textAlign="center">
           <Button
-            onClick={handleConfirmDelete}
-            color="error"
             variant="contained"
+            color="primary"
+            onClick={handleOpenAdd}
+            sx={{ mb: 3 }}
           >
-            Delete
+            Add Doctor
           </Button>
-        </DialogActions>
-      </Dialog>
+        </Box>
 
-      {/* Snackbar Alert */}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbar.severity}
-          sx={{ width: "100%" }}
+        <Grid container spacing={2}>
+          {currentDoctors.map((doc) => (
+            <Grid item xs={12} sm={6} md={4} key={doc.id}>
+              <Card>
+                <CardContent
+                  sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                >
+                  <Typography variant="h6">{doc.fullName}</Typography>
+                  <Typography color="text.secondary">
+                    {specialties.find((s) => s.id === doc.specialtyId)?.name ||
+                      "No Specialty"}
+                  </Typography>
+                  <Typography>{doc.email}</Typography>
+                  <Typography>{doc.phone}</Typography>
+                  <Typography>{doc.bio}</Typography>
+                  <div
+                    style={{ display: "flex", gap: "8px", marginTop: "8px" }}
+                  >
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      color="primary"
+                      component={Link}
+                      to={`/admin/doctors/${doc.id}`}
+                    >
+                      View Details
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => handleOpenEdit(doc)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      color="error"
+                      onClick={() => handleDeleteClick(doc)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+
+        {doctors.length > doctorsPerPage && (
+          <CustomPagination
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
+
+        <Dialog open={openDialog} onClose={handleClose} maxWidth="sm" fullWidth>
+          <DialogTitle>
+            {editingDoctor ? "Edit Doctor" : "Add Doctor"}
+          </DialogTitle>
+          <DialogContent
+            sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+          >
+            <TextField
+              label="Full Name"
+              name="fullName"
+              value={form.fullName}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              label="Phone"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              select
+              label="Specialty"
+              name="specialtyId"
+              value={form.specialtyId}
+              onChange={handleChange}
+              fullWidth
+            >
+              {specialties.map((spec) => (
+                <MenuItem key={spec.id} value={spec.id}>
+                  {spec.name}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              label="Bio"
+              name="bio"
+              value={form.bio}
+              onChange={handleChange}
+              multiline
+              rows={3}
+              fullWidth
+            />
+            <TextField
+              label="Image URL"
+              name="image"
+              value={form.image}
+              onChange={handleChange}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button variant="contained" color="primary" onClick={handleSave}>
+              {editingDoctor ? "Update" : "Add"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={confirmOpen}
+          onClose={handleCancelDelete}
+          aria-labelledby="confirm-dialog-title"
+          aria-describedby="confirm-dialog-description"
         >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </Container>
+          <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="confirm-dialog-description">
+              Are you sure you want to delete doctor{" "}
+              <strong>{doctorToDelete?.fullName}</strong>?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelDelete} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmDelete}
+              color="error"
+              variant="contained"
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={handleSnackbarClose}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Container>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+        <Button variant="contained" onClick={() => navigate("/admin")}>
+          Back to Dashboard
+        </Button>
+      </Box>
+    </>
   );
 };
 

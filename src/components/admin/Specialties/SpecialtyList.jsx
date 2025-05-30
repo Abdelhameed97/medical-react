@@ -14,9 +14,11 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  Box,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 
 const SpecialtiesList = () => {
   const [specialties, setSpecialties] = useState([]);
@@ -29,6 +31,8 @@ const SpecialtiesList = () => {
     message: "",
     severity: "success",
   });
+
+  const navigate = useNavigate(); 
 
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [selectedSpecialty, setSelectedSpecialty] = useState(null);
@@ -123,107 +127,118 @@ const SpecialtiesList = () => {
   };
 
   return (
-    <Container sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Specialties
-      </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleOpenAdd}
-        sx={{ mb: 3 }}
-      >
-        Add Specialty
-      </Button>
-      <Grid container spacing={2}>
-        {specialties.map((spec) => (
-          <Grid item xs={12} sm={6} md={4} key={spec.id}>
-            <Card>
-              <CardContent
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Typography>{spec.name}</Typography>
-                <div>
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleOpenEdit(spec)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleDeleteClick(spec)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {/* Add/Edit Dialog */}
-      <Dialog open={openDialog} onClose={handleClose}>
-        <DialogTitle>
-          {editingSpecialty ? "Edit Specialty" : "Add Specialty"}
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Specialty Name"
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSave} variant="contained" color="primary">
-            {editingSpecialty ? "Update" : "Add"}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Confirm Delete Dialog */}
-      <Dialog open={openConfirmDialog} onClose={handleCancelDelete}>
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete this specialty?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelDelete}>Cancel</Button>
-          <Button
-            onClick={handleConfirmDelete}
-            color="error"
-            variant="contained"
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Snackbar */}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbar.severity}
-          sx={{ width: "100%" }}
+    <>
+      <Container sx={{ py: 4 }}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          color="primary"
+          textAlign="center"
         >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </Container>
+          Specialties
+        </Typography>
+        <Box textAlign="center" sx={{ mb: 3 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleOpenAdd}
+            sx={{ mb: 3 }}
+          >
+            Add Specialty
+          </Button>
+        </Box>
+        <Grid container spacing={2}>
+          {specialties.map((spec) => (
+            <Grid item xs={12} sm={6} md={4} key={spec.id}>
+              <Card>
+                <CardContent
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography>{spec.name}</Typography>
+                  <div>
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleOpenEdit(spec)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDeleteClick(spec)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+        {/* Add/Edit Dialog */}
+        <Dialog open={openDialog} onClose={handleClose}>
+          <DialogTitle>
+            {editingSpecialty ? "Edit Specialty" : "Add Specialty"}
+          </DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Specialty Name"
+              fullWidth
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleSave} variant="contained" color="primary">
+              {editingSpecialty ? "Update" : "Add"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        {/* Confirm Delete Dialog */}
+        <Dialog open={openConfirmDialog} onClose={handleCancelDelete}>
+          <DialogTitle>Confirm Delete</DialogTitle>
+          <DialogContent>
+            Are you sure you want to delete this specialty?
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelDelete}>Cancel</Button>
+            <Button
+              onClick={handleConfirmDelete}
+              color="error"
+              variant="contained"
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+        {/* Snackbar */}
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={handleSnackbarClose}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Container>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+        <Button variant="contained" onClick={() => navigate("/admin/doctors")}>
+          Back to Dashboard
+        </Button>
+      </Box>
+    </>
   );
 };
 
