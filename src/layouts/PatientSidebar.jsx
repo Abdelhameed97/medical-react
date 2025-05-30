@@ -32,7 +32,6 @@ const PatientSidebar = ({ drawerWidth = 240, mobileOpen, onDrawerToggle }) => {
   const menuItems = [
     { text: "Home", icon: <HomeIcon />, path: "/patient" },
     { text: "Appointments", icon: <AppointmentsIcon />, path: "/patient/my-appointments" },
-    { text: "Messages", icon: <MessagesIcon />, path: "/patient/messages" },
     { text: "Profile", icon: <ProfileIcon />, path: "/patient/profile" },
   ];
 
