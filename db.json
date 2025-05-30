@@ -1,5 +1,4 @@
 {
-
   "users": [
     {
       "id": "1",
@@ -36,12 +35,27 @@
       "password": "patient456",
       "role": "patient"
     },
-
     {
       "id": "6",
       "username": "layla",
       "email": "layla@med.com",
       "password": "patient789",
+      "role": "patient"
+    },
+    {
+      "id": "561e",
+      "name": "harbi",
+      "username": "Harbi_Abdellah",
+      "email": "harbia305@gmail.com",
+      "password": "123456789",
+      "role": "patient"
+    },
+    {
+      "id": "d64a",
+      "name": "Ahmed",
+      "username": "Ahmed",
+      "email": "ali@example.com",
+      "password": "123456789",
       "role": "patient"
     }
   ],
@@ -497,7 +511,6 @@
       "status": "pending",
       "notes": "ملاحظة رقم 6"
     },
-
     {
       "id": "7",
       "patientId": 2,

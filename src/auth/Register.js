@@ -58,9 +58,10 @@ const Register = () => {
         error = value.trim() === "" ? "Name is required" : "";
         break;
       case "email":
-        error = value.trim() === ""
-          ? "Email is required"
-          : !emailRegex.test(value)
+        error =
+          value.trim() === ""
+            ? "Email is required"
+            : !emailRegex.test(value)
             ? "Invalid email format"
             : "";
         break;
@@ -68,9 +69,10 @@ const Register = () => {
         error = value.trim() === "" ? "Username is required" : "";
         break;
       case "password":
-        error = value.trim() === ""
-          ? "Password is required"
-          : value.length < 8
+        error =
+          value.trim() === ""
+            ? "Password is required"
+            : value.length < 8
             ? "Password must be at least 8 characters"
             : "";
         break;
@@ -117,7 +119,7 @@ const Register = () => {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validateForm();
 
@@ -126,11 +128,42 @@ const Register = () => {
       return;
     }
 
-    // Save to localStorage (temporary demo logic)
-    localStorage.setItem("registeredName", formData.name);
-    localStorage.setItem("registeredEmail", formData.email);
-    setFormError("");
-    navigate("/login");
+    try {
+      // Check if email already exists
+      const checkResponse = await fetch(
+        `http://localhost:5000/users?email=${formData.email}`
+      );
+      const existingUsers = await checkResponse.json();
+
+      if (existingUsers.length > 0) {
+        setFormError("Email already exists. Please use a different email.");
+        return;
+      }
+
+      // Register new user
+      const response = await fetch("http://localhost:5000/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          role: "patient", // Default role for new users
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Registration failed");
+      }
+
+      // Redirect to login after successful registration
+      navigate("/login");
+    } catch (error) {
+      setFormError(error.message || "Registration failed. Please try again.");
+    }
   };
 
   return (
@@ -138,7 +171,8 @@ const Register = () => {
       <CssBaseline />
       <Box
         sx={{
-          background: "linear-gradient(135deg, rgba(11,233,185,0.959) 0%, rgba(2,124,98,0.671) 100%)",
+          background:
+            "linear-gradient(135deg, rgba(11,233,185,0.959) 0%, rgba(2,124,98,0.671) 100%)",
           minHeight: "100vh",
           display: "flex",
           alignItems: "center",
@@ -167,7 +201,13 @@ const Register = () => {
             >
               <PersonAddIcon fontSize="large" />
             </Avatar>
-            <Typography variant="h5" component="h1" fontWeight="bold" color="primary" mt={2}>
+            <Typography
+              variant="h5"
+              component="h1"
+              fontWeight="bold"
+              color="primary"
+              mt={2}
+            >
               Create Your Account
             </Typography>
           </Box>
@@ -179,25 +219,27 @@ const Register = () => {
           )}
 
           <form onSubmit={handleSubmit}>
-            {["name", "email", "username", "password", "confirmPassword"].map((field) => (
-              <TextField
-                key={field}
-                label={
-                  field === "confirmPassword"
-                    ? "Confirm Password"
-                    : field.charAt(0).toUpperCase() + field.slice(1)
-                }
-                type={field.includes("password") ? "password" : "text"}
-                name={field}
-                value={formData[field]}
-                onChange={handleInputChange}
-                error={!!errors[field]}
-                helperText={errors[field]}
-                fullWidth
-                margin="normal"
-                variant="outlined"
-              />
-            ))}
+            {["name", "email", "username", "password", "confirmPassword"].map(
+              (field) => (
+                <TextField
+                  key={field}
+                  label={
+                    field === "confirmPassword"
+                      ? "Confirm Password"
+                      : field.charAt(0).toUpperCase() + field.slice(1)
+                  }
+                  type={field.includes("password") ? "password" : "text"}
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleInputChange}
+                  error={!!errors[field]}
+                  helperText={errors[field]}
+                  fullWidth
+                  margin="normal"
+                  variant="outlined"
+                />
+              )
+            )}
 
             <Button
               type="submit"
