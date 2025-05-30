@@ -260,7 +260,7 @@
       "image": "https://randomuser.me/api/portraits/men/65.jpg",
       "email": "rehab123@gmail.com",
       "phone": "01013102431",
-      "bio": "hello  i am rehab kamal  abdelhammed",
+      "bio": "hello  i am rehab kamal  abdelhammed"
     },
     {
       "id": "2",
@@ -306,7 +306,6 @@
       "image": "https://randomuser.me/api/portraits/women/14.jpg",
       "approved": false,
       "notes": "Alooooooo"
-      "image": "https://randomuser.me/api/portraits/women/14.jpg"
     }
   ],
   "availability": [
@@ -490,7 +489,7 @@
       "status": "pending",
       "notes": "ملاحظة رقم 6"
     },
-    
+
     {
       "id": "7",
       "patientId": 2,
