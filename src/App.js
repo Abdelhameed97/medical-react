@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MainDashboard from "./pages/MainDashboard"; // أضف هذا الاستيراد
+import MainDashboard from "./pages/MainDashboard";
 import Home from "./pages/Home";
 import DoctorDashboard from "./pages/Doctor/DoctorDashboard";
 import DoctorAppointments from "./pages/Doctor/DoctorAppointments";
@@ -24,12 +24,13 @@ import Notifications from "./pages/admin/Notifications";
 import PatientLayout from "./layouts/PatientLayout";
 // Add new imports for patients
 import FindDoctorsView from "./features/patients/FindDoctorsView";
-import Doctor_Details from "./features/patients/Doctor_Details";
+import DoctorInfo from "./features/patients/DoctorInfo";
 import MyAppointments from "./features/patients/MyAppointments";
 import Profile from "./features/patients/Profile";
 import AppointmentConfirmation from "./features/patients/AppointmentConfirmation";
-import AdminPatientApproval from './components/admin/Approval/AdminPatientApproval';
-import AdminDoctorApproval from './components/admin/Approval/AdminDoctorsApproval';
+
+import AdminPatientApproval from "./components/admin/Approval/AdminPatientApproval";
+import AdminDoctorApproval from "./components/admin/Approval/AdminDoctorsApproval";
 import AdminProfile from "./pages/admin/AdminProfile";
 
 // Add new AdminLayout component
@@ -39,12 +40,9 @@ function PatientRoutes() {
       <ThemeProvider theme={theme}>
         <Routes>
           <Route path='/' element={<FindDoctorsView />} />
-          <Route path='doctors/:docId' element={<Doctor_Details />} />
+          <Route path='doctors/:docId' element={<DoctorInfo/>} />
           {/* <Route path='patients' element={<PatientsList />} /> */}
-          <Route
-            path='my-appointments/:patientId'
-            element={<MyAppointments />}
-          />
+          <Route path='my-appointments' element={<MyAppointments />} />
           <Route
             path='confirm-appointment/:docId'
             element={<AppointmentConfirmation />}
@@ -76,42 +74,40 @@ function DoctorLayout() {
 function AdminRoutes() {
   return (
     <AdminLayout>
-        <Routes>
-          <Route path='/' element={<AdminHomePage />} />
-          <Route path='doctors' element={<DoctorList />} />
-          <Route path='patients' element={<PatientsList />} />
-          <Route path='doctors/:id' element={<DoctorDetails />} />
-          <Route path='patients/:id' element={<PatientDetails />} />
-          <Route path='appointments' element={<AppointmentsList />} />
-          <Route path='specialties' element={<SpecialtiesList />} />
-          <Route path='notifications' element={<Notifications />} />
-          <Route path="/AdminPatientApproval" element={<AdminPatientApproval />} />
-          <Route path="/AdminDoctorApproval" element={<AdminDoctorApproval />} />
-          <Route path="/AdminProfile" element={<AdminProfile />} />
-        </Routes>
-      </AdminLayout>
+      <Routes>
+        <Route path='/' element={<AdminHomePage />} />
+        <Route path='doctors' element={<DoctorList />} />
+        <Route path='patients' element={<PatientsList />} />
+        <Route path='doctors/:id' element={<DoctorDetails />} />
+        <Route path='patients/:id' element={<PatientDetails />} />
+        <Route path='appointments' element={<AppointmentsList />} />
+        <Route path='specialties' element={<SpecialtiesList />} />
+        <Route path='notifications' element={<Notifications />} />
+        <Route
+          path='/AdminPatientApproval'
+          element={<AdminPatientApproval />}
+        />
+        <Route path='/AdminDoctorApproval' element={<AdminDoctorApproval />} />
+        <Route path='/AdminProfile' element={<AdminProfile />} />
+      </Routes>
+    </AdminLayout>
   );
 }
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainDashboard />} /> {/* الصفحة الرئيسية الجديدة */}
-        <Route path="/home" element={<Home />} />
-        <Route path="/doctor/*" element={<DoctorLayout />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/admin/*" element={<AdminRoutes />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/patient/*' element={<PatientRoutes />} />
-        <Route path='/doctor/*' element={<DoctorLayout />} />
-        <Route path='/admin/*' element={<AdminRoutes />} />
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          <Route path='/' element={<MainDashboard />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/patient/*' element={<PatientRoutes />} />
+          <Route path='/doctor/*' element={<DoctorLayout />} />
+          <Route path='/admin/*' element={<AdminRoutes />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }

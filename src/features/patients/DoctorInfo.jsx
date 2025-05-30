@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import DoctorDetailCard from "../../components/DoctorDetailCard";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Box, CircularProgress } from "@mui/material";
 
-const Doctor_Details = () => {
+const DoctorInfo = () => {
   const [doctor, setDoctor] = useState({});
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState("23");
@@ -25,7 +25,7 @@ const Doctor_Details = () => {
         console.error("Error fetching doctor details:", err);
         setLoading(false);
       });
-  }, []);
+  }, [docId]);
 
   const handleBook = () => {
     navigate(`/patient/confirm-appointment/${docId}`);
@@ -53,4 +53,4 @@ const Doctor_Details = () => {
   );
 };
 
-export default Doctor_Details;
+export default DoctorInfo;

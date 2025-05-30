@@ -247,6 +247,40 @@
     "distance": "800m away",
     "image": "https://randomuser.me/api/portraits/men/75.jpg"
   },
+  "recommendedDoctors": [
+    {
+      "id": "1",
+      "fullName": "Dr. Marcus Horizon",
+      "specialty": "Cardiology",
+      "rating": 4.7,
+      "distance": "800m away",
+      "image": "https://randomuser.me/api/portraits/men/75.jpg"
+    },
+    {
+      "id": "2",
+      "fullName": "Dr. Maria Carter",
+      "specialty": "Dentist",
+      "rating": 4.5,
+      "distance": "1.2km away",
+      "image": "https://randomuser.me/api/portraits/women/65.jpg"
+    },
+    {
+      "id": "3",
+      "fullName": "Dr. Stevi Moore",
+      "specialty": "Surgeon",
+      "rating": 4.8,
+      "distance": "500m away",
+      "image": "https://randomuser.me/api/portraits/women/66.jpg"
+    },
+    {
+      "id": "4",
+      "fullName": "Dr. Luke Daniels",
+      "specialty": "Lungs Specialist",
+      "rating": 4.6,
+      "distance": "2km away",
+      "image": "https://randomuser.me/api/portraits/men/65.jpg"
+    }
+  ],
   "recentDoctors": [
     {
       "id": "1",
@@ -312,7 +346,7 @@
       "image": "https://randomuser.me/api/portraits/men/13.jpg"
     },
     {
-      "id": "3",
+      "id": "4",
       "userId": 6,
       "fullName": "Layla Mohamed",
       "email": "",
@@ -488,6 +522,17 @@
       "time": "18:43",
       "notes": "aloooooo",
       "status": "approved"
+    },
+    {
+      "id": "ffb7",
+      "patientId": 1,
+      "doctorName": "Dr. Marcus Horizon",
+      "specialty": "Cardiology",
+      "date": "Wednesday, Jun 23, 2021",
+      "time": "10:00 AM",
+      "reason": "Chest pain",
+      "status": "pending",
+      "paymentMethod": "VISA"
     }
   ],
   "notifications": [
