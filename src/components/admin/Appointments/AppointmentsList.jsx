@@ -15,6 +15,7 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  Chip,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -29,6 +30,7 @@ const AppointmentsList = () => {
     date: "",
     time: "",
     notes: "",
+    status: "pending",
   });
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -51,7 +53,6 @@ const AppointmentsList = () => {
     fetchAppointments();
   }, []);
 
-  // تم توحيد showSnackbar لتظهر رسائل مثل الـ SpecialtiesList
   const showSnackbar = (message, severity = "success") => {
     setSnackbar({ open: true, message, severity });
   };
@@ -69,6 +70,7 @@ const AppointmentsList = () => {
       date: "",
       time: "",
       notes: "",
+      status: "pending",
     });
     setOpenDialog(true);
   };
@@ -81,6 +83,7 @@ const AppointmentsList = () => {
       date: appointment.date || "",
       time: appointment.time || "",
       notes: appointment.notes || "",
+      status: appointment.status || "pending",
     });
     setOpenDialog(true);
   };
@@ -92,6 +95,10 @@ const AppointmentsList = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleStatusChange = (status) => {
+    setFormData((prev) => ({ ...prev, status }));
   };
 
   const handleSave = () => {
@@ -157,10 +164,23 @@ const AppointmentsList = () => {
     setSelectedAppointment(null);
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "approved":
+        return "success";
+      case "pending":
+        return "warning";
+      case "rejected":
+        return "error";
+      default:
+        return "default";
+    }
+  };
+
   return (
     <Container sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom textAlign="center">
-        All Appointments
+        Doctor Appointments
       </Typography>
 
       <Box textAlign="center" sx={{ mb: 3 }}>
@@ -192,6 +212,13 @@ const AppointmentsList = () => {
                   <Typography variant="body1">
                     <strong>Time:</strong> {appointment.time || "N/A"}
                   </Typography>
+                  <Box sx={{ my: 1 }}>
+                    <Chip
+                      label={appointment.status || "pending"}
+                      color={getStatusColor(appointment.status)}
+                      size="small"
+                    />
+                  </Box>
                   <Typography
                     variant="body2"
                     color="text.secondary"
@@ -220,7 +247,6 @@ const AppointmentsList = () => {
         ))}
       </Grid>
 
-      {/* Add/Edit Dialog */}
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
@@ -272,6 +298,38 @@ const AppointmentsList = () => {
             InputLabelProps={{ shrink: true }}
             required
           />
+          <Box sx={{ my: 2 }}>
+            <Typography variant="subtitle2">Status</Typography>
+            <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
+              <Button
+                variant={
+                  formData.status === "approved" ? "contained" : "outlined"
+                }
+                color="success"
+                onClick={() => handleStatusChange("approved")}
+              >
+                Approved
+              </Button>
+              <Button
+                variant={
+                  formData.status === "pending" ? "contained" : "outlined"
+                }
+                color="warning"
+                onClick={() => handleStatusChange("pending")}
+              >
+                Pending
+              </Button>
+              <Button
+                variant={
+                  formData.status === "rejected" ? "contained" : "outlined"
+                }
+                color="error"
+                onClick={() => handleStatusChange("rejected")}
+              >
+                Rejected
+              </Button>
+            </Box>
+          </Box>
           <TextField
             margin="dense"
             label="Notes"
@@ -291,7 +349,6 @@ const AppointmentsList = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Confirm Delete Dialog */}
       <Dialog open={openConfirmDialog} onClose={handleCancelDelete}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
@@ -310,7 +367,6 @@ const AppointmentsList = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for notifications */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}

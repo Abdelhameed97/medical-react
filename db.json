@@ -4,7 +4,28 @@
       "id": "1",
       "username": "admin",
       "email": "admin@med.com",
-      "role": "admin"
+      "password": "admin123",
+      "role": "admin",
+      "lastLogin": "Fri, May 30, 05:17 PM",
+      "position": "System Administrator",
+      "department": "IT",
+      "employeeId": "EMP-ADM-042",
+      "joinDate": "10/02/2018",
+      "responsibilities": "Manage hospital systems, user accounts, and security policies",
+      "education": [
+        {
+          "institution": "Cairo University",
+          "degree": "Bachelor of Computer Science",
+          "period": "2003 - 2007",
+          "description": "Specialized in Information Systems and Network Security"
+        },
+        {
+          "institution": "Certified Information Systems Security Professional (CISSP)",
+          "degree": "ISC2",
+          "period": "2010"
+        }
+      ],
+      "phone": "01010560217"
     },
     {
       "id": "2",
@@ -332,12 +353,10 @@
     {
       "id": "1",
       "doctorId": 1,
-      "patientId": 2,
-      "date": "2025-06-01T10:30:00",
-      "reason": "General check-up",
-      "status": "Scheduled",
-      "paymentMethod": "Mastercard",
-      "time": "06:51"
+      "date": "2025-05-30",
+      "time": "13:00",
+      "status": "rejected",
+      "notes": "ملاحظة رقم 1"
     },
     {
       "id": "2",
@@ -460,6 +479,15 @@
       "reason": "Chest pain",
       "status": "pending",
       "paymentMethod": "VISA"
+    },
+    {
+      "id": "c6e0",
+      "doctorName": "Marwa",
+      "patientName": "Mayar",
+      "date": "2025-05-30",
+      "time": "18:43",
+      "notes": "aloooooo",
+      "status": "approved"
     }
   ],
   "notifications": [
@@ -479,7 +507,264 @@
       "id": "3",
       "message": "Booking confirmed for Dr. Amal at 2025-06-05 09:00 AM.",
       "email": "patient2@example.com",
-      "status": "confirmed"
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-06-03",
+      "time": "13:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 2"
+    },
+    {
+      "id": "3",
+      "patientId": 3,
+      "doctorId": 1,
+      "date": "2025-05-30",
+      "time": "9:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 3"
+    },
+    {
+      "id": "4",
+      "patientId": 2,
+      "doctorId": 1,
+      "date": "2025-05-30",
+      "time": "15:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 4"
+    },
+    {
+      "id": "5",
+      "patientId": 2,
+      "doctorId": 1,
+      "date": "2025-06-06",
+      "time": "9:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 5"
+    },
+    {
+      "id": "6",
+      "patientId": 2,
+      "doctorId": 1,
+      "date": "2025-06-07",
+      "time": "11:00",
+      "status": "pending",
+      "notes": "ملاحظة رقم 6"
+    },
+    {
+      "id": "7",
+      "patientId": 2,
+      "doctorId": 1,
+      "date": "2025-06-08",
+      "time": "13:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 7"
+    },
+    {
+      "id": "8",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-06-09",
+      "time": "16:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 8"
+    },
+    {
+      "id": "9",
+      "patientId": 2,
+      "doctorId": 1,
+      "date": "2025-06-10",
+      "time": "10:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 9"
+    },
+    {
+      "id": "10",
+      "patientId": 3,
+      "doctorId": 1,
+      "date": "2025-06-11",
+      "time": "15:00",
+      "status": "rejected",
+      "notes": "ملاحظة رقم 10"
+    },
+    {
+      "id": "11",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-06-12",
+      "time": "9:00",
+      "status": "rejected",
+      "notes": "ملاحظة رقم 11باتلناتمنتال"
+    },
+    {
+      "id": "12",
+      "patientId": 2,
+      "doctorId": 1,
+      "date": "2025-06-13",
+      "time": "10:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 12"
+    },
+    {
+      "id": "13",
+      "patientId": 2,
+      "doctorId": 1,
+      "date": "2025-06-14",
+      "time": "14:00",
+      "status": "rejected",
+      "notes": "ملاحظة رقم 13"
+    },
+    {
+      "id": "14",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-06-15",
+      "time": "11:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 14"
+    },
+    {
+      "id": "15",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-06-16",
+      "time": "11:00",
+      "status": "rejected",
+      "notes": "ملاحظة رقم 15"
+    },
+    {
+      "id": "16",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-06-17",
+      "time": "14:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 16"
+    },
+    {
+      "id": "17",
+      "patientId": 3,
+      "doctorId": 1,
+      "date": "2025-05-26",
+      "time": "10:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 17"
+    },
+    {
+      "id": "18",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-05-26",
+      "time": "12:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 18"
+    },
+    {
+      "id": "19",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-05-26",
+      "time": "9:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 19"
+    },
+    {
+      "id": "20",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-05-26",
+      "time": "16:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 20"
+    },
+    {
+      "id": "21",
+      "patientId": 3,
+      "doctorId": 1,
+      "date": "2025-05-26",
+      "time": "15:00",
+      "status": "rejected",
+      "notes": "ملاحظة رقم 21"
+    },
+    {
+      "id": "22",
+      "patientId": 3,
+      "doctorId": 1,
+      "date": "2025-05-26",
+      "time": "13:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 22"
+    },
+    {
+      "id": "23",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-05-26",
+      "time": "10:00",
+      "status": "rejected",
+      "notes": "ملاحظة رقم 23"
+    },
+    {
+      "id": "24",
+      "patientId": 3,
+      "doctorId": 1,
+      "date": "2025-05-26",
+      "time": "11:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 24"
+    },
+    {
+      "id": "25",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-06-26",
+      "time": "15:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 25"
+    },
+    {
+      "id": "26",
+      "patientId": 3,
+      "doctorId": 1,
+      "date": "2025-05-26",
+      "time": "12:00",
+      "status": "rejected",
+      "notes": "ملاحظة رقم 26"
+    },
+    {
+      "id": "27",
+      "patientId": 3,
+      "doctorId": 1,
+      "date": "2025-05-26",
+      "time": "11:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 27"
+    },
+    {
+      "id": "28",
+      "patientId": 3,
+      "doctorId": 1,
+      "date": "2025-06-29",
+      "time": "9:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 28"
+    },
+    {
+      "id": "29",
+      "patientId": 1,
+      "doctorId": 1,
+      "date": "2025-06-30",
+      "time": "16:00",
+      "status": "approved",
+      "notes": "ملاحظة رقم 29"
+    },
+    {
+      "id": "30",
+      "patientId": 3,
+      "doctorId": 1,
+      "date": "2025-07-01",
+      "time": "15:00",
+      "status": "rejected",
+      "notes": "ملاحظة رقم 30"
     }
   ]
 }

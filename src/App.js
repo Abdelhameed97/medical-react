@@ -1,19 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-//import DoctorSidebar from "./components/DoctorSidebar";
+import MainDashboard from "./pages/MainDashboard"; // أضف هذا الاستيراد
 import Home from "./pages/Home";
 import DoctorDashboard from "./pages/Doctor/DoctorDashboard";
 import DoctorAppointments from "./pages/Doctor/DoctorAppointments";
 import DoctorAvailability from "./pages/Doctor/DoctorAvailability";
 import DoctorProfile from "./pages/Doctor/DoctorProfile";
-//import DoctorSchedule from "./pages/Doctor/DoctorSchedule";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
-import AdminDoctorApproval from "./admin/AdminDoctorsApproval";
-import AdminPatientApproval from "./admin/AdminPatientApproval";
 import DoctorSidebar from "./components/DoctorSidebar";
-//import Home from "./pages/Home";
-import DoctorSchedule from "./pages/Doctor/DoctorSchedule"; // جديد
-// Add these new imports for patients and admin
+import DoctorSchedule from "./pages/Doctor/DoctorSchedule";
 import AdminLayout from "./components/admin/shared/AdminLayout";
 import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
@@ -33,6 +28,9 @@ import Doctor_Details from "./features/patients/Doctor_Details";
 import MyAppointments from "./features/patients/MyAppointments";
 import Profile from "./features/patients/Profile";
 import AppointmentConfirmation from "./features/patients/AppointmentConfirmation";
+import AdminPatientApproval from './components/admin/Approval/AdminPatientApproval';
+import AdminDoctorApproval from './components/admin/Approval/AdminDoctorsApproval';
+import AdminProfile from "./pages/admin/AdminProfile";
 
 // Add new AdminLayout component
 function PatientRoutes() {
@@ -75,11 +73,9 @@ function DoctorLayout() {
   );
 }
 
-// Add new AdminLayout component
 function AdminRoutes() {
   return (
-    <ThemeProvider theme={theme}>
-      <AdminLayout>
+    <AdminLayout>
         <Routes>
           <Route path='/' element={<AdminHomePage />} />
           <Route path='doctors' element={<DoctorList />} />
@@ -89,33 +85,34 @@ function AdminRoutes() {
           <Route path='appointments' element={<AppointmentsList />} />
           <Route path='specialties' element={<SpecialtiesList />} />
           <Route path='notifications' element={<Notifications />} />
+          <Route path="/AdminPatientApproval" element={<AdminPatientApproval />} />
+          <Route path="/AdminDoctorApproval" element={<AdminDoctorApproval />} />
+          <Route path="/AdminProfile" element={<AdminProfile />} />
         </Routes>
       </AdminLayout>
-    </ThemeProvider>
   );
 }
 
 function App() {
   return (
+    <ThemeProvider theme={theme}>
     <Router>
       <Routes>
+        <Route path="/" element={<MainDashboard />} /> {/* الصفحة الرئيسية الجديدة */}
+        <Route path="/home" element={<Home />} />
+        <Route path="/doctor/*" element={<DoctorLayout />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path='/home' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/patient/*' element={<PatientRoutes />} />
         <Route path='/doctor/*' element={<DoctorLayout />} />
-
-        <Route
-          path='/admin/AdminPatientApproval'
-          element={<AdminPatientApproval />}
-        />
-        <Route
-          path='/admin/AdminDoctorApproval'
-          element={<AdminDoctorApproval />}
-        />
         <Route path='/admin/*' element={<AdminRoutes />} />
       </Routes>
     </Router>
+    </ThemeProvider>
   );
 }
 
