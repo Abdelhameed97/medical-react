@@ -60,12 +60,214 @@
   ],
   "doctors": [
     {
-      "name": "rehabkamal",
+      "id": "1",
+      "fullName": "Dr. Marcus Horizon",
+      "specialty": "Cardiology",
+      "rating": 4.7,
+      "distance": "800m away",
+      "image": "https://randomuser.me/api/portraits/men/75.jpg",
+      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "availableDates": [
+        {
+          "day": "Mon",
+          "date": "21"
+        },
+        {
+          "day": "Tue",
+          "date": "22"
+        },
+        {
+          "day": "Wed",
+          "date": "23"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "fullName": "Dr. Maria Carter",
+      "specialty": "Dentist",
+      "rating": 4.5,
+      "distance": "1.2km away",
+      "image": "https://randomuser.me/api/portraits/women/65.jpg",
+      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "availableDates": [
+        {
+          "day": "Mon",
+          "date": "21"
+        },
+        {
+          "day": "Tue",
+          "date": "22"
+        },
+        {
+          "day": "Wed",
+          "date": "23"
+        },
+        {
+          "day": "Thu",
+          "date": "24"
+        },
+        {
+          "day": "Fri",
+          "date": "25"
+        },
+        {
+          "day": "Sat",
+          "date": "26"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "fullName": "Dr. Stevi Moore",
+      "specialty": "Surgeon",
+      "rating": 4.8,
+      "distance": "500m away",
+      "image": "https://randomuser.me/api/portraits/women/66.jpg",
+      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "availableDates": [
+        {
+          "day": "Mon",
+          "date": "21"
+        },
+        {
+          "day": "Tue",
+          "date": "22"
+        },
+        {
+          "day": "Wed",
+          "date": "23"
+        },
+        {
+          "day": "Thu",
+          "date": "24"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "fullName": "Dr. Luke Daniels",
+      "specialty": "Lungs Specialist",
+      "rating": 4.6,
+      "distance": "2km away",
+      "image": "https://randomuser.me/api/portraits/men/65.jpg",
+      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "availableDates": [
+        {
+          "day": "Thu",
+          "date": "24"
+        },
+        {
+          "day": "Fri",
+          "date": "25"
+        },
+        {
+          "day": "Sat",
+          "date": "26"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "fullName": "Dr. Abdelhameed Mohamed",
+      "specialty": "Cardiology",
+      "rating": 4.7,
+      "distance": "800m away",
+      "image": "https://randomuser.me/api/portraits/men/75.jpg",
+      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      "availableDates": [
+        {
+          "day": "Mon",
+          "date": "21"
+        },
+        {
+          "day": "Tue",
+          "date": "22"
+        },
+        {
+          "day": "Wed",
+          "date": "23"
+        }
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "General"
+    },
+    {
+      "id": "2",
+      "name": "Lungs Specialist"
+    },
+    {
+      "id": "3",
+      "name": "Dentist"
+    },
+    {
+      "id": "4",
+      "name": "Psychiatrist"
+    },
+    {
+      "id": "5",
+      "name": "Covid-19"
+    },
+    {
+      "id": "6",
+      "name": "Orthopedics"
+    },
+    {
+      "id": "7",
+      "name": "Surgeon"
+    },
+    {
+      "id": "8",
+      "name": "Cardiologist"
+    }
+  ],
+  "recommendedDoctor": {
+    "id": 1,
+    "fullName": "Dr. Marcus Horizon",
+    "specialty": "Cardiology",
+    "rating": 4.7,
+    "distance": "800m away",
+    "image": "https://randomuser.me/api/portraits/men/75.jpg"
+  },
+  "recentDoctors": [
+    {
+      "id": "1",
+      "fullName": "Dr. Marcus Horizon",
+      "specialty": "Cardiology",
+      "rating": 4.7,
+      "distance": "800m away",
+      "image": "https://randomuser.me/api/portraits/men/75.jpg"
+    },
+    {
+      "id": "2",
+      "fullName": "Dr. Maria Carter",
+      "specialty": "Dentist",
+      "rating": 4.5,
+      "distance": "1.2km away",
+      "image": "https://randomuser.me/api/portraits/women/65.jpg"
+    },
+    {
+      "id": "3",
+      "fullName": "Dr. Stevi Moore",
+      "specialty": "Surgeon",
+      "rating": 4.8,
+      "distance": "500m away",
+      "image": "https://randomuser.me/api/portraits/women/66.jpg"
+    },
+    {
+      "id": "4",
+      "fullName": "Dr. Luke Daniels",
+      "specialty": "Lungs Specialist",
+      "rating": 4.6,
+      "distance": "2km away",
+      "image": "https://randomuser.me/api/portraits/men/65.jpg",
       "email": "rehab123@gmail.com",
       "phone": "01013102431",
-      "specialty": "doctora ",
-      "bio": "hello  i am rehab kamal  abdelhammed",
-      "id": "1"
+      "bio": "hello  i am rehab kamal  abdelhammed"
     },
     {
       "id": "2",
@@ -108,13 +310,15 @@
       "age": 19,
       "gender": "female",
       "contact": "0100000004",
-      "image": "https://randomuser.me/api/portraits/women/14.jpg"
+      "image": "https://randomuser.me/api/portraits/women/14.jpg",
+      "approved": false,
+      "notes": "Alooooooo"
     }
   ],
   "availability": [
     {
       "id": "f421",
-      "doctorId": 2,
+      "doctorId": 1,
       "day": "Tuesday",
       "startTime": "09:00",
       "endTime": "17:00"
@@ -125,6 +329,13 @@
       "day": "Thursday",
       "startTime": "12:00",
       "endTime": "20:00"
+    },
+    {
+      "id": "fe56",
+      "doctorId": 3,
+      "day": "Saturday",
+      "startTime": "09:00",
+      "endTime": "17:00"
     },
     {
       "id": "d7c7",
@@ -146,6 +357,102 @@
     },
     {
       "id": "2",
+      "doctorId": 3,
+      "patientId": 4,
+      "date": "2025-06-05T09:00:00",
+      "reason": "Consultation for allergies",
+      "status": "Scheduled"
+    },
+    {
+      "id": "3",
+      "doctorId": 4,
+      "patientId": 3,
+      "date": "2025-06-07T11:15:00",
+      "reason": "Blood pressure check",
+      "status": "Cancelled"
+    },
+    {
+      "id": "4",
+      "doctorId": 5,
+      "patientId": 5,
+      "date": "2025-06-08T16:00:00",
+      "reason": "Skin rash evaluation",
+      "status": "Scheduled"
+    },
+    {
+      "id": "5",
+      "doctorId": 5,
+      "patientId": 5,
+      "date": "2025-06-08T16:00:00",
+      "reason": "covid-19",
+      "status": "Scheduled"
+    },
+    {
+      "id": "6",
+      "doctorId": 4,
+      "patientId": 1,
+      "date": "2025-06-08T16:00:00",
+      "reason": "Skin rash evaluation",
+      "status": "Scheduled"
+    },
+    {
+      "id": "7",
+      "doctorId": 3,
+      "patientId": 1,
+      "date": "2025-06-08T16:00:00",
+      "reason": "Skin rash evaluation",
+      "status": "Scheduled"
+    },
+    {
+      "id": "6a19",
+      "doctorId": 1,
+      "patientId": 1,
+      "dateTime": "2025-05-30T00:45:25.643Z",
+      "reason": "General Checkup",
+      "status": "Pending"
+    },
+    {
+      "id": "34c8",
+      "doctorId": "1",
+      "patientId": 1,
+      "date": "Friday, Jul 12, 2021 | 11:00 AM",
+      "reason": "Back pain",
+      "paymentMethod": "Mastercard"
+    },
+    {
+      "id": "05ba",
+      "doctorId": "2",
+      "patientId": 1,
+      "date": "Friday, Jul 12, 2021 | 11:00 AM",
+      "reason": "Headache",
+      "paymentMethod": "Mastercard"
+    },
+    {
+      "id": "a3ec",
+      "doctorId": "4",
+      "patientId": 1,
+      "date": "Wednesday, Jun 23, 2021 | 10:00 AM",
+      "reason": "Chest pain",
+      "paymentMethod": "VISA"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "1",
+      "message": "Booking confirmed for Dr. Omar at 2025-06-01 10:00 AM.",
+      "email": "patient1@example.com",
+      "status": "confirmed"
+    },
+    {
+      "id": "2",
+      "message": "Booking confirmation email sent to sara@med.com.",
+      "email": "sara@med.com",
+      "status": "sent"
+    },
+    {
+      "id": "3",
+      "message": "Booking confirmed for Dr. Amal at 2025-06-05 09:00 AM.",
+      "email": "patient2@example.com",
       "patientId": 1,
       "doctorId": 1,
       "date": "2025-06-03",
@@ -189,7 +496,7 @@
       "status": "pending",
       "notes": "ملاحظة رقم 6"
     },
-    
+
     {
       "id": "7",
       "patientId": 2,
