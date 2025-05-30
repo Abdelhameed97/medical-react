@@ -79,7 +79,7 @@ function Login() {
     setErrors(newErrors);
     return isValid;
   };
-
+/*
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validateForm();
@@ -98,7 +98,51 @@ function Login() {
 
     setFormError("");
     navigate("/dashboard");
-  };
+  };*/
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const isValid = validateForm();
+
+  if (!isValid) {
+    setFormError("Please correct the errors before submitting.");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:5000/users");
+    const users = await res.json();
+
+    const matchedUser = users.find(
+      (user) =>
+        user.email === formData.email && user.password === formData.password
+    );
+
+    if (!matchedUser) {
+      setFormError("Invalid email or password.");
+      return;
+    }
+
+    localStorage.setItem("currentUser", JSON.stringify(matchedUser));
+
+    switch (matchedUser.role) {
+      case "admin":
+        navigate("/admin");
+        break;
+      case "doctor":
+        navigate("/doctor");
+        break;
+      case "patient":
+        navigate("/patient-dashboard");
+        break;
+      default:
+        navigate("/dashboard");
+    }
+  } catch (error) {
+    setFormError("Something went wrong. Please try again.");
+  }
+};
+
 
   return (
     <div className="auth-container">

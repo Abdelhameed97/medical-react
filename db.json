@@ -1,39 +1,46 @@
 {
+
   "users": [
     {
       "id": "1",
       "username": "admin",
       "email": "admin@med.com",
+      "password": "admin123",
       "role": "admin"
     },
     {
       "id": "2",
       "username": "dr.john",
-      "email": "john@med.com",
+      "email": "john@gmial.com",
+      "password": "doctor123",
       "role": "doctor"
     },
     {
       "id": "3",
       "username": "sara",
       "email": "sara@med.com",
+      "password": "patient123",
       "role": "patient"
     },
     {
       "id": "4",
       "username": "dr.amal",
       "email": "amal@med.com",
+      "password": "doctor456",
       "role": "doctor"
     },
     {
       "id": "5",
       "username": "ahmed",
       "email": "ahmed@med.com",
+      "password": "patient456",
       "role": "patient"
     },
     {
       "id": "6",
       "username": "layla",
       "email": "layla@med.com",
+      "password": "patient789",
       "role": "patient"
     }
   ],

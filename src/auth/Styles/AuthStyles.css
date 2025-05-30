@@ -9,7 +9,6 @@
 }
 
 body {
-  background: linear-gradient(135deg, rgba(11, 233, 185, 0.959) 0%, rgba(2, 124, 98, 0.671) 100%);
   background-size: cover;
   font-family: 'Poppins', 'Segoe UI', sans-serif;
   min-height: 100vh;
