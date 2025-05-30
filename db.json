@@ -61,6 +61,30 @@
       "email": "layla@med.com",
       "password": "patient789",
       "role": "patient"
+    },
+    {
+      "id": "561e",
+      "name": "harbi",
+      "username": "Harbi_Abdellah",
+      "email": "harbia305@gmail.com",
+      "password": "123456789",
+      "role": "patient"
+    },
+    {
+      "id": "d64a",
+      "name": "Ahmed",
+      "username": "Ahmed",
+      "email": "ali@example.com",
+      "password": "123456789",
+      "role": "patient"
+    },
+    {
+      "id": "0ec7",
+      "name": "adam",
+      "username": "Harbi_Abdellah",
+      "email": "adam@gmail.com",
+      "password": "123456789",
+      "role": "patient"
     }
   ],
   "specialties": [
