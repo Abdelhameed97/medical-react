@@ -419,6 +419,7 @@ const DoctorAppointments = () => {
                 <Typography variant="h6" color="text.secondary" fontSize="1.1rem">
                   No appointments found
                 </Typography>
+            
                 <Typography variant="body2" color="text.disabled" sx={{ mt: 1, fontSize: "0.9rem" }}>
                   {tab === 0 && "No pending appointments available"}
                   {tab === 1 && "No accepted appointments available"}

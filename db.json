@@ -53,11 +53,11 @@
   ],
   "doctors": [
     {
-      "name": "rehab",
-      "email": "rehab@gmail.com",
+      "name": "rehabkamal",
+      "email": "rehab123@gmail.com",
       "phone": "01013102431",
-      "specialty": "لاموي",
-      "bio": "gjvklkscb,mb nd",
+      "specialty": "doctora ",
+      "bio": "hello  i am rehab kamal  abdelhammed",
       "id": "1"
     },
     {
@@ -120,9 +120,30 @@
       "endTime": "20:00"
     },
     {
-      "id": "fe56",
+      "id": "4dbd",
       "doctorId": 1,
-      "day": "Saturday",
+      "day": "Tuesday",
+      "startTime": "09:00",
+      "endTime": "17:00"
+    },
+    {
+      "id": "acb7",
+      "doctorId": 1,
+      "day": "Wednesday",
+      "startTime": "09:00",
+      "endTime": "17:00"
+    },
+    {
+      "id": "cb45",
+      "doctorId": 1,
+      "day": "Sunday",
+      "startTime": "09:00",
+      "endTime": "17:00"
+    },
+    {
+      "id": "84ce",
+      "doctorId": 1,
+      "day": "Monday",
       "startTime": "09:00",
       "endTime": "17:00"
     }
