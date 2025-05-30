@@ -32,7 +32,7 @@ const PatientSidebar = ({
     {
       text: "My Appointments",
       icon: <AppointmentsIcon />,
-      path: "/patient/my-appointments",
+      path: `/patient/my-appointments`,
     },
     { text: "Profile", icon: <PeopleIcon />, path: "/patient/profile" },
   ];

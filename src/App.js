@@ -30,7 +30,7 @@ import PatientLayout from "./layouts/PatientLayout";
 // Add new imports for patients
 import FindDoctorsView from "./features/patients/FindDoctorsView";
 import Doctor_Details from "./features/patients/Doctor_Details";
-import AppointmentBooking from "./features/patients/AppointmentBooking";
+import MyAppointments from "./features/patients/MyAppointments";
 import Profile from "./features/patients/Profile";
 import AppointmentConfirmation from "./features/patients/AppointmentConfirmation";
 
@@ -42,11 +42,11 @@ function PatientRoutes() {
         <Routes>
           <Route path='/' element={<FindDoctorsView />} />
           <Route path='doctors/:docId' element={<Doctor_Details />} />
-          <Route path='patients' element={<PatientsList />} />
-          {/* <Route
-            path='book-appointment/:docId'
-            element={<AppointmentBooking />}
-          /> */}
+          {/* <Route path='patients' element={<PatientsList />} /> */}
+          <Route
+            path='my-appointments/:patientId'
+            element={<MyAppointments />}
+          />
           <Route
             path='confirm-appointment/:docId'
             element={<AppointmentConfirmation />}
