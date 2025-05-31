@@ -34,7 +34,8 @@ const DoctorsList = () => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [doctorToDelete, setDoctorToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const doctorsPerPage = 6;
+  const [errors, setErrors] = useState({});
+  const doctorsPerPage = 5;
   const navigate = useNavigate();
   const [form, setForm] = useState({
     fullName: "",

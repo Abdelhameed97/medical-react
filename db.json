@@ -6,7 +6,7 @@
       "email": "admin@med.com",
       "password": "admin123",
       "role": "admin",
-      "lastLogin": "Sat, May 31, 01:54 AM",
+      "lastLogin": "Fri, May 30, 09:32 PM",
       "position": "System Administrator",
       "department": "IT",
       "employeeId": "EMP-ADM-042",
@@ -25,7 +25,7 @@
           "period": "2010"
         }
       ],
-      "phone": "5555"
+      "phone": "01010560217"
     },
     {
       "id": "2",
@@ -540,7 +540,7 @@
       "date": "Wednesday, Jun 23, 2021",
       "time": "10:00 AM",
       "reason": "Chest pain",
-      "status": "approved",
+      "status": "pending",
       "paymentMethod": "VISA"
     },
     {
@@ -551,35 +551,8 @@
       "date": "Wednesday, Jun 23, 2021",
       "time": "10:00 AM",
       "reason": "Chest pain",
-      "status": "approved",
+      "status": "pending",
       "paymentMethod": "VISA"
-    },
-    {
-      "id": "393a6a15-5912-4cac-8c58-23995383be0e",
-      "doctorName": "Dina",
-      "patientName": "Dina",
-      "date": "2025-05-30",
-      "time": "23:16",
-      "notes": "Allllo",
-      "status": "approved"
-    },
-    {
-      "id": "b59d5311-f9b2-46e4-9179-dd5e8d445e31",
-      "doctorName": "Dina",
-      "patientName": "Mayar",
-      "date": "2025-05-30",
-      "time": "23:21",
-      "notes": "ءسؤث",
-      "status": "approved"
-    },
-    {
-      "id": "c6e0",
-      "doctorName": "Marwa",
-      "patientName": "Mayar",
-      "date": "2025-05-30",
-      "time": "18:43",
-      "notes": "aloooooo",
-      "status": "approved"
     }
   ],
   "notifications": [
