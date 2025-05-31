@@ -3,8 +3,15 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TodayIcon from "@mui/icons-material/Today";
 import { styles } from "../doctorStyle/DoctorDashboard.styles";
+import { useNavigate } from "react-router-dom";
 
 const DoctorDashboard = () => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
   // يمكن استخدام هذه البيانات من API أو Redux store
   const dashboardData = {
     doctor: {
@@ -17,24 +24,27 @@ const DoctorDashboard = () => {
         title: "Upcoming Appointments",
         value: 5,
         icon: AccessTimeIcon,
-        action: "View All",
-        theme: "appointments"
+        action: "View Schedule",
+        theme: "appointments",
+        path: "/doctor/appointments"
       },
       {
         id: 2,
         title: "Total Patients",
         value: 12,
         icon: PeopleAltIcon,
-        action: "Manage",
-        theme: "patients"
+        action: "View Patients",
+        theme: "patients",
+        path: "/doctor/patients"
       },
       {
         id: 3,
         title: "Today's Appointments",
         value: 3,
         icon: TodayIcon,
-        action: "Check Schedule",
-        theme: "today"
+        action: "View Today",
+        theme: "today",
+        path: "/doctor/schedule"
       }
     ]
   };
@@ -44,10 +54,14 @@ const DoctorDashboard = () => {
     const theme = styles.themes[stat.theme];
 
     return (
-      <Grid item xs={12} md={4} key={stat.id}>
-        <Paper elevation={3} sx={styles.card(theme)}>
+      <Grid item xs={12} sm={6} md={4} key={stat.id}>
+        <Paper 
+          elevation={0} 
+          sx={styles.card(theme)}
+          onClick={() => handleNavigation(stat.path)}
+        >
           <Box sx={styles.cardHeader}>
-            <Icon fontSize="large" />
+            <Icon sx={styles.cardIcon} />
             <Typography variant="h6" sx={styles.cardTitle}>
               {stat.title}
             </Typography>
@@ -57,7 +71,12 @@ const DoctorDashboard = () => {
           </Typography>
           <Button 
             variant="contained" 
+            fullWidth
             sx={styles.cardButton(theme.color)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleNavigation(stat.path);
+            }}
           >
             {stat.action}
           </Button>
@@ -68,13 +87,18 @@ const DoctorDashboard = () => {
 
   return (
     <Box sx={styles.mainContainer}>
-      <Typography variant="h4" gutterBottom sx={styles.welcomeText}>
-        Welcome, {dashboardData.doctor.name}
-      </Typography>
-      
-      <Grid container spacing={3} sx={styles.gridContainer}>
-        {dashboardData.stats.map(renderCard)}
-      </Grid>
+      <Box sx={{ maxWidth: 'xl', mx: 'auto', px: 2 }}>
+        <Typography variant="h4" sx={styles.welcomeText}>
+          Welcome, {dashboardData.doctor.name}
+        </Typography>
+        <Typography sx={styles.subtitle}>
+          {dashboardData.doctor.title} | Dashboard Overview
+        </Typography>
+        
+        <Grid container spacing={4} sx={styles.gridContainer}>
+          {dashboardData.stats.map(renderCard)}
+        </Grid>
+      </Box>
     </Box>
   );
 };

@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
+import { AuthProvider } from './hooks/useAuth';
 
 // Public Pages
 import MainDashboard from "./pages/MainDashboard";
@@ -15,6 +16,7 @@ import DoctorAvailability from "./components/Doctor/DoctorAvailability";
 import DoctorProfile from "./components/Doctor/DoctorProfile";
 import DoctorSidebar from "./components/Doctor/DoctorSidebar";
 import DoctorSchedule from "./components/Doctor/DoctorSchedule";
+import DoctorPatientsList from "./components/Doctor/DoctorPatientsList";
 
 // Admin
 import AdminDoctorApproval from "./components/admin/Approval/AdminDoctorsApproval";
@@ -72,6 +74,7 @@ function DoctorLayout() {
           <Route path="availability" element={<DoctorAvailability />} />
           <Route path="profile" element={<DoctorProfile />} />
           <Route path="schedule" element={<DoctorSchedule />} />
+          <Route path="patients" element={<DoctorPatientsList />} />
         </Routes>
       </div>
     </div>
@@ -102,22 +105,24 @@ function AdminRoutes() {
 // Main App Component
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<MainDashboard />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<MainDashboard />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-          {/* Role-based Routes */}
-          <Route path="/doctor/*" element={<DoctorLayout />} />
-          <Route path="/admin/*" element={<AdminRoutes />} />
-          <Route path="/patient/*" element={<PatientRoutes />} />
-        </Routes>
-      </Router>
-    </ThemeProvider>
+            {/* Role-based Routes */}
+            <Route path="/doctor/*" element={<DoctorLayout />} />
+            <Route path="/admin/*" element={<AdminRoutes />} />
+            <Route path="/patient/*" element={<PatientRoutes />} />
+          </Routes>
+        </Router>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

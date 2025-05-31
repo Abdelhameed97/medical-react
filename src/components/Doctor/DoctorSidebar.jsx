@@ -15,7 +15,8 @@ import {
   Person as PersonIcon,
   AccessTime as AvailabilityIcon,
   Schedule as ScheduleIcon,
-  ExitToApp as LogoutIcon
+  ExitToApp as LogoutIcon,
+  PeopleAlt as PatientsIcon
 } from "@mui/icons-material";
 import { styles, StyledListItem, WhiteLinkText } from "../doctorStyle/DoctorSidebar.styles";
 
@@ -25,6 +26,8 @@ const DoctorSidebar = () => {
     { text: "Availability", icon: <AvailabilityIcon />, path: "/doctor/availability" },
     { text: "Appointments", icon: <CalendarTodayIcon />, path: "/doctor/appointments" },
     { text: "Schedule", icon: <ScheduleIcon />, path: "/doctor/schedule" },
+    { text: "Patients", icon: <PatientsIcon />, path: "/doctor/patients" } ,
+
     { text: "Profile", icon: <PersonIcon />, path: "/doctor/profile" }
   ];
 
@@ -67,6 +70,7 @@ const DoctorSidebar = () => {
                 primaryTypographyProps={styles.listItemText}
               />
             </StyledListItem>
+            
           ))}
         </List>
       </Box>
