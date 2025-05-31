@@ -1,89 +1,104 @@
+// DoctorSidebar.styles.js
 import { styled } from "@mui/material";
 import { ListItem, ListItemText } from "@mui/material";
 
 export const StyledListItem = styled(ListItem)(({ theme }) => ({
   '&.MuiListItem-root': {
-    padding: '8px 16px',
-    margin: '4px 0',
-    borderRadius: '8px',
+    padding: '12px 24px',
+    margin: '6px 12px',
+    borderRadius: '12px',
     '&:hover': {
-      backgroundColor: '#3e4d5e',
+      backgroundColor: '#3a4a5d',
       '& .MuiListItemIcon-root': {
-        color: '#4a90e2'
+        color: '#5d9cec'
       }
     },
     '&.Mui-selected': {
-      backgroundColor: '#3e4d5e',
-      borderLeft: '4px solid #4a90e2'
+      backgroundColor: '#3a4a5d',
+      borderLeft: '4px solid #5d9cec'
     }
   }
 }));
 
 export const WhiteLinkText = styled(ListItemText)(({ theme }) => ({
   '& .MuiTypography-root': {
-    color: 'white !important',
+    color: '#f5f7fa !important',
+    fontSize: '1rem',
+    fontWeight: '500',
     '&:hover': {
-      color: 'white !important'
+      color: '#ffffff !important'
     }
   }
 }));
 
 export const styles = {
   drawer: {
-    width: 280,
+    width: 300,
     flexShrink: 0,
     "& .MuiDrawer-paper": {
-      width: 280,
+      width: 300,
       boxSizing: "border-box",
       borderRight: "none",
-      backgroundColor: "#2e3b4a",
+      backgroundColor: "#2b3647",
       color: "white",
       display: "flex",
-      flexDirection: "column"
+      flexDirection: "column",
+      boxShadow: '2px 0 10px rgba(36, 34, 34, 0.1)'
     }
   },
   profileContainer: {
-    p: 3,
+    p: 4,
     textAlign: "center",
-    pt: 4
+    pt: 5,
+    pb: 3
   },
   avatar: {
-    width: 90,
-    height: 90,
-    margin: "0 auto 12px",
-    border: "3px solid #4a90e2",
-    boxShadow: '0 0 10px rgba(74, 144, 226, 0.5)'
+    width: 100,
+    height: 100,
+    margin: "0 auto 16px",
+    border: "3px solid #5d9cec",
+    boxShadow: '0 0 15px rgba(30, 118, 233, 0.4)'
   },
   doctorName: {
     fontWeight: 600,
-    mb: 0.5,
-    color: 'white'
+    mb: 1,
+    color: '#ffffff',
+    fontSize: '1.25rem'
   },
   specialty: {
-    color: 'white'
+    color: '#d1d8e0',
+    fontSize: '0.875rem'
   },
   divider: {
-    backgroundColor: "#3e4d5e",
-    my: 1
+    backgroundColor: "#3a4a5d",
+    height: '2px',
+    my: 2
   },
   listContainer: {
     flexGrow: 1,
-    px: 2
+    px: 3
   },
   listIcon: {
-    color: "white",
-    minWidth: '40px'
+    color: "#d1d8e0",
+    minWidth: '45px',
+    '&.MuiListItemIcon-root': {
+      fontSize: '1.25rem'
+    }
   },
   listItemText: {
     variant: 'body1',
-    sx: { fontWeight: 500 }
+    sx: { 
+      fontWeight: 500,
+      fontSize: '1rem'
+    }
   },
   footerContainer: {
-    p: 2,
+    p: 3,
     pt: 0
   },
   footerDivider: {
-    backgroundColor: "#3e4d5e",
+    backgroundColor: "#3a4a5d",
+    height: '2px',
     mb: 2
   }
-}; 
+};
