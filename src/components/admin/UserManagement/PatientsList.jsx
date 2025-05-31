@@ -1,28 +1,41 @@
 import React, { useEffect, useState } from "react";
 import {
-  Container,
+  Box,
   Typography,
-  Grid,
-  Card,
-  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  Paper,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
-  DialogActions,
   TextField,
+  DialogActions,
+  MenuItem,
   Snackbar,
   Alert,
-  Box,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CustomPagination from "../../CustomPagination.jsx";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const PatientList = () => {
   const [patients, setPatients] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingPatient, setEditingPatient] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [patientToDelete, setPatientToDelete] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [errors, setErrors] = useState({});
+  const patientsPerPage = 5;
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -32,28 +45,39 @@ const PatientList = () => {
     gender: "",
     notes: "",
   });
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [patientToDelete, setPatientToDelete] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const patientsPerPage = 6;
-  const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState({
     open: false,
     severity: "success",
     message: "",
   });
 
-  const fetchPatients = () => {
-    fetch("http://localhost:5000/patients")
-      .then((res) => res.json())
-      .then((data) => setPatients(data))
-      .catch(() =>
-        setSnackbar({
-          open: true,
-          severity: "error",
-          message: "Failed to load patients",
-        })
-      );
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePhone = (phone) => /^[0-9]{10,15}$/.test(phone);
+  const validateAge = (age) => age > 0 && age <= 120;
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!form.fullName.trim()) newErrors.fullName = "Full name is required";
+    if (!validateEmail(form.email)) newErrors.email = "Invalid email format";
+    if (!validatePhone(form.phone)) newErrors.phone = "Invalid phone number";
+    if (!form.address.trim()) newErrors.address = "Address is required";
+    if (!validateAge(form.age)) newErrors.age = "Age must be 1-120";
+    if (!form.gender) newErrors.gender = "Gender is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const fetchPatients = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/patients");
+      setPatients(await response.json());
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to load data",
+        severity: "error",
+      });
+    }
   };
 
   useEffect(() => {
@@ -68,315 +92,286 @@ const PatientList = () => {
   );
   const totalPages = Math.ceil(patients.length / patientsPerPage);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const handlePageChange = (page) => setCurrentPage(page);
+
+  const handleSave = async () => {
+    if (!validateForm()) return;
+    try {
+      const url = editingPatient
+        ? `http://localhost:5000/patients/${editingPatient.id}`
+        : "http://localhost:5000/patients";
+      const method = editingPatient ? "PUT" : "POST";
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!response.ok) throw new Error("Failed to save");
+      fetchPatients();
+      setOpenDialog(false);
+      setSnackbar({
+        open: true,
+        message: `Patient ${editingPatient ? "updated" : "added"} successfully`,
+        severity: "success",
+      });
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to save patient",
+        severity: "error",
+      });
+    }
   };
 
-  const handleOpenAdd = () => {
-    setEditingPatient(null);
-    setForm({
-      fullName: "",
-      email: "",
-      phone: "",
-      address: "",
-      age: "",
-      gender: "",
-      notes: "",
-    });
-    setOpenDialog(true);
-  };
-
-  const handleOpenEdit = (patient) => {
-    setEditingPatient(patient);
-    setForm({
-      fullName: patient.fullName || "",
-      email: patient.email || "",
-      phone: patient.phone || "",
-      address: patient.address || "",
-      age: patient.age || "",
-      gender: patient.gender || "",
-      notes: patient.notes || "",
-    });
-    setOpenDialog(true);
-  };
-
-  const handleClose = () => {
-    setOpenDialog(false);
-  };
-
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSave = () => {
-    const method = editingPatient ? "PUT" : "POST";
-    const url = editingPatient
-      ? `http://localhost:5000/patients/${editingPatient.id}`
-      : "http://localhost:5000/patients";
-
-    fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error saving patient");
-        return res.json();
-      })
-      .then(() => {
-        fetchPatients();
-        handleClose();
-        setSnackbar({
-          open: true,
-          severity: "success",
-          message: editingPatient
-            ? "Patient updated successfully"
-            : "Patient added successfully",
-        });
-      })
-      .catch(() =>
-        setSnackbar({
-          open: true,
-          severity: "error",
-          message: "Failed to save patient",
-        })
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/patients/${patientToDelete.id}`,
+        { method: "DELETE" }
       );
-  };
-
-  const handleDeleteClick = (patient) => {
-    setPatientToDelete(patient);
-    setConfirmOpen(true);
-  };
-
-  const handleConfirmDelete = () => {
-    fetch(`http://localhost:5000/patients/${patientToDelete.id}`, {
-      method: "DELETE",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Delete failed");
-        fetchPatients();
-        setConfirmOpen(false);
-        setPatientToDelete(null);
-        setSnackbar({
-          open: true,
-          severity: "success",
-          message: "Patient deleted successfully",
-        });
-      })
-      .catch(() =>
-        setSnackbar({
-          open: true,
-          severity: "error",
-          message: "Failed to delete patient",
-        })
-      );
-  };
-
-  const handleCancelDelete = () => {
-    setConfirmOpen(false);
-    setPatientToDelete(null);
-  };
-
-  const handleSnackbarClose = () => {
-    setSnackbar((prev) => ({ ...prev, open: false }));
+      if (!response.ok) throw new Error("Delete failed");
+      fetchPatients();
+      setConfirmOpen(false);
+      setSnackbar({
+        open: true,
+        message: "Patient deleted successfully",
+        severity: "success",
+      });
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to delete patient",
+        severity: "error",
+      });
+    }
   };
 
   return (
-    <>
-      <Container sx={{ py: 4 }}>
+    <Box sx={{ backgroundColor: "#F5F8FF", minHeight: "100vh", p: 4 }}>
+      <Paper elevation={3} sx={{ p: 3, borderRadius: "24px" }}>
         <Typography
-          variant="h4"
-          gutterBottom
-          color="primary"
-          textAlign="center"
+          variant="h5"
+          sx={{ mb: 3, color: "#199A8E", fontWeight: "bold" }}
         >
-          Patients
+          Patients Management
         </Typography>
-        <Box textAlign="center" sx={{ mb: 3 }}>
 
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
           <Button
             variant="contained"
-            color="primary"
-            onClick={handleOpenAdd}
-            sx={{ mb: 3 }}
+            onClick={() => {
+              setEditingPatient(null);
+              setForm({
+                fullName: "",
+                email: "",
+                phone: "",
+                address: "",
+                age: "",
+                gender: "",
+                notes: "",
+              });
+              setOpenDialog(true);
+            }}
           >
-            Add Patient
+            Add New Patient
           </Button>
         </Box>
-        <Grid container spacing={2}>
-          {currentPatients.map((patient) => (
-            <Grid item xs={12} sm={6} md={4} key={patient.id}>
-              <Card>
-                <CardContent
-                  sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-                >
-                  <Typography variant="h6">{patient.fullName}</Typography>
-                  <Typography color="text.secondary">
-                    {patient.email}
-                  </Typography>
-                  <Typography>{patient.phone}</Typography>
-                  <Typography>{patient.address}</Typography>
-                  <Typography>Age: {patient.age}</Typography>
-                  <Typography>Gender: {patient.gender}</Typography>
-                  <Typography>{patient.notes}</Typography>
-                  <div
-                    style={{ display: "flex", gap: "8px", marginTop: "8px" }}
-                  >
-                    <Button
-                      variant="outlined"
-                      size="small"
+
+        <Table>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#199A8E" }}>
+              <TableCell sx={{ color: "#fff" }}>Name</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Email</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Phone</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Address</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Age</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Gender</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {currentPatients.map((patient) => (
+              <TableRow key={patient.id}>
+                <TableCell>{patient.fullName}</TableCell>
+                <TableCell>{patient.email}</TableCell>
+                <TableCell>{patient.phone}</TableCell>
+                <TableCell>{patient.address}</TableCell>
+                <TableCell>{patient.age}</TableCell>
+                <TableCell>{patient.gender}</TableCell>
+                <TableCell>
+                  <Tooltip title="View Details">
+                    <IconButton
                       color="primary"
-                      component={Link}
-                      to={`/admin/patients/${patient.id}`}
+                      onClick={() => navigate(`/admin/patients/${patient.id}`)}
                     >
-                      View Details
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() => handleOpenEdit(patient)}
+                      <VisibilityIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Edit">
+                    <IconButton
+                      onClick={() => {
+                        setEditingPatient(patient);
+                        setForm({
+                          fullName: patient.fullName,
+                          email: patient.email,
+                          phone: patient.phone,
+                          address: patient.address,
+                          age: patient.age,
+                          gender: patient.gender,
+                          notes: patient.notes,
+                        });
+                        setOpenDialog(true);
+                      }}
                     >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      color="error"
-                      onClick={() => handleDeleteClick(patient)}
+                      <EditIcon color="primary" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <IconButton
+                      onClick={() => {
+                        setPatientToDelete(patient);
+                        setConfirmOpen(true);
+                      }}
                     >
-                      Delete
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+                      <DeleteIcon color="error" />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
-        {patients.length > patientsPerPage && (
-          <CustomPagination
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
+        <CustomPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </Paper>
+
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {editingPatient ? "Edit Patient" : "Add New Patient"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Full Name"
+            name="fullName"
+            value={form.fullName}
+            onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+            error={!!errors.fullName}
+            helperText={errors.fullName}
+            fullWidth
+            margin="normal"
           />
-        )}
-
-        <Dialog open={openDialog} onClose={handleClose} maxWidth="sm" fullWidth>
-          <DialogTitle>
-            {editingPatient ? "Edit Patient" : "Add Patient"}
-          </DialogTitle>
-          <DialogContent
-            sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+          <TextField
+            label="Email"
+            name="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            error={!!errors.email}
+            helperText={errors.email}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Phone"
+            name="phone"
+            value={form.phone}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            error={!!errors.phone}
+            helperText={errors.phone}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Address"
+            name="address"
+            value={form.address}
+            onChange={(e) => setForm({ ...form, address: e.target.value })}
+            error={!!errors.address}
+            helperText={errors.address}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Age"
+            name="age"
+            type="number"
+            value={form.age}
+            onChange={(e) => setForm({ ...form, age: e.target.value })}
+            error={!!errors.age}
+            helperText={errors.age}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            select
+            label="Gender"
+            name="gender"
+            value={form.gender}
+            onChange={(e) => setForm({ ...form, gender: e.target.value })}
+            error={!!errors.gender}
+            helperText={errors.gender}
+            fullWidth
+            margin="normal"
           >
-            <TextField
-              label="Full Name"
-              name="fullName"
-              value={form.fullName}
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Email"
-              name="email"
-              type="email"
-              value={form.email}
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Phone"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Address"
-              name="address"
-              value={form.address}
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Age"
-              name="age"
-              type="number"
-              value={form.age}
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Gender"
-              name="gender"
-              value={form.gender}
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Notes"
-              name="notes"
-              multiline
-              rows={3}
-              value={form.notes}
-              onChange={handleChange}
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button variant="contained" color="primary" onClick={handleSave}>
-              {editingPatient ? "Update" : "Add"}
-            </Button>
-          </DialogActions>
-        </Dialog>
+            <MenuItem value="">Select Gender</MenuItem>
+            <MenuItem value="Male">Male</MenuItem>
+            <MenuItem value="Female">Female</MenuItem>
+            <MenuItem value="Other">Other</MenuItem>
+          </TextField>
+          <TextField
+            label="Notes"
+            name="notes"
+            value={form.notes}
+            onChange={(e) => setForm({ ...form, notes: e.target.value })}
+            fullWidth
+            multiline
+            rows={3}
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+          <Button variant="contained" onClick={handleSave}>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-        <Dialog
-          open={confirmOpen}
-          onClose={handleCancelDelete}
-          aria-labelledby="confirm-dialog-title"
-          aria-describedby="confirm-dialog-description"
-        >
-          <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="confirm-dialog-description">
-              Are you sure you want to delete patient{" "}
-              <strong>{patientToDelete?.fullName}</strong>?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancelDelete} color="primary">
-              Cancel
-            </Button>
-            <Button
-              onClick={handleConfirmDelete}
-              color="error"
-              variant="contained"
-            >
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete {patientToDelete?.fullName}?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmOpen(false)}>Cancel</Button>
+          <Button color="error" variant="contained" onClick={handleDelete}>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={3000}
-          onClose={handleSnackbarClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            onClose={handleSnackbarClose}
-            severity={snackbar.severity}
-            sx={{ width: "100%" }}
-          >
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
-      </Container>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+      </Snackbar>
+
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Button variant="contained" onClick={() => navigate("/admin")}>
           Back to Dashboard
         </Button>
       </Box>
-    </>
+    </Box>
   );
 };
 

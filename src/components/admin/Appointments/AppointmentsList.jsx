@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from "react";
 import {
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
   Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  Paper,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   TextField,
-  IconButton,
+  DialogActions,
   Snackbar,
   Alert,
   Chip,
+  IconButton,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import CustomPagination from "../../CustomPagination.jsx";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CustomPagination from "../../CustomPagination.jsx";
-import { useNavigate } from "react-router-dom"; 
 
 const AppointmentsList = () => {
   const [appointments, setAppointments] = useState([]);
@@ -34,27 +36,37 @@ const AppointmentsList = () => {
     notes: "",
     status: "pending",
   });
+  const [errors, setErrors] = useState({});
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const appointmentsPerPage = 5;
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success",
   });
+  const navigate = useNavigate();
 
-  // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const appointmentsPerPage = 6;
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.doctorName.trim())
+      newErrors.doctorName = "Doctor name is required";
+    if (!formData.patientName.trim())
+      newErrors.patientName = "Patient name is required";
+    if (!formData.date) newErrors.date = "Date is required";
+    if (!formData.time) newErrors.time = "Time is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-  const navigate = useNavigate(); 
-
-  const fetchAppointments = () => {
-    fetch("http://localhost:5000/appointments")
-      .then((res) => res.json())
-      .then((data) => setAppointments(data))
-      .catch((err) =>
-        showSnackbar("Failed to fetch appointments: " + err.message, "error")
-      );
+  const fetchAppointments = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/appointments");
+      setAppointments(await response.json());
+    } catch (error) {
+      showSnackbar("Failed to fetch appointments", "error");
+    }
   };
 
   useEffect(() => {
@@ -65,9 +77,8 @@ const AppointmentsList = () => {
     setSnackbar({ open: true, message, severity });
   };
 
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") return;
-    setSnackbar((prev) => ({ ...prev, open: false }));
+  const handleSnackbarClose = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   const handleOpenAdd = () => {
@@ -80,6 +91,7 @@ const AppointmentsList = () => {
       notes: "",
       status: "pending",
     });
+    setErrors({});
     setOpenDialog(true);
   };
 
@@ -93,6 +105,7 @@ const AppointmentsList = () => {
       notes: appointment.notes || "",
       status: appointment.status || "pending",
     });
+    setErrors({});
     setOpenDialog(true);
   };
 
@@ -102,48 +115,41 @@ const AppointmentsList = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({ ...formData, [name]: value });
+    if (errors[name]) setErrors({ ...errors, [name]: "" });
   };
 
   const handleStatusChange = (status) => {
-    setFormData((prev) => ({ ...prev, status }));
+    setFormData({ ...formData, status });
   };
 
-  const handleSave = () => {
-    if (
-      !formData.doctorName ||
-      !formData.patientName ||
-      !formData.date ||
-      !formData.time
-    ) {
-      showSnackbar("Please fill in all required fields", "error");
-      return;
+  const handleSave = async () => {
+    if (!validateForm()) return;
+
+    try {
+      const url = editingAppointment
+        ? `http://localhost:5000/appointments/${editingAppointment.id}`
+        : "http://localhost:5000/appointments";
+      const method = editingAppointment ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error("Failed to save appointment");
+
+      fetchAppointments();
+      setOpenDialog(false);
+      showSnackbar(
+        editingAppointment
+          ? "Appointment updated successfully"
+          : "Appointment added successfully"
+      );
+    } catch (error) {
+      showSnackbar(error.message, "error");
     }
-
-    const method = editingAppointment ? "PUT" : "POST";
-    const url = editingAppointment
-      ? `http://localhost:5000/appointments/${editingAppointment.id}`
-      : "http://localhost:5000/appointments";
-
-    fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error saving appointment");
-        return res.json();
-      })
-      .then(() => {
-        fetchAppointments();
-        setOpenDialog(false);
-        showSnackbar(
-          editingAppointment
-            ? "Appointment updated successfully!"
-            : "Appointment added successfully!"
-        );
-      })
-      .catch((err) => showSnackbar(err.message, "error"));
   };
 
   const handleDelete = (appointment) => {
@@ -151,25 +157,26 @@ const AppointmentsList = () => {
     setOpenConfirmDialog(true);
   };
 
-  const handleConfirmDelete = () => {
-    fetch(`http://localhost:5000/appointments/${selectedAppointment.id}`, {
-      method: "DELETE",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error deleting appointment");
-        fetchAppointments();
-        setOpenConfirmDialog(false);
-        showSnackbar("Appointment deleted successfully!");
-      })
-      .catch((err) => {
-        showSnackbar(err.message, "error");
-        setOpenConfirmDialog(false);
-      });
+  const handleConfirmDelete = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/appointments/${selectedAppointment.id}`,
+        { method: "DELETE" }
+      );
+
+      if (!response.ok) throw new Error("Failed to delete");
+
+      fetchAppointments();
+      setOpenConfirmDialog(false);
+      showSnackbar("Appointment deleted successfully");
+    } catch (error) {
+      showSnackbar(error.message, "error");
+      setOpenConfirmDialog(false);
+    }
   };
 
   const handleCancelDelete = () => {
     setOpenConfirmDialog(false);
-    setSelectedAppointment(null);
   };
 
   const getStatusColor = (status) => {
@@ -185,7 +192,6 @@ const AppointmentsList = () => {
     }
   };
 
-  // Pagination logic
   const indexOfLastAppointment = currentPage * appointmentsPerPage;
   const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
   const currentAppointments = appointments.slice(
@@ -195,233 +201,212 @@ const AppointmentsList = () => {
   const totalPages = Math.ceil(appointments.length / appointmentsPerPage);
 
   return (
-    <>
-      <Container sx={{ py: 4 }}>
+    <Box sx={{ backgroundColor: "#F5F8FF", minHeight: "100vh", p: 4 }}>
+      <Paper elevation={3} sx={{ p: 3, borderRadius: "24px" }}>
         <Typography
-          variant="h4"
-          gutterBottom
-          textAlign="center"
-          color="primary"
+          variant="h5"
+          sx={{ mb: 3, color: "#199A8E", fontWeight: "bold" }}
         >
-          Doctor Appointments
+          Appointments Management
         </Typography>
 
-        <Box textAlign="center" sx={{ mb: 3 }}>
-          <Button variant="contained" color="primary" onClick={handleOpenAdd}>
-            Add Appointment
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+          <Button variant="contained" onClick={handleOpenAdd}>
+            Add New Appointment
           </Button>
         </Box>
 
-        <Grid container spacing={3}>
-          {currentAppointments.map((appointment) => (
-            <Grid item xs={12} sm={6} md={4} key={appointment.id}>
-              <Card sx={{ boxShadow: 3 }}>
-                <CardContent>
-                  <Box sx={{ mb: 1 }}>
-                    <Typography variant="h6" gutterBottom>
-                      Appointment #{appointment.id}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Doctor:</strong>{" "}
-                      {appointment.doctorName || appointment.doctor || "N/A"}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Patient:</strong>{" "}
-                      {appointment.patientName || appointment.patient || "N/A"}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Date:</strong> {appointment.date || "N/A"}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Time:</strong> {appointment.time || "N/A"}
-                    </Typography>
-                    <Box sx={{ my: 1 }}>
-                      <Chip
-                        label={appointment.status || "pending"}
-                        color={getStatusColor(appointment.status)}
-                        size="small"
-                      />
-                    </Box>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ mt: 1 }}
-                    >
-                      {appointment.notes || ""}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleOpenEdit(appointment)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="error"
-                      onClick={() => handleDelete(appointment)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        <Table>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#199A8E" }}>
+              <TableCell sx={{ color: "#fff" }}>ID</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Doctor</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Patient</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Date</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Time</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Status</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {currentAppointments.map((appointment) => (
+              <TableRow key={appointment.id}>
+                <TableCell>#{appointment.id}</TableCell>
+                <TableCell>
+                  {appointment.doctorName || appointment.doctor || "N/A"}
+                </TableCell>
+                <TableCell>
+                  {appointment.patientName || appointment.patient || "N/A"}
+                </TableCell>
+                <TableCell>{appointment.date || "N/A"}</TableCell>
+                <TableCell>{appointment.time || "N/A"}</TableCell>
+                <TableCell>
+                  <Chip
+                    label={appointment.status || "pending"}
+                    color={getStatusColor(appointment.status)}
+                    size="small"
+                  />
+                </TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleOpenEdit(appointment)}>
+                    <EditIcon color="primary" />
+                  </IconButton>
+                  <IconButton onClick={() => handleDelete(appointment)}>
+                    <DeleteIcon color="error" />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
-        {/* Pagination */}
-        <Box mt={4}>
-          <CustomPagination
-            totalPages={totalPages}
-            onPageChange={(page) => setCurrentPage(page)}
+        <CustomPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </Paper>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {editingAppointment ? "Edit Appointment" : "Add Appointment"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="dense"
+            label="Doctor Name *"
+            name="doctorName"
+            fullWidth
+            value={formData.doctorName}
+            onChange={handleInputChange}
+            error={!!errors.doctorName}
+            helperText={errors.doctorName}
           />
-        </Box>
-
-        {/* Add/Edit Dialog */}
-        <Dialog
-          open={openDialog}
-          onClose={handleCloseDialog}
-          maxWidth="sm"
-          fullWidth
-        >
-          <DialogTitle>
-            {editingAppointment ? "Edit Appointment" : "Add Appointment"}
-          </DialogTitle>
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Doctor Name"
-              name="doctorName"
-              fullWidth
-              value={formData.doctorName}
-              onChange={handleInputChange}
-              required
-            />
-            <TextField
-              margin="dense"
-              label="Patient Name"
-              name="patientName"
-              fullWidth
-              value={formData.patientName}
-              onChange={handleInputChange}
-              required
-            />
-            <TextField
-              margin="dense"
-              label="Date"
-              name="date"
-              type="date"
-              fullWidth
-              value={formData.date}
-              onChange={handleInputChange}
-              InputLabelProps={{ shrink: true }}
-              required
-            />
-            <TextField
-              margin="dense"
-              label="Time"
-              name="time"
-              type="time"
-              fullWidth
-              value={formData.time}
-              onChange={handleInputChange}
-              InputLabelProps={{ shrink: true }}
-              required
-            />
-            <Box sx={{ my: 2 }}>
-              <Typography variant="subtitle2">Status</Typography>
-              <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
-                <Button
-                  variant={
-                    formData.status === "approved" ? "contained" : "outlined"
-                  }
-                  color="success"
-                  onClick={() => handleStatusChange("approved")}
-                >
-                  Approved
-                </Button>
-                <Button
-                  variant={
-                    formData.status === "pending" ? "contained" : "outlined"
-                  }
-                  color="warning"
-                  onClick={() => handleStatusChange("pending")}
-                >
-                  Pending
-                </Button>
-                <Button
-                  variant={
-                    formData.status === "rejected" ? "contained" : "outlined"
-                  }
-                  color="error"
-                  onClick={() => handleStatusChange("rejected")}
-                >
-                  Rejected
-                </Button>
-              </Box>
+          <TextField
+            margin="dense"
+            label="Patient Name *"
+            name="patientName"
+            fullWidth
+            value={formData.patientName}
+            onChange={handleInputChange}
+            error={!!errors.patientName}
+            helperText={errors.patientName}
+          />
+          <TextField
+            margin="dense"
+            label="Date *"
+            name="date"
+            type="date"
+            fullWidth
+            value={formData.date}
+            onChange={handleInputChange}
+            InputLabelProps={{ shrink: true }}
+            error={!!errors.date}
+            helperText={errors.date}
+          />
+          <TextField
+            margin="dense"
+            label="Time *"
+            name="time"
+            type="time"
+            fullWidth
+            value={formData.time}
+            onChange={handleInputChange}
+            InputLabelProps={{ shrink: true }}
+            error={!!errors.time}
+            helperText={errors.time}
+          />
+          <Box sx={{ my: 2 }}>
+            <Typography variant="subtitle2">Status *</Typography>
+            <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
+              <Button
+                variant={
+                  formData.status === "approved" ? "contained" : "outlined"
+                }
+                color="success"
+                onClick={() => handleStatusChange("approved")}
+              >
+                Approved
+              </Button>
+              <Button
+                variant={
+                  formData.status === "pending" ? "contained" : "outlined"
+                }
+                color="warning"
+                onClick={() => handleStatusChange("pending")}
+              >
+                Pending
+              </Button>
+              <Button
+                variant={
+                  formData.status === "rejected" ? "contained" : "outlined"
+                }
+                color="error"
+                onClick={() => handleStatusChange("rejected")}
+              >
+                Rejected
+              </Button>
             </Box>
-            <TextField
-              margin="dense"
-              label="Notes"
-              name="notes"
-              fullWidth
-              multiline
-              rows={3}
-              value={formData.notes}
-              onChange={handleInputChange}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseDialog}>Cancel</Button>
-            <Button variant="contained" onClick={handleSave}>
-              {editingAppointment ? "Update" : "Add"}
-            </Button>
-          </DialogActions>
-        </Dialog>
+          </Box>
+          <TextField
+            margin="dense"
+            label="Notes"
+            name="notes"
+            fullWidth
+            multiline
+            rows={3}
+            value={formData.notes}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button variant="contained" onClick={handleSave}>
+            {editingAppointment ? "Update" : "Add"}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-        {/* Delete Confirmation Dialog */}
-        <Dialog open={openConfirmDialog} onClose={handleCancelDelete}>
-          <DialogTitle>Confirm Delete</DialogTitle>
-          <DialogContent>
-            Are you sure you want to delete this appointment?
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancelDelete}>Cancel</Button>
-            <Button
-              color="error"
-              variant="contained"
-              onClick={handleConfirmDelete}
-            >
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
-
-        {/* Snackbar for feedback messages */}
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={4000}
-          onClose={handleSnackbarClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            onClose={handleSnackbarClose}
-            severity={snackbar.severity}
-            sx={{ width: "100%" }}
+      <Dialog open={openConfirmDialog} onClose={handleCancelDelete}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete appointment #{selectedAppointment?.id}
+          ?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete}>Cancel</Button>
+          <Button
+            color="error"
+            variant="contained"
+            onClick={handleConfirmDelete}
           >
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
-      </Container>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
 
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-        <Button variant="contained" onClick={() => navigate("/admin/doctors")}>
+        <Button variant="contained" onClick={() => navigate("/admin")}>
           Back to Dashboard
         </Button>
       </Box>
-    </>
+    </Box>
   );
 };
 
