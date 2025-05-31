@@ -7,6 +7,9 @@ const DoctorDashboard = () => {
   return (
     <Box p={3} sx={{ backgroundColor: "#f5f7fa", minHeight: "100vh" }}>
       <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", color: "#2e3b4a" }}>
+      
+        {/* Welcome, {doctor.name} */}
+        
         Welcome, Dr. John
       </Typography>
       

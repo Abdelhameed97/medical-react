@@ -411,18 +411,11 @@
       "endTime": "17:00"
     },
     {
-      "id": "716a",
-      "doctorId": 1,
-      "day": "Tuesday",
-      "startTime": "09:00",
-      "endTime": "17:00"
-    },
-    {
-      "id": "3cb8",
+      "id": "18bd",
       "doctorId": 1,
       "day": "Wednesday",
       "startTime": "09:00",
-      "endTime": "19:00"
+      "endTime": "22:00"
     }
   ],
   "appointments": [
