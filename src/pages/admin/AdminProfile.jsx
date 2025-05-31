@@ -5,12 +5,8 @@ import {
   Typography,
   Avatar,
   Paper,
-  Divider,
   TextField,
   Button,
-  IconButton,
-  Chip,
-  Badge,
   List,
   ListItem,
   ListItemAvatar,
@@ -19,36 +15,26 @@ import {
   Tab,
   styled,
   useTheme,
-  LinearProgress,
   CircularProgress,
   Alert,
 } from "@mui/material";
 import {
   Edit,
   Save,
-  CameraAlt,
-  VerifiedUser,
-  Email,
-  Phone,
-  LocationOn,
-  Security,
   CalendarToday,
   Person,
   Work,
   School,
-  Lock,
   Notifications,
   CloudUpload,
-  PersonAdd,
 } from "@mui/icons-material";
-import { Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ProfileCard = styled(Paper)(({ theme }) => ({
   background: `rgba(${
     theme.palette.mode === "dark" ? "30,30,30" : "255,255,255"
   }, 0.8)`,
   backdropFilter: "blur(12px)",
-  border: "1px solid rgba(255, 255, 255, 0.2)",
   borderRadius: "16px",
   boxShadow: theme.shadows[10],
   overflow: "hidden",
@@ -67,6 +53,8 @@ const AdminProfile = () => {
   const [error, setError] = useState(null);
   const [adminData, setAdminData] = useState(null);
   const [activityLog, setActivityLog] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAdminData = async () => {
@@ -198,9 +186,6 @@ const AdminProfile = () => {
       sx={{
         p: 4,
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
-        backgroundImage:
-          "radial-gradient(circle at 10% 20%, rgba(200, 200, 255, 0.3) 0%, transparent 20%)",
       }}
     >
       {/* Header */}
@@ -238,529 +223,250 @@ const AdminProfile = () => {
           {editMode ? (loading ? "Saving..." : "Save Changes") : "Edit Profile"}
         </Button>
       </Box>
+      {/* Right Column - Main Content */}
+      <Grid item xs={12} md={8}>
+        <ProfileCard>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={tabValue}
+              onChange={handleTabChange}
+              variant="scrollable"
+              scrollButtons="auto"
+            >
+              <Tab
+                label="Personal Info"
+                icon={<Person />}
+                iconPosition="start"
+              />
+              <Tab
+                label="Professional Info"
+                icon={<Work />}
+                iconPosition="start"
+              />
+              <Tab label="Education" icon={<School />} iconPosition="start" />
+              <Tab
+                label="Activity Log"
+                icon={<CalendarToday />}
+                iconPosition="start"
+              />
+            </Tabs>
+          </Box>
 
-      {adminData && (
-        <Grid container spacing={3}>
-          {/* Left Column - Profile Info */}
-          <Grid item xs={12} md={4}>
-            <ProfileCard>
-              <Box
-                sx={{
-                  p: 3,
-                  textAlign: "center",
-                  background:
-                    "linear-gradient(135deg, rgba(63,81,181,0.1) 0%, rgba(33,150,243,0.1) 100%)",
-                }}
-              >
-                <Badge
-                  overlap="circular"
-                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                  badgeContent={
-                    <IconButton
-                      sx={{
-                        bgcolor: "primary.main",
-                        color: "white",
-                        "&:hover": { bgcolor: "primary.dark" },
-                      }}
-                    >
-                      <CameraAlt fontSize="small" />
-                    </IconButton>
-                  }
-                >
-                  <Avatar
-                    sx={{
-                      width: 120,
-                      height: 120,
-                      margin: "0 auto 16px",
-                      border: "4px solid white",
-                      boxShadow: theme.shadows[6],
-                    }}
-                    src="https://randomuser.me/api/portraits/men/1.jpg"
-                    alt="Admin Avatar"
-                  />
-                </Badge>
-
-                <Typography variant="h5" fontWeight="bold" gutterBottom>
-                  {adminData.username}
-                  <VerifiedUser
-                    color="primary"
-                    sx={{ ml: 1, fontSize: "1.2rem" }}
-                  />
+          <Box sx={{ p: 3 }}>
+            {tabValue === 0 && (
+              <Box>
+                <Typography variant="h6" fontWeight="bold" gutterBottom>
+                  Personal Information
                 </Typography>
 
-                <Chip
-                  label={adminData.role}
-                  color="primary"
-                  size="small"
-                  sx={{ mb: 2, borderRadius: "8px" }}
-                />
-
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 2 }}
-                >
-                  Last login: {adminData.lastLogin}
-                </Typography>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: 2,
-                    mb: 3,
-                  }}
-                >
-                  <IconButton
-                    sx={{ bgcolor: "primary.light", color: "primary.main" }}
-                  >
-                    <Email />
-                  </IconButton>
-                  <IconButton
-                    sx={{
-                      bgcolor: "secondary.light",
-                      color: "secondary.main",
-                    }}
-                  >
-                    <Phone />
-                  </IconButton>
-                  <IconButton
-                    sx={{ bgcolor: "success.light", color: "success.main" }}
-                  >
-                    <Notifications />
-                  </IconButton>
-                </Box>
-              </Box>
-
-              <Divider />
-
-              <Box sx={{ p: 3 }}>
-                <List dense>
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          bgcolor: "primary.light",
-                          color: "primary.main",
-                          width: 32,
-                          height: 32,
-                        }}
-                      >
-                        <Person fontSize="small" />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Username"
-                      secondary={adminData.username}
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Username"
+                      value={adminData.username}
+                      variant="outlined"
+                      disabled
+                      sx={{ mb: 2 }}
                     />
-                  </ListItem>
-
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          bgcolor: "secondary.light",
-                          color: "secondary.main",
-                          width: 32,
-                          height: 32,
-                        }}
-                      >
-                        <Email fontSize="small" />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="Email" secondary={adminData.email} />
-                  </ListItem>
-
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          bgcolor: "warning.light",
-                          color: "warning.main",
-                          width: 32,
-                          height: 32,
-                        }}
-                      >
-                        <Phone fontSize="small" />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Phone"
-                      secondary={
-                        editMode ? (
-                          <TextField
-                            fullWidth
-                            variant="standard"
-                            value={adminData.phone || ""}
-                            onChange={(e) =>
-                              handleInputChange("phone", e.target.value)
-                            }
-                            disabled={!editMode}
-                          />
-                        ) : (
-                          adminData.phone || "Not provided"
-                        )
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Role"
+                      value={adminData.role}
+                      variant="outlined"
+                      disabled
+                      sx={{ mb: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Email"
+                      value={adminData.email}
+                      variant="outlined"
+                      disabled={!editMode}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
                       }
+                      sx={{ mb: 2 }}
                     />
-                  </ListItem>
-
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          bgcolor: "success.light",
-                          color: "success.main",
-                          width: 32,
-                          height: 32,
-                        }}
-                      >
-                        <LocationOn fontSize="small" />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Location"
-                      secondary={
-                        editMode ? (
-                          <TextField
-                            fullWidth
-                            variant="standard"
-                            value={adminData.location || ""}
-                            onChange={(e) =>
-                              handleInputChange("location", e.target.value)
-                            }
-                            disabled={!editMode}
-                          />
-                        ) : (
-                          adminData.location || "Not provided"
-                        )
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Phone"
+                      value={adminData.phone || ""}
+                      variant="outlined"
+                      disabled={!editMode}
+                      onChange={(e) =>
+                        handleInputChange("phone", e.target.value)
                       }
+                      sx={{ mb: 2 }}
                     />
-                  </ListItem>
-                </List>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Location"
+                      value={adminData.location || ""}
+                      variant="outlined"
+                      disabled={!editMode}
+                      onChange={(e) =>
+                        handleInputChange("location", e.target.value)
+                      }
+                      sx={{ mb: 2 }}
+                    />
+                  </Grid>
+                </Grid>
               </Box>
-            </ProfileCard>
+            )}
 
-            {/* Security Card */}
-            <ProfileCard sx={{ mt: 3 }}>
-              <Box sx={{ p: 3 }}>
-                <Typography
-                  variant="h6"
-                  fontWeight="bold"
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    mb: 2,
-                  }}
-                >
-                  <Security color="primary" sx={{ mr: 1 }} />
-                  Security Status
+            {tabValue === 1 && (
+              <Box>
+                <Typography variant="h6" fontWeight="bold" gutterBottom>
+                  Professional Information
                 </Typography>
 
-                <Box sx={{ mb: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <span>Password Strength</span>
-                    <span>Strong</span>
-                  </Typography>
-                  <LinearProgress
-                    variant="determinate"
-                    value={90}
-                    sx={{
-                      height: 6,
-                      borderRadius: 3,
-                      mt: 1,
-                      "& .MuiLinearProgress-bar": {
-                        backgroundColor: "success.main",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ mb: 2 }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <span>Two-Factor Auth</span>
-                    <span>Enabled</span>
-                  </Typography>
-                  <LinearProgress
-                    variant="determinate"
-                    value={100}
-                    sx={{
-                      height: 6,
-                      borderRadius: 3,
-                      mt: 1,
-                      "& .MuiLinearProgress-bar": {
-                        backgroundColor: "primary.main",
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  startIcon={<Lock />}
-                  sx={{ mt: 2, borderRadius: "12px" }}
-                >
-                  Change Password
-                </Button>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Position"
+                      value={adminData.position}
+                      variant="outlined"
+                      disabled={!editMode}
+                      onChange={(e) =>
+                        handleInputChange("position", e.target.value)
+                      }
+                      sx={{ mb: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Department"
+                      value={adminData.department}
+                      variant="outlined"
+                      disabled={!editMode}
+                      onChange={(e) =>
+                        handleInputChange("department", e.target.value)
+                      }
+                      sx={{ mb: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Employee ID"
+                      value={adminData.employeeId}
+                      variant="outlined"
+                      disabled
+                      sx={{ mb: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Join Date"
+                      value={adminData.joinDate}
+                      variant="outlined"
+                      disabled
+                      sx={{ mb: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Responsibilities"
+                      value={adminData.responsibilities}
+                      variant="outlined"
+                      disabled={!editMode}
+                      onChange={(e) =>
+                        handleInputChange("responsibilities", e.target.value)
+                      }
+                      multiline
+                      rows={3}
+                    />
+                  </Grid>
+                </Grid>
               </Box>
-            </ProfileCard>
-          </Grid>
+            )}
 
-          {/* Right Column - Main Content */}
-          <Grid item xs={12} md={8}>
-            <ProfileCard>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <Tabs
-                  value={tabValue}
-                  onChange={handleTabChange}
-                  variant="scrollable"
-                  scrollButtons="auto"
-                >
-                  <Tab
-                    label="Personal Info"
-                    icon={<Person />}
-                    iconPosition="start"
-                  />
-                  <Tab
-                    label="Professional Info"
-                    icon={<Work />}
-                    iconPosition="start"
-                  />
-                  <Tab
-                    label="Education"
-                    icon={<School />}
-                    iconPosition="start"
-                  />
-                  <Tab
-                    label="Activity Log"
-                    icon={<CalendarToday />}
-                    iconPosition="start"
-                  />
-                </Tabs>
-              </Box>
+            {tabValue === 2 && (
+              <Box>
+                <Typography variant="h6" fontWeight="bold" gutterBottom>
+                  Education & Qualifications
+                </Typography>
 
-              <Box sx={{ p: 3 }}>
-                {tabValue === 0 && (
-                  <Box>
-                    <Typography variant="h6" fontWeight="bold" gutterBottom>
-                      Personal Information
+                {adminData.education.map((edu, index) => (
+                  <Box key={index} sx={{ mb: 3 }}>
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      {edu.institution}
                     </Typography>
-
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          label="Username"
-                          value={adminData.username}
-                          variant="outlined"
-                          disabled
-                          sx={{ mb: 2 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          label="Role"
-                          value={adminData.role}
-                          variant="outlined"
-                          disabled
-                          sx={{ mb: 2 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          fullWidth
-                          label="Email"
-                          value={adminData.email}
-                          variant="outlined"
-                          disabled={!editMode}
-                          onChange={(e) =>
-                            handleInputChange("email", e.target.value)
-                          }
-                          sx={{ mb: 2 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          label="Phone"
-                          value={adminData.phone || ""}
-                          variant="outlined"
-                          disabled={!editMode}
-                          onChange={(e) =>
-                            handleInputChange("phone", e.target.value)
-                          }
-                          sx={{ mb: 2 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          label="Location"
-                          value={adminData.location || ""}
-                          variant="outlined"
-                          disabled={!editMode}
-                          onChange={(e) =>
-                            handleInputChange("location", e.target.value)
-                          }
-                          sx={{ mb: 2 }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Box>
-                )}
-
-                {tabValue === 1 && (
-                  <Box>
-                    <Typography variant="h6" fontWeight="bold" gutterBottom>
-                      Professional Information
+                    <Typography variant="body2" color="text.secondary">
+                      {edu.degree} • {edu.period}
                     </Typography>
-
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          label="Position"
-                          value={adminData.position}
-                          variant="outlined"
-                          disabled={!editMode}
-                          onChange={(e) =>
-                            handleInputChange("position", e.target.value)
-                          }
-                          sx={{ mb: 2 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          label="Department"
-                          value={adminData.department}
-                          variant="outlined"
-                          disabled={!editMode}
-                          onChange={(e) =>
-                            handleInputChange("department", e.target.value)
-                          }
-                          sx={{ mb: 2 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          label="Employee ID"
-                          value={adminData.employeeId}
-                          variant="outlined"
-                          disabled
-                          sx={{ mb: 2 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          fullWidth
-                          label="Join Date"
-                          value={adminData.joinDate}
-                          variant="outlined"
-                          disabled
-                          sx={{ mb: 2 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          fullWidth
-                          label="Responsibilities"
-                          value={adminData.responsibilities}
-                          variant="outlined"
-                          disabled={!editMode}
-                          onChange={(e) =>
-                            handleInputChange(
-                              "responsibilities",
-                              e.target.value
-                            )
-                          }
-                          multiline
-                          rows={3}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Box>
-                )}
-
-                {tabValue === 2 && (
-                  <Box>
-                    <Typography variant="h6" fontWeight="bold" gutterBottom>
-                      Education & Qualifications
-                    </Typography>
-
-                    {adminData.education.map((edu, index) => (
-                      <Box key={index} sx={{ mb: 3 }}>
-                        <Typography variant="subtitle1" fontWeight="bold">
-                          {edu.institution}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {edu.degree} • {edu.period}
-                        </Typography>
-                        {edu.description && (
-                          <Typography variant="body2" sx={{ mt: 1 }}>
-                            {edu.description}
-                          </Typography>
-                        )}
-                      </Box>
-                    ))}
-
-                    {editMode && (
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        startIcon={<CloudUpload />}
-                        sx={{ borderRadius: "12px" }}
-                      >
-                        Add Certification
-                      </Button>
+                    {edu.description && (
+                      <Typography variant="body2" sx={{ mt: 1 }}>
+                        {edu.description}
+                      </Typography>
                     )}
                   </Box>
-                )}
+                ))}
 
-                {tabValue === 3 && (
-                  <Box>
-                    <Typography variant="h6" fontWeight="bold" gutterBottom>
-                      Recent Activity Log
-                    </Typography>
-
-                    <List dense>
-                      {activityLog.map((item, index) => (
-                        <ListItem key={index} sx={{ py: 1 }}>
-                          <ListItemAvatar>
-                            <Avatar
-                              sx={{
-                                bgcolor: `${item.icon.props.color}.light`,
-                                color: `${item.icon.props.color}.main`,
-                                width: 32,
-                                height: 32,
-                              }}
-                            >
-                              {item.icon}
-                            </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={item.action}
-                            secondary={item.time}
-                          />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Box>
+                {editMode && (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<CloudUpload />}
+                    sx={{ borderRadius: "12px" }}
+                  >
+                    Add Certification
+                  </Button>
                 )}
               </Box>
-            </ProfileCard>
-          </Grid>
-        </Grid>
-      )}
+            )}
+
+            {tabValue === 3 && (
+              <Box>
+                <Typography variant="h6" fontWeight="bold" gutterBottom>
+                  Recent Activity Log
+                </Typography>
+
+                <List dense>
+                  {activityLog.map((item, index) => (
+                    <ListItem key={index} sx={{ py: 1 }}>
+                      <ListItemAvatar>
+                        <Avatar
+                          sx={{
+                            bgcolor: `${item.icon.props.color}.light`,
+                            color: `${item.icon.props.color}.main`,
+                            width: 32,
+                            height: 32,
+                          }}
+                        >
+                          {item.icon}
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={item.action}
+                        secondary={item.time}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            )}
+          </Box>
+        </ProfileCard>
+      </Grid>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+        <Button variant="contained" onClick={() => navigate("/admin")}>
+          Back to Dashboard
+        </Button>
+      </Box>
     </Box>
   );
 };

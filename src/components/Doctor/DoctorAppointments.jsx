@@ -11,6 +11,7 @@ import {
   Save, Close, FilterAlt
 } from "@mui/icons-material";
 import dayjs from "dayjs";
+import { styles } from "../doctorStyle/DoctorAppointments.styles";
 
 const DoctorAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -79,15 +80,7 @@ const DoctorAppointments = () => {
             label="Approved"
             color="success"
             size="small"
-            sx={{
-              fontWeight: 600,
-              fontSize: "0.75rem",
-              backgroundColor: "#10b981",
-              color: "#fff",
-              "&:hover": { backgroundColor: "#059669" },
-              px: 1,
-              py: 0.5
-            }}
+            sx={styles.statusChip.approved}
           />
         );
       case "rejected":
@@ -97,15 +90,7 @@ const DoctorAppointments = () => {
             label="Rejected"
             color="error"
             size="small"
-            sx={{
-              fontWeight: 600,
-              fontSize: "0.75rem",
-              backgroundColor: "#ef4444",
-              color: "#fff",
-              "&:hover": { backgroundColor: "#dc2626" },
-              px: 1,
-              py: 0.5
-            }}
+            sx={styles.statusChip.rejected}
           />
         );
       default:
@@ -115,15 +100,7 @@ const DoctorAppointments = () => {
             label="Pending"
             color="warning"
             size="small"
-            sx={{
-              fontWeight: 600,
-              fontSize: "0.75rem",
-              backgroundColor: "#f59e0b",
-              color: "#fff",
-              "&:hover": { backgroundColor: "#d97706" },
-              px: 1,
-              py: 0.5
-            }}
+            sx={styles.statusChip.pending}
           />
         );
     }
@@ -182,55 +159,13 @@ const DoctorAppointments = () => {
 
   const renderAppointmentCard = (appt) => (
     <Grid item xs={12} sm={6} md={2} key={appt.id}>
-      <Paper
-        elevation={0}
-        sx={{
-          p: 2.5,
-          borderRadius: 1.5,
-          borderLeft: `4px solid ${
-            appt.status === "approved" ? "#10b981" :
-            appt.status === "rejected" ? "#ef4444" : "#f59e0b"
-          }`,
-          background: "#ffffff",
-          boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
-          position: "relative",
-          "&:hover": {
-            transform: "translateY(-6px)",
-            boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
-            borderLeftWidth: "5px"
-          },
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          minWidth: 320,
-          "&:before": {
-            content: '""',
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "8px",
-            background: appt.status === "approved"
-              ? "linear-gradient(90deg, #10b981, #34d399)"
-              : appt.status === "rejected"
-              ? "linear-gradient(90deg, #ef4444, #f87171)"
-              : "linear-gradient(90deg, #f59e0b, #fbbf24)",
-            borderTopLeftRadius: "4px",
-            borderTopRightRadius: "4px",
-          },
-        }}
-      >
+      <Paper elevation={0} sx={styles.appointmentCard}>
         <Stack direction="row" spacing={1.5} alignItems="center" mb={1.5}>
-          <Avatar
-            sx={{
-              bgcolor: appt.status === "approved" ? "#10b981" :
-                       appt.status === "rejected" ? "#ef4444" : "#f59e0b",
-              width: 36,
-              height: 36,
-              fontSize: "0.9rem",
-            }}
-          >
-          </Avatar>
+          <Avatar sx={{
+            ...styles.avatar,
+            bgcolor: appt.status === "approved" ? "#10b981" :
+                     appt.status === "rejected" ? "#ef4444" : "#f59e0b",
+          }} />
           <Box>
             <Typography variant="subtitle1" fontWeight={600} color="text.primary" fontSize="1rem">
               {appt.patientName}
@@ -241,17 +176,17 @@ const DoctorAppointments = () => {
           </Box>
         </Stack>
 
-        <Divider sx={{ my: 1.5, borderColor: "rgba(0,0,0,0.06)" }} />
+        <Divider sx={styles.divider} />
 
         <Box mb={1.5}>
           <Stack direction="row" spacing={0.5} alignItems="center" mb={1}>
-            <CalendarToday sx={{ color: "#64748b", fontSize: 18 }} />
+            <CalendarToday sx={styles.statusIcon} />
             <Typography variant="body2" color="text.secondary" fontSize="0.9rem">
               {dayjs(appt.date).format("DD/MM/YYYY")}
             </Typography>
           </Stack>
           <Stack direction="row" spacing={0.5} alignItems="center" mb={1}>
-            <WatchLater sx={{ color: "#64748b", fontSize: 18 }} />
+            <WatchLater sx={styles.statusIcon} />
             <Typography variant="body2" color="text.secondary" fontSize="0.9rem">
               {appt.time}
             </Typography>
@@ -262,16 +197,8 @@ const DoctorAppointments = () => {
         </Box>
 
         <Box mt="auto">
-          <Typography
-            variant="subtitle2"
-            fontWeight={600}
-            color="text.primary"
-            mb={1}
-            display="flex"
-            alignItems="center"
-            fontSize="0.95rem"
-          >
-            <Notes sx={{ mr: 0.5, color: "#64748b", fontSize: 18 }} />
+          <Typography variant="subtitle2" fontWeight={600} color="text.primary" mb={1} display="flex" alignItems="center" fontSize="0.95rem">
+            <Notes sx={{ mr: 0.5, ...styles.statusIcon }} />
             Notes
           </Typography>
           {editingNotes === appt.id ? (
@@ -284,7 +211,7 @@ const DoctorAppointments = () => {
                 value={tempNotes}
                 onChange={(e) => setTempNotes(e.target.value)}
                 size="small"
-                sx={{ mb: 1, "& .MuiOutlinedInput-root": { borderRadius: 1 } }}
+                sx={styles.notesField}
               />
               <Stack direction="row" spacing={1} justifyContent="flex-end">
                 <Button
@@ -292,13 +219,7 @@ const DoctorAppointments = () => {
                   size="small"
                   startIcon={<Save sx={{ fontSize: 18 }} />}
                   onClick={() => saveNotes(appt.id)}
-                  sx={{ 
-                    minWidth: 95, 
-                    backgroundColor: "#10b981", 
-                    "&:hover": { backgroundColor: "#059669" },
-                    fontSize: "0.8rem",
-                    py: 0.5
-                  }}
+                  sx={styles.saveButton}
                 >
                   Save
                 </Button>
@@ -307,48 +228,21 @@ const DoctorAppointments = () => {
                   size="small"
                   startIcon={<Close sx={{ fontSize: 18 }} />}
                   onClick={cancelEditing}
-                  sx={{ 
-                    minWidth: 95,
-                    fontSize: "0.8rem",
-                    py: 0.5
-                  }}
+                  sx={styles.cancelButton}
                 >
                   Cancel
                 </Button>
               </Stack>
             </Box>
           ) : (
-            <Paper
-              variant="outlined"
-              sx={{
-                p: 1.5,
-                borderRadius: 1,
-                minHeight: 80,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                position: "relative",
-                backgroundColor: "#f8fafc",
-                borderColor: "rgba(0,0,0,0.06)",
-                "&:hover": { backgroundColor: "#f1f5f9" },
-                "& .MuiOutlinedInput-notchedOutline": { borderColor: "rgba(0,0,0,0.06)" }
-              }}
-            >
+            <Paper variant="outlined" sx={styles.notesPaper}>
               <Typography variant="body2" color="text.secondary" sx={{ width: "100%", fontSize: "0.9rem" }}>
                 {appt.notes || "No notes added"}
               </Typography>
               <IconButton
                 size="small"
                 onClick={() => startEditing(appt)}
-                sx={{
-                  position: "absolute",
-                  top: 4,
-                  right: 4,
-                  backgroundColor: "rgba(255,255,255,0.9)",
-                  "&:hover": { backgroundColor: "rgba(0,0,0,0.04)" },
-                  width: 24,
-                  height: 24
-                }}
+                sx={styles.editButton}
               >
                 <Edit fontSize="small" sx={{ fontSize: 18 }} />
               </IconButton>
@@ -363,14 +257,7 @@ const DoctorAppointments = () => {
               size="small"
               startIcon={<CheckCircle sx={{ fontSize: 18 }} />}
               onClick={() => handleStatusChange(appt.id, "approved")}
-              sx={{
-                minWidth: 95,
-                backgroundColor: "#10b981",
-                "&:hover": { backgroundColor: "#059669" },
-                textTransform: "none",
-                fontSize: "0.8rem",
-                py: 0.5
-              }}
+              sx={styles.approveButton}
             >
               Approve
             </Button>
@@ -381,15 +268,7 @@ const DoctorAppointments = () => {
               size="small"
               startIcon={<Cancel sx={{ fontSize: 18 }} />}
               onClick={() => handleStatusChange(appt.id, "rejected")}
-              sx={{
-                minWidth: 95,
-                borderColor: "#ef4444",
-                color: "#ef4444",
-                "&:hover": { borderColor: "#dc2626", color: "#dc2626" },
-                textTransform: "none",
-                fontSize: "0.8rem",
-                py: 0.5
-              }}
+              sx={styles.rejectButton}
             >
               Reject
             </Button>
@@ -407,15 +286,7 @@ const DoctorAppointments = () => {
         <Grid container spacing={2}>
           {paginatedData.length ? paginatedData.map(renderAppointmentCard) : (
             <Grid item xs={12}>
-              <Paper
-                sx={{
-                  p: 3,
-                  textAlign: "center",
-                  backgroundColor: "#ffffff",
-                  borderRadius: 1.5,
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
-                }}
-              >
+              <Paper sx={styles.noAppointmentsPaper}>
                 <Typography variant="h6" color="text.secondary" fontSize="1.1rem">
                   No appointments found
                 </Typography>
@@ -431,15 +302,7 @@ const DoctorAppointments = () => {
         </Grid>
         
         {totalPages > 1 && (
-          <Box sx={{ 
-            display: "flex", 
-            justifyContent: "center", 
-            mt: 10,
-            p: 1.5,
-            backgroundColor: "#ffffff",
-            borderRadius: 1.5,
-            boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
-          }}>
+          <Box sx={styles.paginationBox}>
             <Pagination
               count={totalPages}
               page={page}
@@ -447,20 +310,7 @@ const DoctorAppointments = () => {
               color="primary"
               shape="rounded"
               size="small"
-              sx={{
-                "& .MuiPaginationItem-root": {
-                  fontSize: "0.85rem",
-                  minWidth: 30,
-                  height: 30,
-                  borderRadius: 15,
-                  "&.Mui-selected": {
-                    backgroundColor: "#10b981",
-                    color: "#fff",
-                    "&:hover": { backgroundColor: "#059669" }
-                  },
-                  "&:hover": { backgroundColor: "#e2e8f0" }
-                }
-              }}
+              sx={styles.pagination}
             />
           </Box>
         )}
@@ -469,31 +319,9 @@ const DoctorAppointments = () => {
   };
 
   return (
-    <Box
-      sx={{
-        p: { xs: 1.5, sm: 2, md: 3 },
-        backgroundColor: "#f9fafb",
-        minHeight: "100vh",
-        overflowX: "hidden",
-      }}
-    >
-      <Box sx={{ 
-        display: "flex", 
-        alignItems: "center", 
-        mb: 3,
-        p: 2,
-        backgroundColor: "#ffffff",
-        borderRadius: 1.5,
-        boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
-      }}>
-        <CalendarToday sx={{ 
-          fontSize: 28, 
-          mr: 1.5, 
-          color: "#10b981",
-          backgroundColor: "#ecfdf5",
-          p: 0.5,
-          borderRadius: "50%"
-        }} />
+    <Box sx={styles.mainBox}>
+      <Box sx={styles.headerBox}>
+        <CalendarToday sx={styles.calendarIcon} />
         <Box>
           <Typography variant="h5" fontWeight={700} color="text.primary" fontSize="1.25rem">
             Appointments Management
@@ -504,18 +332,10 @@ const DoctorAppointments = () => {
         </Box>
       </Box>
 
-      <Paper
-        sx={{
-          p: 2,
-          mb: 3,
-          borderRadius: 1.5,
-          backgroundColor: "#ffffff",
-          boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
-        }}
-      >
+      <Paper sx={styles.filterPaper}>
         <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap" useFlexGap>
-          <FilterAlt sx={{ color: "#64748b", fontSize: 20 }} />
-          <FormControl size="small" sx={{ minWidth: 130 }}>
+          <FilterAlt sx={styles.filterIcon} />
+          <FormControl size="small" sx={styles.formControl}>
             <InputLabel>Filter Type</InputLabel>
             <Select
               value={filterType}
@@ -524,16 +344,16 @@ const DoctorAppointments = () => {
                 setPage(1);
               }}
               label="Filter Type"
-              sx={{ fontSize: "0.85rem", "& .MuiOutlinedInput-notchedOutline": { borderRadius: 1 } }}
+              sx={styles.selectStyle}
             >
-              <MenuItem value="all" sx={{ fontSize: "0.85rem" }}>All Appointments</MenuItem>
-              <MenuItem value="day" sx={{ fontSize: "0.85rem" }}>By Day of Week</MenuItem>
-              <MenuItem value="date" sx={{ fontSize: "0.85rem" }}>By Specific Date</MenuItem>
+              <MenuItem value="all" sx={styles.menuItemStyle}>All Appointments</MenuItem>
+              <MenuItem value="day" sx={styles.menuItemStyle}>By Day of Week</MenuItem>
+              <MenuItem value="date" sx={styles.menuItemStyle}>By Specific Date</MenuItem>
             </Select>
           </FormControl>
 
           {filterType === "day" && (
-            <FormControl size="small" sx={{ minWidth: 150 }}>
+            <FormControl size="small" sx={styles.dayFormControl}>
               <InputLabel>Select Day</InputLabel>
               <Select
                 value={selectedDay}
@@ -542,10 +362,10 @@ const DoctorAppointments = () => {
                   setPage(1);
                 }}
                 label="Select Day"
-                sx={{ fontSize: "0.85rem", "& .MuiOutlinedInput-notchedOutline": { borderRadius: 1 } }}
+                sx={styles.selectStyle}
               >
                 {daysOfWeek.map(day => (
-                  <MenuItem key={day} value={day} sx={{ fontSize: "0.85rem" }}>{day}</MenuItem>
+                  <MenuItem key={day} value={day} sx={styles.menuItemStyle}>{day}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -562,7 +382,7 @@ const DoctorAppointments = () => {
                 setPage(1);
               }}
               InputLabelProps={{ shrink: true }}
-              sx={{ width: 160, "& .MuiOutlinedInput-notchedOutline": { borderRadius: 1 } }}
+              sx={styles.dateField}
               inputProps={{ style: { fontSize: "0.85rem" } }}
             />
           )}
@@ -576,19 +396,7 @@ const DoctorAppointments = () => {
                 setSelectedDate("");
                 setPage(1);
               }}
-              sx={{ 
-                ml: "auto", 
-                borderColor: "#e2e8f0", 
-                color: "#64748b", 
-                "&:hover": { 
-                  borderColor: "#cbd5e1", 
-                  color: "#475569",
-                  backgroundColor: "#f1f5f9"
-                },
-                fontSize: "0.75rem",
-                px: 1,
-                py: 0.5
-              }}
+              sx={styles.clearButton}
             >
               Clear Filters
             </Button>
@@ -596,14 +404,7 @@ const DoctorAppointments = () => {
         </Stack>
       </Paper>
 
-      <Paper
-        sx={{
-          mb: 3,
-          borderRadius: 1.5,
-          backgroundColor: "#ffffff",
-          boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
-        }}
-      >
+      <Paper sx={styles.tabsPaper}>
         <Tabs
           value={tab}
           onChange={(e, newVal) => {
@@ -617,25 +418,7 @@ const DoctorAppointments = () => {
           textColor="primary"
           variant="scrollable"
           scrollButtons="auto"
-          sx={{
-            "& .MuiTabs-flexContainer": { gap: 0.5 },
-            "& .MuiTab-root": { 
-              fontWeight: 600, 
-              textTransform: "none", 
-              fontSize: "0.85rem",
-              px: 1.5,
-              minHeight: 44,
-              borderRadius: 0.5,
-              "&.Mui-selected": {
-                color: "#10b981",
-                backgroundColor: "rgba(16, 185, 129, 0.1)"
-              }
-            },
-            "& .MuiTabs-indicator": {
-              height: 3,
-              backgroundColor: "#10b981"
-            }
-          }}
+          sx={styles.tabs}
         >
           <Tab label="Pending" />
           <Tab label="Accepted" />

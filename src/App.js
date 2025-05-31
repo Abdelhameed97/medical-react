@@ -9,12 +9,12 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 
 // Doctor
-import DoctorDashboard from "./pages/Doctor/DoctorDashboard";
-import DoctorAppointments from "./pages/Doctor/DoctorAppointments";
-import DoctorAvailability from "./pages/Doctor/DoctorAvailability";
-import DoctorProfile from "./pages/Doctor/DoctorProfile";
-import DoctorSidebar from "./components/DoctorSidebar";
-import DoctorSchedule from "./pages/Doctor/DoctorSchedule";
+import DoctorDashboard from "./components/Doctor/DoctorDashboard";
+import DoctorAppointments from "./components/Doctor/DoctorAppointments";
+import DoctorAvailability from "./components/Doctor/DoctorAvailability";
+import DoctorProfile from "./components/Doctor/DoctorProfile";
+import DoctorSidebar from "./components/Doctor/DoctorSidebar";
+import DoctorSchedule from "./components/Doctor/DoctorSchedule";
 
 // Admin
 import AdminDoctorApproval from "./components/admin/Approval/AdminDoctorsApproval";

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
-  Container,
+  Box,
   Typography,
-  Grid,
-  Card,
-  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  Paper,
   Button,
   Dialog,
   DialogTitle,
@@ -14,11 +17,14 @@ import {
   MenuItem,
   Snackbar,
   Alert,
-  DialogContentText,
-  Box,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CustomPagination from "../../CustomPagination.jsx";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const DoctorsList = () => {
   const [doctors, setDoctors] = useState([]);
@@ -28,7 +34,7 @@ const DoctorsList = () => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [doctorToDelete, setDoctorToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const doctorsPerPage = 4;
+  const doctorsPerPage = 6;
   const navigate = useNavigate();
   const [form, setForm] = useState({
     fullName: "",
@@ -44,35 +50,41 @@ const DoctorsList = () => {
     message: "",
   });
 
-  const fetchDoctors = () => {
-    fetch("http://localhost:5000/doctors")
-      .then((res) => res.json())
-      .then((data) => setDoctors(data))
-      .catch(() =>
-        setSnackbar({
-          open: true,
-          severity: "error",
-          message: "Failed to load doctors",
-        })
-      );
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePhone = (phone) => /^[0-9]{10,15}$/.test(phone);
+  const validateImageUrl = (url) => /\.(jpeg|jpg|gif|png|svg)$/i.test(url);
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!form.fullName.trim()) newErrors.fullName = "Full name is required";
+    if (!validateEmail(form.email)) newErrors.email = "Invalid email format";
+    if (!validatePhone(form.phone)) newErrors.phone = "Invalid phone number";
+    if (!form.specialtyId) newErrors.specialtyId = "Specialty is required";
+    if (!form.bio.trim()) newErrors.bio = "Bio is required";
+    if (!validateImageUrl(form.image)) newErrors.image = "Invalid image URL";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const fetchSpecialties = () => {
-    fetch("http://localhost:5000/specialties")
-      .then((res) => res.json())
-      .then((data) => setSpecialties(data))
-      .catch(() =>
-        setSnackbar({
-          open: true,
-          severity: "error",
-          message: "Failed to load specialties",
-        })
-      );
+  const fetchDoctors = async () => {
+    try {
+      const [doctorsRes, specialtiesRes] = await Promise.all([
+        fetch("http://localhost:5000/doctors"),
+        fetch("http://localhost:5000/specialties"),
+      ]);
+      setDoctors(await doctorsRes.json());
+      setSpecialties(await specialtiesRes.json());
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to load data",
+        severity: "error",
+      });
+    }
   };
 
   useEffect(() => {
     fetchDoctors();
-    fetchSpecialties();
   }, []);
 
   const indexOfLastDoctor = currentPage * doctorsPerPage;
@@ -80,9 +92,7 @@ const DoctorsList = () => {
   const currentDoctors = doctors.slice(indexOfFirstDoctor, indexOfLastDoctor);
   const totalPages = Math.ceil(doctors.length / doctorsPerPage);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page) => setCurrentPage(page);
 
   const handleOpenAdd = () => {
     setEditingDoctor(null);
@@ -94,297 +104,291 @@ const DoctorsList = () => {
       bio: "",
       image: "",
     });
+    setErrors({});
     setOpenDialog(true);
   };
 
   const handleOpenEdit = (doctor) => {
     setEditingDoctor(doctor);
     setForm({
-      fullName: doctor.fullName || "",
-      email: doctor.email || "",
-      phone: doctor.phone || "",
-      specialtyId: doctor.specialtyId || "",
-      bio: doctor.bio || "",
-      image: doctor.image || "",
+      fullName: doctor.fullName,
+      email: doctor.email,
+      phone: doctor.phone,
+      specialtyId: doctor.specialtyId,
+      bio: doctor.bio,
+      image: doctor.image,
     });
+    setErrors({});
     setOpenDialog(true);
   };
 
-  const handleClose = () => {
+  const handleCloseDialog = () => {
     setOpenDialog(false);
   };
 
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleSave = async () => {
+    if (!validateForm()) return;
+
+    try {
+      const url = editingDoctor
+        ? `http://localhost:5000/doctors/${editingDoctor.id}`
+        : "http://localhost:5000/doctors";
+      const method = editingDoctor ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) throw new Error("Failed to save doctor");
+
+      fetchDoctors();
+      setOpenDialog(false);
+      setSnackbar({
+        open: true,
+        message: editingDoctor
+          ? "Doctor updated successfully"
+          : "Doctor added successfully",
+        severity: "success",
+      });
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to save doctor",
+        severity: "error",
+      });
+    }
   };
 
-  const handleSave = () => {
-    const method = editingDoctor ? "PUT" : "POST";
-    const url = editingDoctor
-      ? `http://localhost:5000/doctors/${editingDoctor.id}`
-      : "http://localhost:5000/doctors";
-
-    fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error saving doctor");
-        return res.json();
-      })
-      .then(() => {
-        fetchDoctors();
-        handleClose();
-        setSnackbar({
-          open: true,
-          severity: "success",
-          message: editingDoctor
-            ? "Doctor updated successfully"
-            : "Doctor added successfully",
-        });
-      })
-      .catch(() =>
-        setSnackbar({
-          open: true,
-          severity: "error",
-          message: "Failed to save doctor",
-        })
-      );
-  };
-
-  const handleDeleteClick = (doctor) => {
+  const handleDelete = (doctor) => {
     setDoctorToDelete(doctor);
     setConfirmOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    fetch(`http://localhost:5000/doctors/${doctorToDelete.id}`, {
-      method: "DELETE",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Delete failed");
-        fetchDoctors();
-        setConfirmOpen(false);
-        setDoctorToDelete(null);
-        setSnackbar({
-          open: true,
-          severity: "success",
-          message: "Doctor deleted successfully",
-        });
-      })
-      .catch(() =>
-        setSnackbar({
-          open: true,
-          severity: "error",
-          message: "Failed to delete doctor",
-        })
+  const handleConfirmDelete = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/doctors/${doctorToDelete.id}`,
+        { method: "DELETE" }
       );
+
+      if (!response.ok) throw new Error("Delete failed");
+
+      fetchDoctors();
+      setConfirmOpen(false);
+      setSnackbar({
+        open: true,
+        message: "Doctor deleted successfully",
+        severity: "success",
+      });
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to delete doctor",
+        severity: "error",
+      });
+      setConfirmOpen(false);
+    }
   };
 
   const handleCancelDelete = () => {
     setConfirmOpen(false);
-    setDoctorToDelete(null);
-  };
-
-  const handleSnackbarClose = () => {
-    setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
   return (
-    <>
-      <Container sx={{ py: 4 }}>
+    <Box sx={{ backgroundColor: "#F5F8FF", minHeight: "100vh", p: 4 }}>
+      <Paper elevation={3} sx={{ p: 3, borderRadius: "24px" }}>
         <Typography
-          variant="h4"
-          gutterBottom
-          color="primary"
-          textAlign="center"
+          variant="h5"
+          sx={{ mb: 3, color: "#199A8E", fontWeight: "bold" }}
         >
-          Doctors
+          Doctors Management
         </Typography>
-        <Box textAlign="center">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpenAdd}
-            sx={{ mb: 3 }}
-          >
-            Add Doctor
+
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+          <Button variant="contained" onClick={handleOpenAdd}>
+            Add New Doctor
           </Button>
         </Box>
 
-        <Grid container spacing={2}>
-          {currentDoctors.map((doc) => (
-            <Grid item xs={12} sm={6} md={4} key={doc.id}>
-              <Card>
-                <CardContent
-                  sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-                >
-                  <Typography variant="h6">{doc.fullName}</Typography>
-                  <Typography color="text.secondary">
-                    {specialties.find((s) => s.id === doc.specialtyId)?.name ||
-                      "No Specialty"}
-                  </Typography>
-                  <Typography>{doc.email}</Typography>
-                  <Typography>{doc.phone}</Typography>
-                  <Typography>{doc.bio}</Typography>
-                  <div
-                    style={{ display: "flex", gap: "8px", marginTop: "8px" }}
-                  >
-                    <Button
-                      variant="outlined"
-                      size="small"
+        <Table>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#199A8E" }}>
+              <TableCell sx={{ color: "#fff" }}>Name</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Specialty</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Email</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Phone</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {currentDoctors.map((doctor) => (
+              <TableRow key={doctor.id}>
+                <TableCell>{doctor.fullName}</TableCell>
+                <TableCell>
+                  {specialties.find((s) => s.id === doctor.specialtyId)?.name ||
+                    "N/A"}
+                </TableCell>
+                <TableCell>{doctor.email}</TableCell>
+                <TableCell>{doctor.phone}</TableCell>
+                <TableCell>
+                  <Tooltip title="View Details">
+                    <IconButton
                       color="primary"
-                      component={Link}
-                      to={`/admin/doctors/${doc.id}`}
+                      onClick={() => navigate(`/admin/doctors/${doctor.id}`)}
                     >
-                      View Details
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() => handleOpenEdit(doc)}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      color="error"
-                      onClick={() => handleDeleteClick(doc)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+                      <VisibilityIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Edit">
+                    <IconButton onClick={() => handleOpenEdit(doctor)}>
+                      <EditIcon color="primary" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <IconButton onClick={() => handleDelete(doctor)}>
+                      <DeleteIcon color="error" />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
-        {doctors.length > doctorsPerPage && (
-          <CustomPagination
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
+        <CustomPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </Paper>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {editingDoctor ? "Edit Doctor" : "Add Doctor"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Full Name *"
+            name="fullName"
+            value={form.fullName}
+            onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+            error={!!errors.fullName}
+            helperText={errors.fullName || "At least 3 characters"}
+            fullWidth
+            margin="normal"
           />
-        )}
-
-        <Dialog open={openDialog} onClose={handleClose} maxWidth="sm" fullWidth>
-          <DialogTitle>
-            {editingDoctor ? "Edit Doctor" : "Add Doctor"}
-          </DialogTitle>
-          <DialogContent
-            sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+          <TextField
+            label="Email *"
+            name="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            error={!!errors.email}
+            helperText={errors.email || "e.g., user@example.com"}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Phone *"
+            name="phone"
+            value={form.phone}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            error={!!errors.phone}
+            helperText={errors.phone || "10-15 digits only"}
+            fullWidth
+            margin="normal"
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+              maxLength: 15,
+            }}
+          />
+          <TextField
+            select
+            label="Specialty *"
+            name="specialtyId"
+            value={form.specialtyId}
+            onChange={(e) => setForm({ ...form, specialtyId: e.target.value })}
+            error={!!errors.specialtyId}
+            helperText={errors.specialtyId}
+            fullWidth
+            margin="normal"
           >
-            <TextField
-              label="Full Name"
-              name="fullName"
-              value={form.fullName}
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Email"
-              name="email"
-              type="email"
-              value={form.email}
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              label="Phone"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              fullWidth
-            />
-            <TextField
-              select
-              label="Specialty"
-              name="specialtyId"
-              value={form.specialtyId}
-              onChange={handleChange}
-              fullWidth
-            >
-              {specialties.map((spec) => (
-                <MenuItem key={spec.id} value={spec.id}>
-                  {spec.name}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              label="Bio"
-              name="bio"
-              value={form.bio}
-              onChange={handleChange}
-              multiline
-              rows={3}
-              fullWidth
-            />
-            <TextField
-              label="Image URL"
-              name="image"
-              value={form.image}
-              onChange={handleChange}
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button variant="contained" color="primary" onClick={handleSave}>
-              {editingDoctor ? "Update" : "Add"}
-            </Button>
-          </DialogActions>
-        </Dialog>
+            <MenuItem value="">Select Specialty</MenuItem>
+            {specialties.map((spec) => (
+              <MenuItem key={spec.id} value={spec.id}>
+                {spec.name}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            label="Bio *"
+            name="bio"
+            value={form.bio}
+            onChange={(e) => setForm({ ...form, bio: e.target.value })}
+            error={!!errors.bio}
+            helperText={errors.bio || "At least 10 characters"}
+            fullWidth
+            multiline
+            rows={3}
+            margin="normal"
+          />
+          <TextField
+            label="Image URL *"
+            name="image"
+            value={form.image}
+            onChange={(e) => setForm({ ...form, image: e.target.value })}
+            error={!!errors.image}
+            helperText={errors.image || "Must be valid image URL"}
+            fullWidth
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button variant="contained" onClick={handleSave}>
+            {editingDoctor ? "Update" : "Add"}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-        <Dialog
-          open={confirmOpen}
-          onClose={handleCancelDelete}
-          aria-labelledby="confirm-dialog-title"
-          aria-describedby="confirm-dialog-description"
-        >
-          <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="confirm-dialog-description">
-              Are you sure you want to delete doctor{" "}
-              <strong>{doctorToDelete?.fullName}</strong>?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancelDelete} color="primary">
-              Cancel
-            </Button>
-            <Button
-              onClick={handleConfirmDelete}
-              color="error"
-              variant="contained"
-            >
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
-
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={3000}
-          onClose={handleSnackbarClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            onClose={handleSnackbarClose}
-            severity={snackbar.severity}
-            sx={{ width: "100%" }}
+      <Dialog open={confirmOpen} onClose={handleCancelDelete}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete {doctorToDelete?.fullName}?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete}>Cancel</Button>
+          <Button
+            color="error"
+            variant="contained"
+            onClick={handleConfirmDelete}
           >
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
-      </Container>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+      </Snackbar>
+
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Button variant="contained" onClick={() => navigate("/admin")}>
           Back to Dashboard
         </Button>
       </Box>
-    </>
+    </Box>
   );
 };
 

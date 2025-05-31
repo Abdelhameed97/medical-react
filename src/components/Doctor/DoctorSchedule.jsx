@@ -3,6 +3,7 @@ import { Typography, Box, Grid, Paper, Pagination } from "@mui/material";
 import { CheckCircle, CalendarToday } from "@mui/icons-material";
 import axios from "axios";
 import dayjs from "dayjs";
+import { styles } from "../doctorStyle/DoctorSchedule.styles";
 
 const DoctorSchedule = () => {
   const [appointments, setAppointments] = useState([]);
@@ -52,76 +53,33 @@ const DoctorSchedule = () => {
 
   const renderCard = (appt) => (
     <Grid item xs={12} sm={6} md={4} key={appt.id}>
-      <Paper
-        elevation={0}
-        sx={{
-          p: 3,
-          borderRadius: 3,
-          borderLeft: "4px solid #10b981",
-          background: "#ffffff",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-          transition: "all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)",
-          "&:hover": {
-            transform: "translateY(-2px)",
-            boxShadow: "0 10px 20px rgba(0, 0, 0, 0.1)",
-            borderLeft: "4px solid #059669"
-          },
-          position: "relative",
-          overflow: "hidden",
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "4px",
-            background: "linear-gradient(90deg, #10b981, #a7f3d0)"
-          }
-        }}
-      >
+      <Paper elevation={0} sx={styles.appointmentCard}>
         <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
           <Box>
             <Typography 
               variant="subtitle1" 
               fontWeight="600" 
               color="text.primary"
-              sx={{ mb: 0.5 }}
+              sx={styles.patientName}
             >
               {getPatientFullName(appt.patientId)}
             </Typography>
             <Typography 
               variant="body2" 
               color="text.secondary"
-              sx={{ 
-                display: "flex",
-                alignItems: "center",
-                gap: 1
-              }}
+              sx={styles.timeInfo}
             >
-              <CalendarToday sx={{ fontSize: 16, color: "#10b981" }} />
+              <CalendarToday sx={styles.timeIcon} />
               {dayjs(appt.date).format("DD/MM/YYYY")} - {appt.time}
             </Typography>
           </Box>
-          <CheckCircle sx={{ color: "#10b981", fontSize: 28 }} />
+          <CheckCircle sx={styles.statusIcon} />
         </Box>
         
-        <Paper
-          elevation={0}
-          sx={{
-            p: 2,
-            mt: 2,
-            borderRadius: 2,
-            backgroundColor: "#f8fafc",
-            border: "1px solid #e2e8f0"
-          }}
-        >
+        <Paper elevation={0} sx={styles.notesContainer}>
           <Typography 
             variant="body2" 
-            color="text.secondary"
-            sx={{
-              fontStyle: appt.notes ? "normal" : "italic",
-              color: appt.notes ? "#64748b" : "#94a3b8"
-            }}
+            sx={appt.notes ? styles.notes : styles.emptyNotes}
           >
             {appt.notes || "No additional notes"}
           </Typography>
@@ -131,23 +89,9 @@ const DoctorSchedule = () => {
   );
 
   return (
-    <Box sx={{ p: 4, maxWidth: "1400px", mx: "auto" }}>
-
-
-
-
-
-      <Box sx={{ 
-        mb: 4,
-        display: "flex",
-        alignItems: "center",
-        gap: 2,
-        p: 3,
-        backgroundColor: "#ffffff",
-        borderRadius: 3,
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)"
-      }}>
-        <CalendarToday sx={{ color: "#10b981", fontSize: 32 }} />
+    <Box sx={styles.container}>
+      <Box sx={styles.headerContainer}>
+        <CalendarToday sx={styles.headerIcon} />
         <Box>
           <Typography variant="h5" fontWeight="700" color="text.primary">
             Today's Approved Appointments
@@ -159,17 +103,11 @@ const DoctorSchedule = () => {
       </Box>
 
       {paginatedAppointments.length === 0 ? (
-        <Box sx={{
-          p: 6,
-          textAlign: "center",
-          backgroundColor: "#ffffff",
-          borderRadius: 3,
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)"
-        }}>
+        <Box sx={styles.emptyStateContainer}>
           <Typography variant="h6" color="text.secondary">
             No appointments scheduled for today
           </Typography>
-          <Typography variant="body2" color="text.disabled" sx={{ mt: 1 }}>
+          <Typography variant="body2" color="text.disabled" sx={styles.emptyStateSubtext}>
             All approved appointments will appear here
           </Typography>
         </Box>
@@ -180,36 +118,14 @@ const DoctorSchedule = () => {
           </Grid>
 
           {totalPages > 1 && (
-            <Box sx={{ 
-              mt: 4,
-              p: 3,
-              display: "flex",
-              justifyContent: "center",
-              backgroundColor: "#ffffff",
-              borderRadius: 3,
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)"
-            }}>
+            <Box sx={styles.paginationContainer}>
               <Pagination
                 count={totalPages}
                 page={page}
                 onChange={handlePageChange}
                 color="primary"
                 shape="rounded"
-                sx={{
-                  "& .MuiPaginationItem-root": {
-                    color: "#64748b",
-                    "&.Mui-selected": {
-                      backgroundColor: "#10b981",
-                      color: "#ffffff",
-                      "&:hover": {
-                        backgroundColor: "#059669"
-                      }
-                    },
-                    "&:hover": {
-                      backgroundColor: "#e2e8f0"
-                    }
-                  }
-                }}
+                sx={styles.pagination}
               />
             </Box>
           )}

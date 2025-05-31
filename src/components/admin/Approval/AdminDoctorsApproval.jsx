@@ -10,10 +10,10 @@ import {
   Paper,
   Button,
   Chip,
-  Stack,
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import CustomPagination from "../../CustomPagination.jsx";
 
 const API_URL = "http://localhost:5000";
 
@@ -33,10 +33,10 @@ export default function AdminDoctorApproval() {
     } catch (err) {
       console.error("Error fetching doctors", err);
     }
-  }
+  };
 
-    const navigate = useNavigate(); 
-  
+  const navigate = useNavigate();
+
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize;
   const paginatedDoctors = doctors.slice(startIndex, endIndex);
@@ -51,6 +51,10 @@ export default function AdminDoctorApproval() {
     } catch (err) {
       console.error("Error updating approval", err);
     }
+  };
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
   };
 
   return (
@@ -115,36 +119,17 @@ export default function AdminDoctorApproval() {
             </TableBody>
           </Table>
 
-          <Stack
-            direction="row"
-            spacing={2}
-            justifyContent="center"
-            sx={{ mt: 3 }}
-          >
-            <Button
-              variant="outlined"
-              disabled={page <= 1}
-              onClick={() => setPage((p) => Math.max(p - 1, 1))}
-            >
-              Previous
-            </Button>
-            <Typography variant="body1" sx={{ alignSelf: "center" }}>
-              Page {page} of {totalPages}
-            </Typography>
-            <Button
-              variant="outlined"
-              disabled={page >= totalPages}
-              onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-            >
-              Next
-            </Button>
-          </Stack>
+          <CustomPagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </Paper>
-      </Box>
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-        <Button variant="contained" onClick={() => navigate("/admin/doctors")}>
-          Back to Dashboard
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+          <Button variant="contained" onClick={() => navigate("/admin")}>
+            Back to Dashboard
+          </Button>
+        </Box>
       </Box>
     </>
   );

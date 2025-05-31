@@ -1,67 +1,70 @@
 import React, { useEffect, useState } from "react";
 import {
-  Container,
+  Box,
   Typography,
-  Grid,
-  Card,
-  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  Paper,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   TextField,
   DialogActions,
-  IconButton,
   Snackbar,
   Alert,
-  Box,
+  IconButton,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
+import CustomPagination from "../../CustomPagination.jsx";
 
 const SpecialtiesList = () => {
   const [specialties, setSpecialties] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingSpecialty, setEditingSpecialty] = useState(null);
   const [name, setName] = useState("");
-
+  const [errors, setErrors] = useState({});
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const specialtiesPerPage = 5;
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success",
   });
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!name.trim()) newErrors.name = "Specialty name is required";
+    else if (name.trim().length < 3)
+      newErrors.name = "Name must be at least 3 characters";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
-  const [selectedSpecialty, setSelectedSpecialty] = useState(null);
-
-  const fetchSpecialties = () => {
-    fetch("http://localhost:5000/specialties")
-      .then((res) => res.json())
-      .then((data) => setSpecialties(data));
+  const fetchSpecialties = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/specialties");
+      setSpecialties(await response.json());
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to load specialties",
+        severity: "error",
+      });
+    }
   };
 
   useEffect(() => {
     fetchSpecialties();
   }, []);
-
-  const handleOpenAdd = () => {
-    setEditingSpecialty(null);
-    setName("");
-    setOpenDialog(true);
-  };
-
-  const handleOpenEdit = (specialty) => {
-    setEditingSpecialty(specialty);
-    setName(specialty.name);
-    setOpenDialog(true);
-  };
-
-  const handleClose = () => {
-    setOpenDialog(false);
-  };
 
   const showSnackbar = (message, severity = "success") => {
     setSnackbar({ open: true, message, severity });
@@ -71,174 +74,200 @@ const SpecialtiesList = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const handleSave = () => {
-    const method = editingSpecialty ? "PUT" : "POST";
-    const url = editingSpecialty
-      ? `http://localhost:5000/specialties/${editingSpecialty.id}`
-      : "http://localhost:5000/specialties";
-
-    fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error saving specialty");
-        return res.json();
-      })
-      .then(() => {
-        fetchSpecialties();
-        handleClose();
-        showSnackbar(
-          editingSpecialty
-            ? "Specialty updated successfully!"
-            : "Specialty added successfully!"
-        );
-      })
-      .catch((err) => {
-        showSnackbar(err.message, "error");
-      });
+  const handleOpenAdd = () => {
+    setEditingSpecialty(null);
+    setName("");
+    setErrors({});
+    setOpenDialog(true);
   };
 
-  const handleDeleteClick = (specialty) => {
+  const handleOpenEdit = (specialty) => {
+    setEditingSpecialty(specialty);
+    setName(specialty.name);
+    setErrors({});
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleSave = async () => {
+    if (!validateForm()) return;
+
+    try {
+      const url = editingSpecialty
+        ? `http://localhost:5000/specialties/${editingSpecialty.id}`
+        : "http://localhost:5000/specialties";
+      const method = editingSpecialty ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
+
+      if (!response.ok) throw new Error("Failed to save specialty");
+
+      fetchSpecialties();
+      setOpenDialog(false);
+      showSnackbar(
+        editingSpecialty
+          ? "Specialty updated successfully"
+          : "Specialty added successfully"
+      );
+    } catch (error) {
+      showSnackbar(error.message, "error");
+    }
+  };
+
+  const handleDelete = (specialty) => {
     setSelectedSpecialty(specialty);
     setOpenConfirmDialog(true);
   };
 
-  const handleConfirmDelete = () => {
-    fetch(`http://localhost:5000/specialties/${selectedSpecialty.id}`, {
-      method: "DELETE",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error deleting specialty");
-        fetchSpecialties();
-        setOpenConfirmDialog(false);
-        showSnackbar("Specialty deleted successfully!");
-      })
-      .catch((err) => {
-        showSnackbar(err.message, "error");
-        setOpenConfirmDialog(false);
-      });
+  const handleConfirmDelete = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/specialties/${selectedSpecialty.id}`,
+        { method: "DELETE" }
+      );
+
+      if (!response.ok) throw new Error("Failed to delete");
+
+      fetchSpecialties();
+      setOpenConfirmDialog(false);
+      showSnackbar("Specialty deleted successfully");
+    } catch (error) {
+      showSnackbar(error.message, "error");
+      setOpenConfirmDialog(false);
+    }
   };
 
   const handleCancelDelete = () => {
     setOpenConfirmDialog(false);
-    setSelectedSpecialty(null);
   };
 
+  const indexOfLastSpecialty = currentPage * specialtiesPerPage;
+  const indexOfFirstSpecialty = indexOfLastSpecialty - specialtiesPerPage;
+  const currentSpecialties = specialties.slice(
+    indexOfFirstSpecialty,
+    indexOfLastSpecialty
+  );
+  const totalPages = Math.ceil(specialties.length / specialtiesPerPage);
+
   return (
-    <>
-      <Container sx={{ py: 4 }}>
+    <Box sx={{ backgroundColor: "#F5F8FF", minHeight: "100vh", p: 4 }}>
+      <Paper elevation={3} sx={{ p: 3, borderRadius: "24px" }}>
         <Typography
-          variant="h4"
-          gutterBottom
-          color="primary"
-          textAlign="center"
+          variant="h5"
+          sx={{ mb: 3, color: "#199A8E", fontWeight: "bold" }}
         >
-          Specialties
+          Specialties Management
         </Typography>
-        <Box textAlign="center" sx={{ mb: 3 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpenAdd}
-            sx={{ mb: 3 }}
-          >
-            Add Specialty
+
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+          <Button variant="contained" onClick={handleOpenAdd}>
+            Add New Specialty
           </Button>
         </Box>
-        <Grid container spacing={2}>
-          {specialties.map((spec) => (
-            <Grid item xs={12} sm={6} md={4} key={spec.id}>
-              <Card>
-                <CardContent
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography>{spec.name}</Typography>
-                  <div>
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleOpenEdit(spec)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="error"
-                      onClick={() => handleDeleteClick(spec)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </div>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-        {/* Add/Edit Dialog */}
-        <Dialog open={openDialog} onClose={handleClose}>
-          <DialogTitle>
-            {editingSpecialty ? "Edit Specialty" : "Add Specialty"}
-          </DialogTitle>
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Specialty Name"
-              fullWidth
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSave} variant="contained" color="primary">
-              {editingSpecialty ? "Update" : "Add"}
-            </Button>
-          </DialogActions>
-        </Dialog>
-        {/* Confirm Delete Dialog */}
-        <Dialog open={openConfirmDialog} onClose={handleCancelDelete}>
-          <DialogTitle>Confirm Delete</DialogTitle>
-          <DialogContent>
-            Are you sure you want to delete this specialty?
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancelDelete}>Cancel</Button>
-            <Button
-              onClick={handleConfirmDelete}
-              color="error"
-              variant="contained"
-            >
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
-        {/* Snackbar */}
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={3000}
-          onClose={handleSnackbarClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            onClose={handleSnackbarClose}
-            severity={snackbar.severity}
-            sx={{ width: "100%" }}
+
+        <Table>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#199A8E" }}>
+              <TableCell sx={{ color: "#fff" }}>ID</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Name</TableCell>
+              <TableCell sx={{ color: "#fff" }}>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {currentSpecialties.map((specialty) => (
+              <TableRow key={specialty.id}>
+                <TableCell>#{specialty.id}</TableCell>
+                <TableCell>{specialty.name}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleOpenEdit(specialty)}>
+                    <EditIcon color="primary" />
+                  </IconButton>
+                  <IconButton onClick={() => handleDelete(specialty)}>
+                    <DeleteIcon color="error" />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+
+        <CustomPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </Paper>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {editingSpecialty ? "Edit Specialty" : "Add Specialty"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Specialty Name *"
+            fullWidth
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            error={!!errors.name}
+            helperText={errors.name || "At least 3 characters"}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button variant="contained" onClick={handleSave}>
+            {editingSpecialty ? "Update" : "Add"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openConfirmDialog} onClose={handleCancelDelete}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete {selectedSpecialty?.name}?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete}>Cancel</Button>
+          <Button
+            color="error"
+            variant="contained"
+            onClick={handleConfirmDelete}
           >
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
-      </Container>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-        <Button variant="contained" onClick={() => navigate("/admin/doctors")}>
+        <Button variant="contained" onClick={() => navigate("/admin")}>
           Back to Dashboard
         </Button>
       </Box>
-    </>
+    </Box>
   );
 };
 
