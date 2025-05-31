@@ -411,11 +411,18 @@
       "endTime": "17:00"
     },
     {
-      "id": "18bd",
+      "id": "a9e6",
       "doctorId": 1,
       "day": "Wednesday",
       "startTime": "09:00",
       "endTime": "22:00"
+    },
+    {
+      "id": "6b22",
+      "doctorId": 1,
+      "day": "Sunday",
+      "startTime": "09:00",
+      "endTime": "20:00"
     }
   ],
   "appointments": [
@@ -576,7 +583,7 @@
       "date": "2025-05-30",
       "time": "23:16",
       "notes": "Allllo",
-      "status": "pending"
+      "status": "approved"
     },
     {
       "id": "b59d5311-f9b2-46e4-9179-dd5e8d445e31",
@@ -585,7 +592,7 @@
       "date": "2025-05-30",
       "time": "23:21",
       "notes": "ءسؤث",
-      "status": "pending"
+      "status": "approved"
     },
     {
       "id": "c6e0",

@@ -9,6 +9,7 @@ import {
   Schedule, CheckCircle, AccessTime, 
   Alarm, CalendarToday, WatchLater
 } from "@mui/icons-material";
+import { styles } from "../doctorStyle/DoctorAvailability.styles";
 
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -71,15 +72,14 @@ const DoctorAvailability = () => {
           })
         );
         
-       Promise.all(posts)
-  .then(() => {
-    axios.get("http://localhost:5000/availability?doctorId=1").then(res => {
-      setAvailability(res.data); 
-      setIsSaving(false);
-      setOpenSuccessModal(true);
-    });
-  })
-
+        Promise.all(posts)
+          .then(() => {
+            axios.get("http://localhost:5000/availability?doctorId=1").then(res => {
+              setAvailability(res.data); 
+              setIsSaving(false);
+              setOpenSuccessModal(true);
+            });
+          })
           .catch(() => {
             setIsSaving(false);
             alert("Error saving availability");
@@ -93,8 +93,7 @@ const DoctorAvailability = () => {
   };
 
   return (
-    <Box p={3} sx={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
-      {/* Success Modal */}
+    <Box sx={styles.mainContainer}>
       <Modal
         open={openSuccessModal}
         onClose={handleCloseSuccessModal}
@@ -105,83 +104,43 @@ const DoctorAvailability = () => {
         }}
       >
         <Fade in={openSuccessModal}>
-          <Box sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: '8px',
-            textAlign: 'center'
-          }}>
-            <CheckCircle sx={{ 
-              color: '#4CAF50', 
-              fontSize: '60px',
-              mb: 2
-            }} />
+          <Box sx={styles.successModal}>
+            <CheckCircle sx={styles.successIcon} />
             <Typography variant="h5" component="h2" gutterBottom>
               Success
             </Typography>
             <Typography variant="body1" sx={{ mb: 3 }}>
-                Availability saved successfully
+              Availability saved successfully
             </Typography>
             <Button
               variant="contained"
               onClick={handleCloseSuccessModal}
-              sx={{
-                backgroundColor: '#4a90e2',
-                '&:hover': {
-                  backgroundColor: '#3a80d2'
-                }
-              }}
+              sx={styles.continueButton}
             >
-                Continue
+              Continue
             </Button>
           </Box>
         </Fade>
       </Modal>
 
-      <Typography variant="h4" gutterBottom sx={{ 
-        fontWeight: 'bold', 
-        color: '#1e293b',
-        mb: 3,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 1
-      }}>
+      <Typography variant="h4" gutterBottom sx={styles.pageTitle}>
         <Schedule fontSize="large" />
         Set Your Availability
       </Typography>
       
-      <Paper elevation={3} sx={{ 
-        p: 4, 
-        borderRadius: '12px',
-        background: 'white'
-      }}>
-        <Typography variant="h6" mb={3} sx={{ 
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-          color: '#3b82f6'
-        }}>
+      <Paper elevation={3} sx={styles.mainPaper}>
+        <Typography variant="h6" mb={3} sx={styles.sectionTitle}>
           <CalendarToday />
           Select Working Days
         </Typography>
         
-        <Divider sx={{ mb: 3 }} />
+        <Divider sx={styles.divider} />
         
         <FormGroup>
           <Grid container spacing={3}>
             {days.map(day => (
               <Grid item xs={12} md={6} key={day}>
-                <Paper elevation={1} sx={{ 
-                  p: 2,
-                  borderRadius: '8px',
-                  borderLeft: `4px solid ${selectedDays[day] ? '#10b981' : '#e2e8f0'}`
-                }}>
+                <Paper elevation={1} sx={styles.dayPaper(selectedDays[day] !== undefined)}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -197,14 +156,14 @@ const DoctorAvailability = () => {
                         {day}
                       </Typography>
                     }
-                    sx={{ mb: selectedDays[day] ? 2 : 0 }}
+                    sx={selectedDays[day] ? styles.dayLabel : {}}
                   />
                   
                   {selectedDays[day] && (
-                    <Box mt={1} pl={4}>
+                    <Box sx={styles.timeContainer}>
                       <Stack direction="row" spacing={2} alignItems="center">
                         <Box sx={{ flex: 1 }}>
-                          <Typography variant="caption" display="block" color="text.secondary">
+                          <Typography variant="caption" sx={styles.timeLabel}>
                             Start Time
                           </Typography>
                           <TextField
@@ -213,13 +172,13 @@ const DoctorAvailability = () => {
                             onChange={(e) => handleTimeChange(day, "start", e.target.value)}
                             fullWidth
                             InputLabelProps={{ shrink: true }}
-                            inputProps={{ step: 300 }} // 5 min intervals
+                            inputProps={{ step: 300 }}
                             size="small"
                           />
                         </Box>
                         
                         <Box sx={{ flex: 1 }}>
-                          <Typography variant="caption" display="block" color="text.secondary">
+                          <Typography variant="caption" sx={styles.timeLabel}>
                             End Time
                           </Typography>
                           <TextField
@@ -228,7 +187,7 @@ const DoctorAvailability = () => {
                             onChange={(e) => handleTimeChange(day, "end", e.target.value)}
                             fullWidth
                             InputLabelProps={{ shrink: true }}
-                            inputProps={{ step: 300 }} // 5 min intervals
+                            inputProps={{ step: 300 }}
                             size="small"
                           />
                         </Box>
@@ -247,13 +206,7 @@ const DoctorAvailability = () => {
             onClick={handleSave}
             disabled={isSaving}
             startIcon={<Alarm />}
-            sx={{
-              px: 4,
-              py: 1.5,
-              borderRadius: '8px',
-              textTransform: 'none',
-              fontSize: '1rem'
-            }}
+            sx={styles.saveButton}
           >
             {isSaving ? "Saving..." : "Save Availability"}
           </Button>
@@ -261,12 +214,8 @@ const DoctorAvailability = () => {
       </Paper>
       
       {availability.length > 0 && (
-        <Box mt={4}>
-          <Typography variant="h6" mb={2} sx={{ 
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1
-          }}>
+        <Box sx={styles.availabilitySection}>
+          <Typography variant="h6" sx={styles.availabilityTitle}>
             <WatchLater />
             Current Availability
           </Typography>

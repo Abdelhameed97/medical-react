@@ -8,6 +8,7 @@ import {
   Person, Email, Phone, MedicalServices,
   Description, CheckCircle
 } from "@mui/icons-material";
+import { styles } from "../doctorStyle/DoctorProfile.styles";
 
 const DoctorProfile = () => {
   const [profile, setProfile] = useState({
@@ -45,7 +46,7 @@ const DoctorProfile = () => {
   };
 
   return (
-    <Box p={3} sx={{ backgroundColor: '#f5f7fa', minHeight: '100vh' }}>
+    <Box sx={styles.container}>
       {/* Success Modal */}
       <Modal
         open={openSuccessModal}
@@ -57,23 +58,8 @@ const DoctorProfile = () => {
         }}
       >
         <Fade in={openSuccessModal}>
-          <Box sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: '8px',
-            textAlign: 'center'
-          }}>
-            <CheckCircle sx={{ 
-              color: '#4CAF50', 
-              fontSize: '60px',
-              mb: 2
-            }} />
+          <Box sx={styles.modalContent}>
+            <CheckCircle sx={styles.successIcon} />
             <Typography variant="h5" component="h2" gutterBottom>
               Success
             </Typography>
@@ -83,12 +69,7 @@ const DoctorProfile = () => {
             <Button
               variant="contained"
               onClick={handleCloseSuccessModal}
-              sx={{
-                backgroundColor: '#4a90e2',
-                '&:hover': {
-                  backgroundColor: '#3a80d2'
-                }
-              }}
+              sx={styles.modalButton}
             >
               Continue
             </Button>
@@ -96,29 +77,15 @@ const DoctorProfile = () => {
         </Fade>
       </Modal>
 
-      <Typography variant="h4" gutterBottom sx={{ 
-        fontWeight: 'bold',
-        color: '#2e3b4a',
-        mb: 3
-      }}>
+      <Typography variant="h4" gutterBottom sx={styles.title}>
         Doctor Profile
       </Typography>
       
-      <Paper elevation={3} sx={{ 
-        p: 4,
-        borderRadius: '16px',
-        maxWidth: '800px',
-        mx: 'auto',
-        backgroundColor: 'white'
-      }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+      <Paper elevation={3} sx={styles.paper}>
+        <Box sx={styles.avatarContainer}>
           <Avatar
             src="/doctor-avatar.jpg"
-            sx={{
-              width: 120,
-              height: 120,
-              border: '3px solid #4a90e2'
-            }}
+            sx={styles.avatar}
           />
         </Box>
         
@@ -136,7 +103,7 @@ const DoctorProfile = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ mb: 2 }}
+          sx={styles.textField}
         />
         
         <TextField
@@ -153,7 +120,7 @@ const DoctorProfile = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ mb: 2 }}
+          sx={styles.textField}
         />
         
         <TextField
@@ -170,7 +137,7 @@ const DoctorProfile = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ mb: 2 }}
+          sx={styles.textField}
         />
         
         <TextField
@@ -187,7 +154,7 @@ const DoctorProfile = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ mb: 2 }}
+          sx={styles.textField}
         />
         
         <TextField
@@ -206,24 +173,16 @@ const DoctorProfile = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ mb: 3 }}
+          sx={styles.bioField}
         />
         
-        <Divider sx={{ my: 2 }} />
+        <Divider sx={styles.divider} />
         
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Box sx={styles.buttonContainer}>
           <Button
             variant="contained"
             onClick={handleSave}
-            sx={{
-              px: 4,
-              py: 1.5,
-              borderRadius: '8px',
-              backgroundColor: '#4a90e2',
-              '&:hover': {
-                backgroundColor: '#3a80d2'
-              }
-            }}
+            sx={styles.saveButton}
           >
             Save Profile
           </Button>
