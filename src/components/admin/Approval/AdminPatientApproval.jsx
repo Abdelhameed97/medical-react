@@ -131,11 +131,11 @@ export default function AdminPatientApproval() {
             onPageChange={handlePageChange}
           />
         </Paper>
-      </Box>
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-        <Button variant="contained" onClick={() => navigate("/admin/doctors")}>
-          Back to Dashboard
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+          <Button variant="contained" onClick={() => navigate("/admin")}>
+            Back to Dashboard
+          </Button>
+        </Box>
       </Box>
     </>
   );

@@ -383,6 +383,12 @@ const DoctorsList = () => {
       >
         <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
       </Snackbar>
+
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+        <Button variant="contained" onClick={() => navigate("/admin")}>
+          Back to Dashboard
+        </Button>
+      </Box>
     </Box>
   );
 };
