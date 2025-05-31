@@ -40,6 +40,8 @@ const AppointmentConfirmation = () => {
         const res = await axios.get(`http://localhost:5000/doctors/${docId}`);
         console.log(res.data);
         setDoctor(res.data);
+        console.log(res.data.name);
+        console.log(res.data.fullname);
       } catch (err) {
         console.error(err);
       } finally {
@@ -51,10 +53,13 @@ const AppointmentConfirmation = () => {
 
   const handleBook = async () => {
     const payload = {
-      doctorId: doctor.id,
       patientId: user.id,
-      date: selectedDate,
+      doctorName: doctor.fullName,
+      specialty: doctor.specialty,
+      date: selectedDate.split(" | ")[0],
+      time: selectedDate.split(" | ")[1],
       reason,
+      status: "pending",
       paymentMethod,
     };
 
@@ -83,7 +88,7 @@ const AppointmentConfirmation = () => {
             sx={{ width: 56, height: 56, marginRight: 2 }}
           />
           <div>
-            <Typography variant='subtitle1'>{doctor.name}</Typography>
+            <Typography variant='subtitle1'>{doctor.fullName}</Typography>
             <Typography variant='body2'>{doctor.specialty}</Typography>
             <Typography variant='body2'>
               ⭐ {doctor.rating} — {doctor.distance} away

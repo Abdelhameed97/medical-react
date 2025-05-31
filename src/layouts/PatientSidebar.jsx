@@ -22,7 +22,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 const PatientSidebar = ({ drawerWidth = 240, mobileOpen, onDrawerToggle }) => {
   const navigate = useNavigate();
-
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -31,8 +31,7 @@ const PatientSidebar = ({ drawerWidth = 240, mobileOpen, onDrawerToggle }) => {
 
   const menuItems = [
     { text: "Home", icon: <HomeIcon />, path: "/patient" },
-    { text: "Appointments", icon: <AppointmentsIcon />, path: "/patient/appointments" },
-    { text: "Messages", icon: <MessagesIcon />, path: "/patient/messages" },
+    { text: "Appointments", icon: <AppointmentsIcon />, path: "/patient/my-appointments" },
     { text: "Profile", icon: <ProfileIcon />, path: "/patient/profile" },
   ];
 

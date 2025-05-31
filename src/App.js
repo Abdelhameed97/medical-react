@@ -33,7 +33,8 @@ import AdminProfile from "./pages/admin/AdminProfile";
 // Patient
 import PatientLayout from "./layouts/PatientLayout";
 import FindDoctorsView from "./features/patients/FindDoctorsView";
-import Doctor_Details from "./features/patients/Doctor_Details";
+import DoctorInfo from "./features/patients/DoctorInfo";
+import MyAppointments from "./features/patients/MyAppointments";
 import AppointmentConfirmation from "./features/patients/AppointmentConfirmation";
 import Profile from "./features/patients/Profile";
 
@@ -43,10 +44,15 @@ function PatientRoutes() {
     <ThemeProvider theme={theme}>
       <PatientLayout>
         <Routes>
-          <Route path="/" element={<FindDoctorsView />} />
-          <Route path="doctors/:docId" element={<Doctor_Details />} />
-          <Route path="confirm-appointment/:docId" element={<AppointmentConfirmation />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path='/' element={<FindDoctorsView />} />
+          <Route path='doctors/:docId' element={<DoctorInfo/>} />
+          {/* <Route path='patients' element={<PatientsList />} /> */}
+          <Route path='my-appointments' element={<MyAppointments />} />
+          <Route
+            path='confirm-appointment/:docId'
+            element={<AppointmentConfirmation />}
+          />
+          <Route path='profile' element={<Profile />} />
         </Routes>
       </PatientLayout>
     </ThemeProvider>

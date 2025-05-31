@@ -93,6 +93,14 @@
       "email": "maka@gmail.com",
       "password": "123456789",
       "role": "patient"
+    },
+    {
+      "id": "cfbd",
+      "name": "mahmoud",
+      "username": "mahmoud",
+      "email": "mahmoud@gmail.com",
+      "password": "mahmoud123",
+      "role": "patient"
     }
   ],
   "specialties": [
@@ -110,29 +118,6 @@
     }
   ],
   "doctors": [
-    {
-      "id": "1",
-      "fullName": "Dr. Marcus Horizon",
-      "specialty": "Cardiology",
-      "rating": 4.7,
-      "distance": "800m away",
-      "image": "https://randomuser.me/api/portraits/men/75.jpg",
-      "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-      "availableDates": [
-        {
-          "day": "Mon",
-          "date": "21"
-        },
-        {
-          "day": "Tue",
-          "date": "22"
-        },
-        {
-          "day": "Wed",
-          "date": "23"
-        }
-      ]
-    },
     {
       "id": "2",
       "fullName": "Dr. Maria Carter",
@@ -166,7 +151,8 @@
           "day": "Sat",
           "date": "26"
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "id": "3",
@@ -193,7 +179,8 @@
           "day": "Thu",
           "date": "24"
         }
-      ]
+      ],
+      "approved": true
     },
     {
       "id": "4",
@@ -216,7 +203,8 @@
           "day": "Sat",
           "date": "26"
         }
-      ]
+      ],
+      "approved": true
     },
     {
       "id": "5",
@@ -240,6 +228,33 @@
           "date": "23"
         }
       ]
+    },
+    {
+      "id": "c708",
+      "fullName": "Adam",
+      "email": "adam@gmail.com",
+      "phone": "01129019280",
+      "specialtyId": "3",
+      "bio": "my sone",
+      "image": ""
+    },
+    {
+      "id": "eb55",
+      "fullName": "",
+      "email": "",
+      "phone": "",
+      "specialtyId": "",
+      "bio": "",
+      "image": ""
+    },
+    {
+      "id": "f309",
+      "fullName": "",
+      "email": "",
+      "phone": "",
+      "specialtyId": "",
+      "bio": "",
+      "image": ""
     }
   ],
   "categories": [
@@ -343,7 +358,8 @@
       "age": 27,
       "gender": "female",
       "contact": "0100000001",
-      "image": "https://randomuser.me/api/portraits/women/12.jpg"
+      "image": "https://randomuser.me/api/portraits/women/12.jpg",
+      "approved": false
     },
     {
       "id": "2",
@@ -368,13 +384,6 @@
   ],
   "availability": [
     {
-      "id": "f421",
-      "doctorId": 1,
-      "day": "Tuesday",
-      "startTime": "09:00",
-      "endTime": "17:00"
-    },
-    {
       "id": "f422",
       "doctorId": 2,
       "day": "Thursday",
@@ -389,7 +398,21 @@
       "endTime": "17:00"
     },
     {
-      "id": "d7c7",
+      "id": "499f",
+      "doctorId": 1,
+      "day": "Tuesday",
+      "startTime": "09:00",
+      "endTime": "17:00"
+    },
+    {
+      "id": "d32e",
+      "doctorId": 1,
+      "day": "Wednesday",
+      "startTime": "09:00",
+      "endTime": "17:00"
+    },
+    {
+      "id": "58e3",
       "doctorId": 1,
       "day": "Sunday",
       "startTime": "00:00",
@@ -401,9 +424,9 @@
       "id": "1",
       "patientId": 1,
       "doctorId": 1,
-      "date": "2025-05-30",
+      "date": "2025-06-01",
       "time": "13:00",
-      "status": "rejected",
+      "status": "pending",
       "notes": "ملاحظة رقم 1"
     },
     {
@@ -418,9 +441,10 @@
       "id": "3",
       "doctorId": 4,
       "patientId": 3,
-      "date": "2025-06-07T11:15:00",
+      "date": "2025-06-01T11:15:00",
       "reason": "Blood pressure check",
-      "status": "Cancelled"
+      "status": "approved",
+      "notes": "doma 50 "
     },
     {
       "id": "4",
@@ -460,11 +484,13 @@
       "patientId": 1,
       "dateTime": "2025-05-30T00:45:25.643Z",
       "reason": "General Checkup",
-      "status": "Pending"
+      "status": "Pending",
+      "date": "2025-05-08",
+      "time": "14:28"
     },
     {
       "id": "34c8",
-      "doctorId": "1",
+      "doctorId": null,
       "patientId": 1,
       "date": "Friday, Jul 12, 2021 | 11:00 AM",
       "reason": "Back pain",
@@ -493,7 +519,40 @@
       "date": "2025-05-30",
       "time": "18:43",
       "notes": "aloooooo",
-      "status": "approved"
+      "status": "rejected"
+    },
+    {
+      "id": "1113",
+      "patientId": 1,
+      "doctorName": "Dr. Marcus Horizon",
+      "specialty": "Cardiology",
+      "date": "Wednesday, Jun 23, 2021",
+      "time": "10:00 AM",
+      "reason": "Chest pain",
+      "status": "rejected",
+      "paymentMethod": "VISA"
+    },
+    {
+      "id": "3086",
+      "patientId": 1,
+      "doctorName": "Dr. Marcus Horizon",
+      "specialty": "Cardiology",
+      "date": "Wednesday, Jun 23, 2021",
+      "time": "10:00 AM",
+      "reason": "Chest pain",
+      "status": "pending",
+      "paymentMethod": "VISA"
+    },
+    {
+      "id": "e994",
+      "patientId": 1,
+      "doctorName": "Dr. Marcus Horizon",
+      "specialty": "Cardiology",
+      "date": "Wednesday, Jun 23, 2021",
+      "time": "10:00 AM",
+      "reason": "Chest pain",
+      "status": "pending",
+      "paymentMethod": "VISA"
     }
   ],
   "notifications": [
@@ -510,7 +569,7 @@
       "status": "sent"
     },
     {
-      "id": "2",
+      "id": "3",
       "message": "Booking confirmed for Dr. Amal at 2025-06-05 09:00 AM.",
       "email": "patient2@example.com",
       "patientId": 1,
