@@ -80,6 +80,14 @@
       "email": "adam@gmail.com",
       "password": "123456789",
       "role": "patient"
+    },
+    {
+      "id": "d41b",
+      "name": "rehab",
+      "username": "Rehabkamal",
+      "email": "rehab@gmail.com",
+      "password": "rehab@gmail.com",
+      "role": "patient"
     }
   ],
   "specialties": [
@@ -118,7 +126,10 @@
           "day": "Wed",
           "date": "23"
         }
-      ]
+      ],
+      "name": "rehab",
+      "email": "rehab@gmail.com",
+      "phone": "01013102431"
     },
     {
       "id": "2",
@@ -386,13 +397,6 @@
   ],
   "availability": [
     {
-      "id": "f421",
-      "doctorId": 1,
-      "day": "Tuesday",
-      "startTime": "09:00",
-      "endTime": "17:00"
-    },
-    {
       "id": "f422",
       "doctorId": 2,
       "day": "Thursday",
@@ -405,6 +409,20 @@
       "day": "Saturday",
       "startTime": "09:00",
       "endTime": "17:00"
+    },
+    {
+      "id": "716a",
+      "doctorId": 1,
+      "day": "Tuesday",
+      "startTime": "09:00",
+      "endTime": "17:00"
+    },
+    {
+      "id": "3cb8",
+      "doctorId": 1,
+      "day": "Wednesday",
+      "startTime": "09:00",
+      "endTime": "19:00"
     }
   ],
   "appointments": [
@@ -514,7 +532,7 @@
       "date": "Wednesday, Jun 23, 2021",
       "time": "10:00 AM",
       "reason": "Chest pain",
-      "status": "pending",
+      "status": "rejected",
       "paymentMethod": "VISA"
     },
     {
@@ -524,7 +542,7 @@
       "date": "Wednesday, Jun 23, 2021",
       "time": "10:00 AM",
       "reason": "Chest pain",
-      "status": "pending",
+      "status": "approved",
       "paymentMethod": "VISA"
     },
     {
@@ -535,7 +553,7 @@
       "date": "Wednesday, Jun 23, 2021",
       "time": "10:00 AM",
       "reason": "Chest pain",
-      "status": "pending",
+      "status": "approved",
       "paymentMethod": "VISA"
     },
     {
@@ -545,7 +563,7 @@
       "date": "2025-05-30",
       "time": "18:43",
       "notes": "aloooooo",
-      "status": "approved"
+      "status": "rejected"
     },
     {
       "id": "ffb7",
@@ -555,7 +573,7 @@
       "date": "Wednesday, Jun 23, 2021",
       "time": "10:00 AM",
       "reason": "Chest pain",
-      "status": "pending",
+      "status": "approved",
       "paymentMethod": "VISA"
     }
   ],
